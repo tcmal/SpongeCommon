@@ -65,7 +65,6 @@ import org.spongepowered.api.event.world.chunk.PopulateChunkEvent;
 import org.spongepowered.api.world.biome.BiomeGenerationSettings;
 import org.spongepowered.api.world.biome.BiomeType;
 import org.spongepowered.api.world.biome.GroundCoverLayer;
-import org.spongepowered.api.world.extent.Extent;
 import org.spongepowered.api.world.gen.BiomeGenerator;
 import org.spongepowered.api.world.gen.GenerationPopulator;
 import org.spongepowered.api.world.gen.Populator;
@@ -309,7 +308,7 @@ public class SpongeChunkGenerator implements WorldGenerator, IChunkGenerator {
         BlockPos blockpos = new BlockPos(chunkX * 16, 0, chunkZ * 16);
         BiomeType biome = (BiomeType) this.world.getBiome(blockpos.add(16, 0, 16));
 
-        org.spongepowered.api.world.Chunk chunk = (org.spongepowered.api.world.Chunk) this.world.getChunk(chunkX, chunkZ);
+        org.spongepowered.api.world.chunk.Chunk chunk = (org.spongepowered.api.world.chunk.Chunk) this.world.getChunk(chunkX, chunkZ);
 
         BiomeGenerationSettings settings = getBiomeSettings(biome);
 

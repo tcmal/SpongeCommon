@@ -41,14 +41,14 @@ public class IndirectlyPoweredPropertyStore extends AbstractSpongePropertyStore<
 
     @Override
     public Optional<IndirectlyPoweredProperty> getFor(Location<World> location) {
-        final net.minecraft.world.World world = (net.minecraft.world.World) location.getExtent();
+        final net.minecraft.world.World world = (net.minecraft.world.World) location.getWorld();
         final boolean powered = world.getRedstonePowerFromNeighbors(VecHelper.toBlockPos(location)) > 0;
         return Optional.of(powered ? TRUE : FALSE);
     }
 
     @Override
     public Optional<IndirectlyPoweredProperty> getFor(Location<World> location, Direction direction) {
-        final net.minecraft.world.World world = (net.minecraft.world.World) location.getExtent();
+        final net.minecraft.world.World world = (net.minecraft.world.World) location.getWorld();
         final EnumFacing facing = toEnumFacing(direction);
         final boolean powered = world.getRedstonePower(VecHelper.toBlockPos(location).offset(facing), facing) > 0;
         return Optional.of(powered ? TRUE : FALSE);

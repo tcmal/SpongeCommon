@@ -33,8 +33,11 @@ import org.spongepowered.api.block.tileentity.TileEntityArchetype;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.DataView;
-import org.spongepowered.api.world.extent.ArchetypeVolume;
-import org.spongepowered.api.world.extent.Extent;
+import org.spongepowered.api.world.extent.archetype.ArchetypeVolume;
+import org.spongepowered.api.world.extent.block.MutableBlockVolume;
+import org.spongepowered.api.world.extent.block.ReadableBlockVolume;
+import org.spongepowered.api.world.extent.tileentity.ReadableTileEntityVolume;
+import org.spongepowered.api.world.extent.archetype.ArchetypeVolumeCreator;
 import org.spongepowered.api.world.schematic.BlockPalette;
 import org.spongepowered.api.world.schematic.BlockPaletteType;
 import org.spongepowered.api.world.schematic.BlockPaletteTypes;
@@ -48,7 +51,7 @@ import java.util.Optional;
 public class SpongeSchematicBuilder implements Schematic.Builder {
 
     private ArchetypeVolume volume;
-    private Extent view;
+    private ArchetypeVolumeCreator view;
     private BlockPalette palette;
     private BlockPaletteType type = BlockPaletteTypes.LOCAL;
     private DataView metadata;
@@ -61,9 +64,14 @@ public class SpongeSchematicBuilder implements Schematic.Builder {
     }
 
     @Override
-    public Builder volume(Extent volume) {
+    public Builder volume(ReadableBlockVolume volume) {
         this.view = volume;
         return this;
+    }
+
+    @Override
+    public Builder volume(ReadableTileEntityVolume volume) {
+        return null;
     }
 
     @Override
@@ -136,7 +144,7 @@ public class SpongeSchematicBuilder implements Schematic.Builder {
             this.metadata.set(DataQuery.of('.', entry.getKey()), entry.getValue());
         }
         if (this.volume == null) {
-            final MutableBlockVolume volume = new ArrayMutableBlockBuffer(this.palette, min, size);
+            final MutableBlockVolume<?> volume = new ArrayMutableBlockBuffer(this.palette, min, size);
             Map<Vector3i, TileEntityArchetype> tiles = Maps.newHashMap();
             this.view.getBlockWorker().iterate((v, x, y, z) -> {
                 volume.setBlock(x, y, z, v.getBlock(x, y, z));

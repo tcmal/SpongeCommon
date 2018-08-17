@@ -25,7 +25,7 @@
 package org.spongepowered.common.world.extent;
 
 import org.spongepowered.api.util.DiscreteTransform3;
-import org.spongepowered.api.world.extent.beta.block.worker.BlockVolumeWorker;
+import org.spongepowered.api.world.extent.block.worker.BlockVolumeWorker;
 import org.spongepowered.common.world.extent.worker.SpongeBlockVolumeWorker;
 
 public class UnmodifiableBlockViewTransform extends AbstractBlockViewTransform<UnmodifiableBlockVolume> implements UnmodifiableBlockVolume {

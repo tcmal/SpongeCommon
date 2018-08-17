@@ -517,8 +517,8 @@ public abstract class MixinEntity implements org.spongepowered.api.entity.Entity
 
             boolean isTeleporting = true;
 
-            if (location.getExtent().getUniqueId() != ((World) this.world).getUniqueId()) {
-                final net.minecraft.world.World nmsWorld = (net.minecraft.world.World) location.getExtent();
+            if (location.getWorld().getUniqueId() != ((World) this.world).getUniqueId()) {
+                final net.minecraft.world.World nmsWorld = (net.minecraft.world.World) location.getWorld();
                 if ((net.minecraft.entity.Entity) (Object) this instanceof EntityPlayerMP) {
                     // Close open containers
                     final EntityPlayerMP entityPlayerMP = (EntityPlayerMP) (Object) this;
@@ -545,7 +545,7 @@ public abstract class MixinEntity implements org.spongepowered.api.entity.Entity
                             ((Player) entityPlayerMP).closeInventory(); // Call API method to make sure we capture it
                         }
 
-                        ((WorldServer) location.getExtent()).getChunkProvider()
+                        ((WorldServer) location.getWorld()).getChunkProvider()
                                 .loadChunk(location.getChunkPosition().getX(), location.getChunkPosition().getZ());
                     }
                     entityPlayerMP.connection
@@ -578,8 +578,8 @@ public abstract class MixinEntity implements org.spongepowered.api.entity.Entity
         } else {
             this.setPosition(location.getX(), location.getY(), location.getZ());
         }
-        if (this.world != location.getExtent()) {
-            this.world = (net.minecraft.world.World) location.getExtent();
+        if (this.world != location.getWorld()) {
+            this.world = (net.minecraft.world.World) location.getWorld();
         }
     }
 
@@ -1445,7 +1445,7 @@ public abstract class MixinEntity implements org.spongepowered.api.entity.Entity
         if (this.fire < 1 && !this.isImmuneToFireForIgniteEvent()) {
             try (CauseStackManager.StackFrame frame = Sponge.getCauseStackManager().pushCauseFrame()) {
 
-                frame.pushCause(this.getLocation().getExtent());
+                frame.pushCause(this.getLocation().getWorld());
                 IgniteEntityEvent event = SpongeEventFactory.
                         createIgniteEntityEvent(frame.getCurrentCause(), ticks, ticks, this);
 

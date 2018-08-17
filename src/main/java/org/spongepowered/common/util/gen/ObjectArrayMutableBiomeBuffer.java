@@ -28,14 +28,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.flowpowered.math.vector.Vector3i;
 import net.minecraft.world.biome.Biome;
-import org.spongepowered.api.util.DiscreteTransform3;
 import org.spongepowered.api.world.biome.BiomeType;
 import org.spongepowered.api.world.biome.BiomeTypes;
 import org.spongepowered.api.world.biome.VirtualBiomeType;
 import org.spongepowered.api.world.extent.StorageType;
-import org.spongepowered.common.world.extent.MutableBiomeViewDownsize;
-import org.spongepowered.common.world.extent.MutableBiomeViewTransform;
-import org.spongepowered.common.world.extent.UnmodifiableBiomeVolumeWrapper;
+import org.spongepowered.api.world.biome.MutableBiomeVolume;
+import org.spongepowered.api.world.biome.worker.MutableBiomeVolumeWorker;
 import org.spongepowered.common.world.extent.worker.SpongeMutableBiomeVolumeWorker;
 
 import java.util.Arrays;
@@ -48,7 +46,7 @@ import java.util.Arrays;
  * example for a contract specified by Minecraft) this implementation becomes
  * more efficient.</p>
  */
-public final class ObjectArrayMutableBiomeBuffer extends AbstractBiomeBuffer implements MutableBiomeVolume {
+public final class ObjectArrayMutableBiomeBuffer extends AbstractBiomeBuffer implements MutableBiomeVolume<ObjectArrayMutableBiomeBuffer> {
 
     private final BiomeType[] biomes;
 
@@ -96,10 +94,11 @@ public final class ObjectArrayMutableBiomeBuffer extends AbstractBiomeBuffer imp
     }
 
     @Override
-    public void setBiome(int x, int y, int z, BiomeType biome) {
+    public boolean setBiome(int x, int y, int z, BiomeType biome) {
         checkNotNull(biome, "biome");
         checkRange(x, y, z);
         this.biomes[getIndex(x, z)] = biome;
+        return true;
     }
 
     /**
@@ -146,12 +145,7 @@ public final class ObjectArrayMutableBiomeBuffer extends AbstractBiomeBuffer imp
     }
 
     @Override
-    public MutableBiomeVolume getBiomeView(DiscreteTransform3 transform) {
-        return new MutableBiomeViewTransform(this, transform);
-    }
-
-    @Override
-    public MutableBiomeVolumeWorker<? extends MutableBiomeVolume> getBiomeWorker() {
+    public MutableBiomeVolumeWorker<ObjectArrayMutableBiomeBuffer> getBiomeWorker() {
         return new SpongeMutableBiomeVolumeWorker<>(this);
     }
 

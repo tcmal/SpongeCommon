@@ -27,7 +27,6 @@ package org.spongepowered.common.world.extent;
 import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.util.DiscreteTransform3;
-import org.spongepowered.api.world.extent.BlockVolume;
 
 public abstract class AbstractBlockViewTransform<V extends BlockVolume> implements BlockVolume {
 

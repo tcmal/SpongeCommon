@@ -27,10 +27,10 @@ package org.spongepowered.common.world.extent;
 import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.util.PositionOutOfBoundsException;
-import org.spongepowered.api.world.extent.BlockVolume;
+import org.spongepowered.api.world.extent.block.ReadableBlockVolume;
 import org.spongepowered.common.util.VecHelper;
 
-public abstract class AbstractBlockViewDownsize<V extends BlockVolume> implements BlockVolume {
+public abstract class AbstractBlockViewDownsize<V extends ReadableBlockVolume> implements ReadableBlockVolume {
 
     protected final V volume;
     protected final Vector3i min;

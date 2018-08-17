@@ -56,7 +56,6 @@ import org.spongepowered.api.text.selector.SelectorTypes;
 import org.spongepowered.api.util.AABB;
 import org.spongepowered.api.util.Functional;
 import org.spongepowered.api.world.Locatable;
-import org.spongepowered.api.world.extent.Extent;
 import org.spongepowered.common.SpongeImpl;
 
 import java.util.ArrayList;

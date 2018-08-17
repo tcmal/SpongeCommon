@@ -41,8 +41,8 @@ import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.PortalAgent;
-import org.spongepowered.api.world.PortalAgentType;
+import org.spongepowered.api.world.teleport.PortalAgent;
+import org.spongepowered.api.world.teleport.PortalAgentType;
 import org.spongepowered.api.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -51,7 +51,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.common.interfaces.world.IMixinLocation;
 import org.spongepowered.common.interfaces.world.IMixinTeleporter;
 import org.spongepowered.common.interfaces.world.IMixinWorldServer;
 import org.spongepowered.common.registry.type.world.PortalAgentRegistryModule;
@@ -228,7 +227,7 @@ public class MixinTeleporter implements PortalAgent, IMixinTeleporter {
                 this.destinationCoordinateCache.put(targetPosition, ((Teleporter) (Object) this).new PortalPosition(portalPosition, this.world.getTotalWorldTime()));
             }
 
-            return Optional.of(new Location<>(searchLocation.getExtent(), VecHelper.toVector3d(portalPosition)));
+            return Optional.of(new Location<>(searchLocation.getWorld(), VecHelper.toVector3d(portalPosition)));
         }
         return Optional.empty();
     }
@@ -305,7 +304,7 @@ public class MixinTeleporter implements PortalAgent, IMixinTeleporter {
 
     // Adds boolean to turn on special tracking if called from API
     private Optional<Location<World>> createTeleporter(Location<World> nearLocation) {
-//        IMixinWorldServer spongeWorld = (IMixinWorldServer) nearLocation.getExtent();
+//        IMixinWorldServer spongeWorld = (IMixinWorldServer) nearLocation.getWorld();
 //        final PhaseTracker causeTracker = PhaseTracker.getInstance();
 //        if (plugin) {
 //            Cause teleportCause = Cause.of(NamedCause.source(this));

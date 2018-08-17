@@ -89,7 +89,7 @@ import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.world.BlockChangeFlags;
 import org.spongepowered.api.world.Dimension;
 import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.PortalAgent;
+import org.spongepowered.api.world.teleport.PortalAgent;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.gamerule.DefaultGameRules;
 import org.spongepowered.api.world.storage.WorldProperties;
@@ -441,7 +441,7 @@ public final class EntityUtil {
             if (event.isCancelled()) {
                 // Mods may cancel this event in order to run custom transfer logic
                 // We need to make sure to only restore the location if
-                if (!portalExitTransform.getExtent().getUniqueId().equals(mixinEntity.getLocation().getExtent().getUniqueId())) {
+                if (!portalExitTransform.getExtent().getUniqueId().equals(mixinEntity.getLocation().getWorld().getUniqueId())) {
                     // update cache
                     if (teleporter instanceof IMixinTeleporter) {
                         ((IMixinTeleporter) teleporter).removePortalPositionFromCache(ChunkPos.asLong(chunkPosition.getX(), chunkPosition.getZ()));

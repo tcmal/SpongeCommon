@@ -32,7 +32,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureStart;
-import org.spongepowered.api.world.extent.Extent;
+import org.spongepowered.api.world.chunk.ProtoChunk;
+import org.spongepowered.api.world.ProtoWorld;
 import org.spongepowered.api.world.gen.Populator;
 import org.spongepowered.api.world.gen.PopulatorType;
 import org.spongepowered.asm.mixin.Mixin;
@@ -64,7 +65,7 @@ public abstract class MixinMapGenStructure extends MixinMapGenBase implements Po
     }
 
     @Override
-    public void populate(org.spongepowered.api.world.World worldIn, Extent extent, Random random) {
+    public void populate(ProtoWorld<?> worldIn, ProtoChunk extent, Random random) {
         Vector3i min = extent.getBlockMin();
         World world = (World) worldIn;
         generateStructure(world, random, new ChunkPos((min.getX() - 8) / 16, (min.getZ() - 8) / 16));

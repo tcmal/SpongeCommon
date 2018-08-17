@@ -32,7 +32,9 @@ import org.spongepowered.api.util.DiscreteTransform3;
 import org.spongepowered.api.world.BlockChangeFlag;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.ArchetypeVolume;
+import org.spongepowered.api.world.extent.archetype.ArchetypeVolume;
+import org.spongepowered.api.world.extent.block.MutableBlockVolume;
+import org.spongepowered.api.world.extent.block.worker.MutableBlockVolumeWorker;
 import org.spongepowered.api.world.schematic.BlockPalette;
 import org.spongepowered.common.util.gen.AbstractBlockBuffer;
 import org.spongepowered.common.world.extent.worker.SpongeMutableBlockVolumeWorker;
@@ -42,10 +44,10 @@ import java.util.Optional;
 
 public class SpongeArchetypeVolume extends AbstractBlockBuffer implements ArchetypeVolume {
 
-    private final MutableBlockVolume backing;
+    private final MutableBlockVolume<?> backing;
     private final Map<Vector3i, TileEntityArchetype> tiles;
 
-    public SpongeArchetypeVolume(MutableBlockVolume backing, Map<Vector3i, TileEntityArchetype> tiles) {
+    public SpongeArchetypeVolume(MutableBlockVolume<?> backing, Map<Vector3i, TileEntityArchetype> tiles) {
         super(backing.getBlockMin(), backing.getBlockSize());
         this.backing = backing;
         this.tiles = Maps.newHashMap(tiles);
@@ -66,14 +68,14 @@ public class SpongeArchetypeVolume extends AbstractBlockBuffer implements Archet
         return this.tiles;
     }
     @Override
-    public MutableBlockVolumeWorker<? extends ArchetypeVolume> getBlockWorker() {
+    public MutableBlockVolumeWorker<ArchetypeVolume> getBlockWorker() {
         return new SpongeMutableBlockVolumeWorker<>(this);
     }
 
     @Override
     public void apply(Location<World> location, BlockChangeFlag changeFlag) {
         this.backing.getBlockWorker().iterate((v, x, y, z) -> {
-            location.getExtent().setBlock(x + location.getBlockX(), y + location.getBlockY(), z + location.getBlockZ(), v.getBlock(x, y, z), changeFlag);
+            location.getWorld().setBlock(x + location.getBlockX(), y + location.getBlockY(), z + location.getBlockZ(), v.getBlock(x, y, z), changeFlag);
         });
         for (Vector3i pos : this.tiles.keySet()) {
             TileEntityArchetype archetype = this.tiles.get(pos);

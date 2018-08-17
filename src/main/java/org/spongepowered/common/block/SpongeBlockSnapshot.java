@@ -55,7 +55,6 @@ import org.spongepowered.api.data.merge.MergeFunction;
 import org.spongepowered.api.data.value.BaseValue;
 import org.spongepowered.api.data.value.immutable.ImmutableValue;
 import org.spongepowered.api.world.BlockChangeFlag;
-import org.spongepowered.api.world.BlockChangeFlags;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 import org.spongepowered.common.SpongeImpl;
@@ -146,7 +145,7 @@ public class SpongeBlockSnapshot implements BlockSnapshot {
     public BlockSnapshot withLocation(Location<World> location) {
         return createBuilder()
             .position(location.getBlockPosition())
-            .worldId(location.getExtent().getUniqueId())
+            .worldId(location.getWorld().getUniqueId())
             .build();
     }
 

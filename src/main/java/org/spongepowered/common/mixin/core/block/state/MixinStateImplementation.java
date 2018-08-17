@@ -117,7 +117,7 @@ public abstract class MixinStateImplementation extends BlockStateBase implements
         final SpongeBlockSnapshotBuilder builder = new SpongeBlockSnapshotBuilder()
             .blockState(this)
             .position(location.getBlockPosition())
-            .worldId(location.getExtent().getUniqueId());
+            .worldId(location.getWorld().getUniqueId());
         if (this.block.hasTileEntity() && location.getBlockType().equals(this.block)) {
             final TileEntity tileEntity = location.getTileEntity()
                 .orElseThrow(() -> new IllegalStateException("Unable to retrieve a TileEntity for location: " + location));

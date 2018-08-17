@@ -104,7 +104,7 @@ public abstract class AbstractBlockPropertyStore<T extends Property<?, ?>> exten
 
     @Override
     public Optional<T> getFor(Location<World> location, Direction direction) {
-        return getForDirection(((net.minecraft.world.World) location.getExtent()), location.getBlockX(), location.getBlockY(), location.getBlockZ(),
+        return getForDirection(((net.minecraft.world.World) location.getWorld()), location.getBlockX(), location.getBlockY(), location.getBlockZ(),
                 toEnumFacing(direction));
     }
 }

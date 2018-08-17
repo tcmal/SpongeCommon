@@ -40,8 +40,8 @@ public class SkyLuminancePropertyStore extends AbstractSpongePropertyStore<SkyLu
 
     @Override
     public Optional<SkyLuminanceProperty> getFor(PropertyHolder propertyHolder) {
-        if (propertyHolder instanceof Location && ((Location<?>) propertyHolder).getExtent() instanceof Chunk) {
-            final Chunk chunk = (Chunk) ((Location<?>) propertyHolder).getExtent();
+        if (propertyHolder instanceof Location && ((Location<?>) propertyHolder).getWorld() instanceof Chunk) {
+            final Chunk chunk = (Chunk) ((Location<?>) propertyHolder).getWorld();
             final float light = chunk.getLightFor(EnumSkyBlock.SKY, VecHelper.toBlockPos((Location<?>) propertyHolder));
             return Optional.of(new SkyLuminanceProperty(light));
         }
@@ -50,7 +50,7 @@ public class SkyLuminancePropertyStore extends AbstractSpongePropertyStore<SkyLu
 
     @Override
     public Optional<SkyLuminanceProperty> getFor(Location<World> location) {
-        final net.minecraft.world.World world = (net.minecraft.world.World) location.getExtent();
+        final net.minecraft.world.World world = (net.minecraft.world.World) location.getWorld();
         final float light = world.getLightFor(EnumSkyBlock.SKY, VecHelper.toBlockPos(location));
         return Optional.of(new SkyLuminanceProperty(light));
     }

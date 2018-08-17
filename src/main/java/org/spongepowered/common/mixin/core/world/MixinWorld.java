@@ -99,15 +99,14 @@ import org.spongepowered.api.util.PositionOutOfBoundsException;
 import org.spongepowered.api.util.annotation.NonnullByDefault;
 import org.spongepowered.api.world.BlockChangeFlag;
 import org.spongepowered.api.world.BlockChangeFlags;
-import org.spongepowered.api.world.Chunk;
-import org.spongepowered.api.world.ChunkPreGenerate;
+import org.spongepowered.api.world.chunk.Chunk;
+import org.spongepowered.api.world.chunk.ChunkPreGenerate;
 import org.spongepowered.api.world.Dimension;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.WorldBorder;
 import org.spongepowered.api.world.biome.BiomeType;
 import org.spongepowered.api.world.explosion.Explosion;
-import org.spongepowered.api.world.extent.Extent;
 import org.spongepowered.api.world.storage.WorldProperties;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -1147,12 +1146,18 @@ public abstract class MixinWorld implements World, IMixinWorld {
     @Redirect(method = "addTileEntity",
             at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", remap = false),
             slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/world/World;tickableTileEntities:Ljava/util/List;"),
-                           to =   @At(value = "FIELD", target = "Lnet/minecraft/world/World;isRemote:Z")))
-    private boolean onAddTileEntity(List<net.minecraft.tileentity.TileEntity> list, Object tile) {
+                           to =   @At(value = "FIELD", target = "Lnet/minecraft/world/World;isRemote:Z")),
+            cancellable = @Cancellable(
+                from = @At(value = "INVOKE", target = "Lnet/minecraft/tileentity/TileEntity:getPos()Lnet/minecraft/util/math/BlockPos;", shift = At.Shift.AFTER),
+                earlyReturn = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", remap = false)
+            )
+    )
+    private boolean onAddTileEntity(List<net.minecraft.tileentity.TileEntity> list, Object tile, CallbackInfoReturnable<Boolean> ci) {
         if (!this.isFake() && !canTileUpdate((net.minecraft.tileentity.TileEntity) tile)) {
             return false;
         }
 
+        ci.setReturnValue(true);
         return list.add((net.minecraft.tileentity.TileEntity) tile);
     }
 

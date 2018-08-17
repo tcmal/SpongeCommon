@@ -26,7 +26,8 @@ package org.spongepowered.common.world.gen.populators;
 
 import com.google.common.collect.Lists;
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.Extent;
+import org.spongepowered.api.world.chunk.ProtoChunk;
+import org.spongepowered.api.world.ProtoWorld;
 import org.spongepowered.api.world.gen.Populator;
 import org.spongepowered.api.world.gen.PopulatorType;
 import org.spongepowered.common.interfaces.world.gen.IFlaggedPopulator;
@@ -63,8 +64,8 @@ public class FilteredPopulator implements IFlaggedPopulator {
     }
 
     @Override
-    public void populate(World world, Extent volume, Random random) {
-        this.wrapped.populate(world, volume, random);
+    public void populate(ProtoWorld<?> world, ProtoChunk volume, Random random) {
+        this.wrapped.populate(world, volume, random, );
     }
 
     @Override
@@ -80,7 +81,7 @@ public class FilteredPopulator implements IFlaggedPopulator {
         if (!flags.containsAll(this.requiredFlags)) {
             return;
         }
-        this.wrapped.populate(world, extent, rand);
+        this.wrapped.populate(world, extent, rand, );
     }
 
     @Override

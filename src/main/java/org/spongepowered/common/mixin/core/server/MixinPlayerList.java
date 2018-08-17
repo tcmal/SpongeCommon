@@ -499,7 +499,7 @@ public abstract class MixinPlayerList implements IMixinPlayerList {
         // Keep players out of blocks
         Vector3d tempPos = player.getLocation().getPosition();
         playerIn.setPosition(location.getX(), location.getY(), location.getZ());
-        while (!((WorldServer) location.getExtent()).getCollisionBoxes(playerIn, playerIn.getEntityBoundingBox()).isEmpty() && location.getPosition().getY() < 256.0D) {
+        while (!((WorldServer) location.getWorld()).getCollisionBoxes(playerIn, playerIn.getEntityBoundingBox()).isEmpty() && location.getPosition().getY() < 256.0D) {
             playerIn.setPosition(playerIn.posX, playerIn.posY + 1.0D, playerIn.posZ);
             location = location.add(0, 1, 0);
         }
@@ -564,11 +564,11 @@ public abstract class MixinPlayerList implements IMixinPlayerList {
         toTransform = event.getToTransform();
         location = toTransform.getLocation();
 
-        if (!(location.getExtent() instanceof WorldServer)) {
+        if (!(location.getWorld() instanceof WorldServer)) {
             SpongeImpl.getLogger().warn("Location set in PlayerRespawnEvent was invalid, using original location instead");
             location = event.getFromTransform().getLocation();
         }
-        worldServer = (WorldServer) location.getExtent();
+        worldServer = (WorldServer) location.getWorld();
 
         final IMixinWorldServer mixinWorldServer = (IMixinWorldServer) worldServer;
         // Set the dimension again in case a plugin changed the target world during RespawnPlayerEvent

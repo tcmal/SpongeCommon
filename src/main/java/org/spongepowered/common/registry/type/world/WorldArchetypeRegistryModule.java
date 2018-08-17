@@ -26,14 +26,13 @@ package org.spongepowered.common.registry.type.world;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.spongepowered.api.CatalogKey;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.registry.AdditionalCatalogRegistryModule;
 import org.spongepowered.api.registry.AlternateCatalogRegistryModule;
 import org.spongepowered.api.registry.util.RegisterCatalog;
 import org.spongepowered.api.registry.util.RegistrationDependency;
 import org.spongepowered.api.world.DimensionTypes;
-import org.spongepowered.api.world.GeneratorTypes;
+import org.spongepowered.api.world.gen.GeneratorTypes;
 import org.spongepowered.api.world.SerializationBehaviors;
 import org.spongepowered.api.world.WorldArchetype;
 import org.spongepowered.api.world.WorldArchetypes;
@@ -42,9 +41,6 @@ import org.spongepowered.api.world.gen.WorldGeneratorModifiers;
 import org.spongepowered.common.registry.AbstractCatalogRegistryModule;
 import org.spongepowered.common.registry.type.data.DataFormatRegistryModule;
 import org.spongepowered.common.registry.type.entity.GameModeRegistryModule;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RegisterCatalog(WorldArchetypes.class)
 @RegistrationDependency({GameModeRegistryModule.class, GeneratorTypeRegistryModule.class, DifficultyRegistryModule.class,

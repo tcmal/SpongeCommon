@@ -26,7 +26,7 @@ package org.spongepowered.common.world.pregen;
 
 import org.spongepowered.api.event.EventListener;
 import org.spongepowered.api.event.world.ChunkPreGenerationEvent;
-import org.spongepowered.api.world.ChunkPreGenerate;
+import org.spongepowered.api.world.chunk.ChunkPreGenerate;
 
 import java.util.List;
 import java.util.UUID;

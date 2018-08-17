@@ -38,7 +38,6 @@ import org.spongepowered.api.text.selector.SelectorType;
 import org.spongepowered.api.util.annotation.NonnullByDefault;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Collection;
 import java.util.List;
@@ -128,7 +127,7 @@ public class SpongeSelector implements Selector {
         if (!this.has(ArgumentTypes.POSITION.z())) {
             selector.add(ArgumentTypes.POSITION.z(), location.getPosition().getFloorZ());
         }
-        return new SelectorResolver(selector.build(), ImmutableSet.of(location.getExtent())).resolve();
+        return new SelectorResolver(selector.build(), ImmutableSet.of(location.getWorld())).resolve();
     }
 
     @Override

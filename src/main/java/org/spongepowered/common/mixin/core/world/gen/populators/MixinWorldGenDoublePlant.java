@@ -37,7 +37,8 @@ import org.spongepowered.api.util.weighted.VariableAmount;
 import org.spongepowered.api.util.weighted.WeightedObject;
 import org.spongepowered.api.util.weighted.WeightedTable;
 import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.extent.Extent;
+import org.spongepowered.api.world.chunk.ProtoChunk;
+import org.spongepowered.api.world.ProtoWorld;
 import org.spongepowered.api.world.gen.PopulatorType;
 import org.spongepowered.api.world.gen.PopulatorTypes;
 import org.spongepowered.api.world.gen.populator.DoublePlant;
@@ -78,7 +79,7 @@ public class MixinWorldGenDoublePlant implements DoublePlant {
     }
 
     @Override
-    public void populate(org.spongepowered.api.world.World worldIn, Extent extent, Random random) {
+    public void populate(ProtoWorld<?> worldIn, ProtoChunk extent, Random random) {
         this.currentExtent = extent;
         Vector3i min = extent.getBlockMin();
         Vector3i size = extent.getBlockSize();

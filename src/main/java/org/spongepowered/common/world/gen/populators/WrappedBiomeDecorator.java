@@ -28,7 +28,8 @@ import com.flowpowered.math.vector.Vector3i;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeDecorator;
-import org.spongepowered.api.world.extent.Extent;
+import org.spongepowered.api.world.chunk.ProtoChunk;
+import org.spongepowered.api.world.ProtoWorld;
 import org.spongepowered.api.world.gen.Populator;
 import org.spongepowered.api.world.gen.PopulatorType;
 import org.spongepowered.common.registry.type.world.gen.PopulatorTypeRegistryModule;
@@ -58,7 +59,7 @@ public class WrappedBiomeDecorator implements Populator {
     }
 
     @Override
-    public void populate(org.spongepowered.api.world.World world, Extent extent, Random random) {
+    public void populate(ProtoWorld<?> world, ProtoChunk extent, Random random) {
         Vector3i min = extent.getBlockMin();
         Vector3i size = extent.getBlockSize();
         World worldIn = (World) world;

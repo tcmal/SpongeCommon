@@ -29,7 +29,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.util.weighted.VariableAmount;
-import org.spongepowered.api.world.extent.Extent;
+import org.spongepowered.api.world.chunk.ProtoChunk;
+import org.spongepowered.api.world.ProtoWorld;
 import org.spongepowered.api.world.gen.PopulatorObject;
 import org.spongepowered.api.world.gen.PopulatorType;
 import org.spongepowered.api.world.gen.PopulatorTypes;
@@ -64,7 +65,7 @@ public class RandomObjectPopulator implements RandomObject {
     }
 
     @Override
-    public void populate(org.spongepowered.api.world.World world, Extent extent, Random random) {
+    public void populate(ProtoWorld<?> world, ProtoChunk extent, Random random) {
         Vector3i min = extent.getBlockMin();
         Vector3i size = extent.getBlockSize();
         int n = this.count.getFlooredAmount(random);

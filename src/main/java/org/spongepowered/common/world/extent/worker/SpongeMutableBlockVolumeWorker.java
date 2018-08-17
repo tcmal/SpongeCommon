@@ -25,16 +25,16 @@
 package org.spongepowered.common.world.extent.worker;
 
 import org.spongepowered.api.block.BlockState;
-import org.spongepowered.api.world.extent.beta.block.MutableBlockVolume;
-import org.spongepowered.api.world.extent.beta.block.worker.MutableBlockVolumeWorker;
-import org.spongepowered.api.world.extent.beta.worker.function.VolumeFiller;
+import org.spongepowered.api.world.extent.block.MutableBlockVolume;
+import org.spongepowered.api.world.extent.block.worker.MutableBlockVolumeWorker;
+import org.spongepowered.api.world.extent.worker.function.VolumeFiller;
 
 /**
  *
  */
-public class SpongeMutableBlockVolumeWorker extends SpongeBlockVolumeWorker<MutableBlockVolume> implements MutableBlockVolumeWorker {
+public class SpongeMutableBlockVolumeWorker<M extends MutableBlockVolume<M>> extends SpongeBlockVolumeWorker<M, M> implements MutableBlockVolumeWorker<M> {
 
-    public SpongeMutableBlockVolumeWorker(MutableBlockVolume volume) {
+    public SpongeMutableBlockVolumeWorker(M volume) {
         super(volume);
     }
 

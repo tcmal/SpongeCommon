@@ -52,7 +52,7 @@ public class ReplaceablePropertyStore extends AbstractBlockPropertyStore<Replace
 
     @Override
     public Optional<ReplaceableProperty> getFor(Location<World> location) {
-        final net.minecraft.world.World world = (net.minecraft.world.World) location.getExtent();
+        final net.minecraft.world.World world = (net.minecraft.world.World) location.getWorld();
         final Block block = (Block) location.getBlockType();
         return Optional.of(block.isReplaceable(world, VecHelper.toBlockPos(location)) ? TRUE : FALSE);
     }

@@ -25,49 +25,72 @@
 package org.spongepowered.common.world.extent;
 
 import com.flowpowered.math.vector.Vector3i;
-import org.spongepowered.api.util.DiscreteTransform3;
 import org.spongepowered.api.world.biome.BiomeType;
+import org.spongepowered.api.world.extent.Volume;
+import org.spongepowered.api.world.biome.ImmutableBiomeVolume;
+import org.spongepowered.api.world.biome.MutableBiomeVolume;
+import org.spongepowered.api.world.biome.UnmodifiableBiomeVolume;
+import org.spongepowered.api.world.biome.worker.MutableBiomeVolumeWorker;
 import org.spongepowered.common.util.gen.ByteArrayImmutableBiomeBuffer;
 import org.spongepowered.common.world.extent.worker.SpongeMutableBiomeVolumeWorker;
 
-public class MutableBiomeViewDownsize extends AbstractBiomeViewDownsize<MutableBiomeVolume> implements MutableBiomeVolume {
+public class MutableBiomeViewDownsize extends AbstractBiomeViewDownsize<MutableBiomeViewDownsize, MutableBiomeVolume<?>> implements MutableBiomeVolume<MutableBiomeViewDownsize> {
 
-    public MutableBiomeViewDownsize(MutableBiomeVolume volume, Vector3i min, Vector3i max) {
+    public MutableBiomeViewDownsize(MutableBiomeVolume<?> volume, Vector3i min, Vector3i max) {
         super(volume, min, max);
     }
 
     @Override
-    public void setBiome(int x, int y, int z, BiomeType biome) {
+    public boolean setBiome(int x, int y, int z, BiomeType biome) {
         checkRange(x, y, z);
-        this.volume.setBiome(x, y, z, biome);
+        return this.volume.setBiome(x, y, z, biome);
     }
 
     @Override
-    public MutableBiomeVolume getBiomeView(Vector3i newMin, Vector3i newMax) {
-        checkRange(newMin.getX(), newMin.getY(), newMin.getZ());
-        checkRange(newMax.getX(), newMax.getY(), newMax.getZ());
-        return new MutableBiomeViewDownsize(this.volume, newMin, newMax);
-    }
-
-    @Override
-    public MutableBiomeVolume getBiomeView(DiscreteTransform3 transform) {
-        return new MutableBiomeViewTransform(this, transform);
-    }
-
-    @Override
-    public MutableBiomeVolumeWorker<? extends MutableBiomeVolume> getBiomeWorker() {
+    public MutableBiomeVolumeWorker<MutableBiomeViewDownsize> getBiomeWorker() {
         return new SpongeMutableBiomeVolumeWorker<>(this);
     }
 
     @Override
-    public UnmodifiableBiomeVolume getUnmodifiableBiomeView() {
+    public UnmodifiableBiomeVolume<?> asUnmodifiableBiomeVolume() {
         return new UnmodifiableBiomeVolumeWrapper(this);
     }
 
     @Override
-    public ImmutableBiomeVolume getImmutableBiomeCopy() {
-        return ByteArrayImmutableBiomeBuffer.newWithoutArrayClone(ExtentBufferUtil.copyToArray(this, this.min, this.max, this.size), this.min,
-            this.size);
+    public ImmutableBiomeVolume asImmutableBiomeVolume() {
+        return ByteArrayImmutableBiomeBuffer.newWithoutArrayClone(ExtentBufferUtil.copyToArray(this, this.min, this.max, this.size), this.min, this.size);
     }
 
+    @Override
+    public Vector3i getBlockMin() {
+        return this.min;
+    }
+
+    @Override
+    public Vector3i getBlockMax() {
+        return this.max;
+    }
+
+    @Override
+    public Vector3i getBlockSize() {
+        return this.size;
+    }
+
+    @Override
+    public boolean containsBlock(int x, int y, int z) {
+        checkRange(x, y, z);
+        return this.volume.containsBlock(x, y, z);
+    }
+
+    @Override
+    public boolean isAreaAvailable(int x, int y, int z) {
+        return this.volume.containsBlock(x, y, z);
+    }
+
+    @Override
+    public Volume getView(Vector3i newMin, Vector3i newMax) {
+        checkRange(newMin.getX(), newMin.getY(), newMin.getZ());
+        checkRange(newMax.getX(), newMax.getY(), newMax.getZ());
+        return new MutableBiomeViewDownsize(this.volume, newMin, newMax);
+    }
 }

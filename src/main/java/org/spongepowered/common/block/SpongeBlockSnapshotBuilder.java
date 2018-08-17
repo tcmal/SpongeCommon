@@ -117,7 +117,7 @@ public class SpongeBlockSnapshotBuilder extends AbstractDataBuilder<BlockSnapsho
     @Override
     public SpongeBlockSnapshotBuilder from(Location<World> location) {
         this.blockState = location.getBlock();
-        this.worldUuid = location.getExtent().getUniqueId();
+        this.worldUuid = location.getWorld().getUniqueId();
         this.coords = location.getBlockPosition();
         if (this.blockState.getType() instanceof ITileEntityProvider) {
             if (location.hasTileEntity()) {

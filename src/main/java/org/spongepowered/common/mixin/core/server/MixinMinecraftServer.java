@@ -67,7 +67,7 @@ import org.spongepowered.api.service.permission.PermissionService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.util.Tristate;
-import org.spongepowered.api.world.ChunkTicketManager;
+import org.spongepowered.api.world.chunk.ChunkTicketManager;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.SerializationBehaviors;
 import org.spongepowered.api.world.World;

@@ -78,7 +78,7 @@ public class SpongeTileEntityArchetype extends AbstractArchetype<TileEntityType,
         final BlockState currentState = location.getBlock();
         final Block currentBlock = BlockUtil.toBlock(currentState);
         final Block newBlock = BlockUtil.toBlock(this.blockState);
-        final net.minecraft.world.World minecraftWorld = (net.minecraft.world.World) location.getExtent();
+        final net.minecraft.world.World minecraftWorld = (net.minecraft.world.World) location.getWorld();
 
         BlockPos blockpos = VecHelper.toBlockPos(location);
         if (currentBlock != newBlock) {
@@ -103,7 +103,7 @@ public class SpongeTileEntityArchetype extends AbstractArchetype<TileEntityType,
         final SpongeBlockSnapshotBuilder builder = new SpongeBlockSnapshotBuilder();
         builder.blockState = this.blockState;
         builder.compound = this.data.copy();
-        builder.worldUuid = location.getExtent().getUniqueId();
+        builder.worldUuid = location.getWorld().getUniqueId();
         builder.coords = location.getBlockPosition();
         return builder.build();
     }

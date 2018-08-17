@@ -25,7 +25,6 @@
 package org.spongepowered.common.interfaces.world.gen;
 
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.Extent;
 import org.spongepowered.api.world.gen.Populator;
 
 import java.util.List;

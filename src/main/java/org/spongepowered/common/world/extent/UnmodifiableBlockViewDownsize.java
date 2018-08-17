@@ -25,19 +25,41 @@
 package org.spongepowered.common.world.extent;
 
 import com.flowpowered.math.vector.Vector3i;
-import org.spongepowered.api.world.extent.BlockVolume;
-import org.spongepowered.api.world.extent.beta.block.worker.BlockVolumeWorker;
+import org.spongepowered.api.fluid.FluidState;
+import org.spongepowered.api.world.extent.Volume;
+import org.spongepowered.api.world.extent.block.ImmutableBlockVolume;
+import org.spongepowered.api.world.extent.block.UnmodifiableBlockVolume;
+import org.spongepowered.api.world.extent.block.worker.BlockVolumeWorker;
 import org.spongepowered.common.world.extent.worker.SpongeBlockVolumeWorker;
 
-public class UnmodifiableBlockViewDownsize extends AbstractBlockViewDownsize<BlockVolume> implements UnmodifiableBlockVolume {
+public class UnmodifiableBlockViewDownsize extends AbstractBlockViewDownsize<BlockVolume> implements UnmodifiableBlockVolume<UnmodifiableBlockViewDownsize> {
 
     public UnmodifiableBlockViewDownsize(BlockVolume volume, Vector3i min, Vector3i max) {
         super(volume, min, max);
     }
 
     @Override
-    public BlockVolumeWorker<? extends UnmodifiableBlockVolume> getBlockWorker() {
+    public BlockVolumeWorker<UnmodifiableBlockViewDownsize> getBlockWorker() {
         return new SpongeBlockVolumeWorker<>(this);
     }
 
+    @Override
+    public FluidState getFluid(int x, int y, int z) {
+        return null;
+    }
+
+    @Override
+    public ImmutableBlockVolume asImmutableBlockVolume() {
+        return null;
+    }
+
+    @Override
+    public boolean isAreaAvailable(int x, int y, int z) {
+        return false;
+    }
+
+    @Override
+    public Volume getView(Vector3i newMin, Vector3i newMax) {
+        return null;
+    }
 }

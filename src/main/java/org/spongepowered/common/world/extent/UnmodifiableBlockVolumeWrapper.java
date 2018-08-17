@@ -26,14 +26,19 @@ package org.spongepowered.common.world.extent;
 
 import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.block.BlockState;
-import org.spongepowered.api.world.extent.beta.block.worker.BlockVolumeWorker;
+import org.spongepowered.api.fluid.FluidState;
+import org.spongepowered.api.world.extent.Volume;
+import org.spongepowered.api.world.extent.block.ImmutableBlockVolume;
+import org.spongepowered.api.world.extent.block.ReadableBlockVolume;
+import org.spongepowered.api.world.extent.block.UnmodifiableBlockVolume;
+import org.spongepowered.api.world.extent.block.worker.BlockVolumeWorker;
 import org.spongepowered.common.world.extent.worker.SpongeBlockVolumeWorker;
 
-public class UnmodifiableBlockVolumeWrapper implements UnmodifiableBlockVolume {
+public class UnmodifiableBlockVolumeWrapper implements UnmodifiableBlockVolume<UnmodifiableBlockVolumeWrapper> {
 
-    private final MutableBlockVolume volume;
+    private final ReadableBlockVolume volume;
 
-    public UnmodifiableBlockVolumeWrapper(MutableBlockVolume volume) {
+    public UnmodifiableBlockVolumeWrapper(ReadableBlockVolume volume) {
         this.volume = volume;
     }
 
@@ -58,12 +63,33 @@ public class UnmodifiableBlockVolumeWrapper implements UnmodifiableBlockVolume {
     }
 
     @Override
+    public boolean isAreaAvailable(int x, int y, int z) {
+        return false;
+    }
+
+    @Override
+    public Volume getView(Vector3i newMin, Vector3i newMax) {
+
+        return new UnmodifiableBlockViewDownsize(this.volume, getBlockMin(), newMax);
+    }
+
+    @Override
     public BlockState getBlock(int x, int y, int z) {
         return this.volume.getBlock(x, y, z);
     }
 
     @Override
-    public BlockVolumeWorker<? extends UnmodifiableBlockVolume> getBlockWorker() {
+    public FluidState getFluid(int x, int y, int z) {
+        return null;
+    }
+
+    @Override
+    public ImmutableBlockVolume asImmutableBlockVolume() {
+        return null;
+    }
+
+    @Override
+    public BlockVolumeWorker<UnmodifiableBlockVolumeWrapper> getBlockWorker() {
         return new SpongeBlockVolumeWorker<>(this);
     }
 

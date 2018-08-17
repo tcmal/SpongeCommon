@@ -28,7 +28,7 @@ import net.minecraft.world.WorldProvider;
 import org.spongepowered.api.service.context.Context;
 import org.spongepowered.api.world.Dimension;
 import org.spongepowered.api.world.DimensionType;
-import org.spongepowered.api.world.GeneratorType;
+import org.spongepowered.api.world.gen.GeneratorType;
 import org.spongepowered.common.interfaces.world.IMixinDimensionType;
 
 public class SpongeDimension implements Dimension {

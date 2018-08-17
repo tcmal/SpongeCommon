@@ -25,7 +25,7 @@
 package org.spongepowered.common.world.extent;
 
 import com.flowpowered.math.vector.Vector3i;
-import org.spongepowered.api.world.extent.beta.block.worker.BlockVolumeWorker;
+import org.spongepowered.api.world.extent.block.worker.BlockVolumeWorker;
 import org.spongepowered.common.world.extent.worker.SpongeBlockVolumeWorker;
 
 public class ImmutableBlockViewDownsize extends AbstractBlockViewDownsize<ImmutableBlockVolume> implements ImmutableBlockVolume {

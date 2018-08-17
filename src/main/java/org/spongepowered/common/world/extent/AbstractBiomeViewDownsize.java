@@ -29,19 +29,18 @@ import static com.google.common.base.Preconditions.checkArgument;
 import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.util.PositionOutOfBoundsException;
 import org.spongepowered.api.world.biome.BiomeType;
-import org.spongepowered.api.world.extent.BiomeVolume;
-import org.spongepowered.api.world.extent.StorageType;
+import org.spongepowered.api.world.biome.ReadableBiomeVolume;
+import org.spongepowered.api.world.biome.WorkableBiomeVolume;
 import org.spongepowered.common.util.VecHelper;
-import org.spongepowered.common.util.gen.ByteArrayMutableBiomeBuffer;
 
-public abstract class AbstractBiomeViewDownsize<V extends BiomeVolume> implements BiomeVolume {
+public abstract class AbstractBiomeViewDownsize<V extends WorkableBiomeVolume<V>, M extends ReadableBiomeVolume> implements WorkableBiomeVolume<V> {
 
-    protected final V volume;
+    protected final M volume;
     protected final Vector3i min;
     protected final Vector3i max;
     protected final Vector3i size;
 
-    public AbstractBiomeViewDownsize(V volume, Vector3i min, Vector3i max) {
+    public AbstractBiomeViewDownsize(M volume, Vector3i min, Vector3i max) {
         checkArgument(min.getY() == 0, "Min y coordinate should be 0");
         checkArgument(max.getY() == 0, "Max y coordinate should be 0");
         this.volume = volume;
@@ -80,17 +79,6 @@ public abstract class AbstractBiomeViewDownsize<V extends BiomeVolume> implement
     public BiomeType getBiome(int x, int y, int z) {
         checkRange(x, y, z);
         return this.volume.getBiome(x, y, z);
-    }
-
-    @Override
-    public MutableBiomeVolume getBiomeCopy(StorageType type) {
-        switch (type) {
-            case STANDARD:
-                return new ByteArrayMutableBiomeBuffer(ExtentBufferUtil.copyToArray(this, this.min, this.max, this.size), this.min, this.size);
-            case THREAD_SAFE:
-            default:
-                throw new UnsupportedOperationException(type.name());
-        }
     }
 
 }

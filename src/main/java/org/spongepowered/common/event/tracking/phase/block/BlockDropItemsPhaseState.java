@@ -89,7 +89,7 @@ final class BlockDropItemsPhaseState extends BlockPhaseState {
         final BlockSnapshot blockSnapshot = context.getSource(BlockSnapshot.class)
             .orElseThrow(TrackingUtil.throwWithContext("Could not find a block dropping items!", context));
         final Location<World> worldLocation = blockSnapshot.getLocation().get();
-        final IMixinWorldServer mixinWorld = ((IMixinWorldServer) worldLocation.getExtent());
+        final IMixinWorldServer mixinWorld = ((IMixinWorldServer) worldLocation.getWorld());
 
         context.getCapturedBlockSupplier()
             .acceptAndClearIfNotEmpty(blocks -> {

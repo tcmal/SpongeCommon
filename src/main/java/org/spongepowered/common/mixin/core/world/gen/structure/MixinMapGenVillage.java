@@ -29,7 +29,8 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.MapGenVillage;
-import org.spongepowered.api.world.extent.Extent;
+import org.spongepowered.api.world.chunk.ProtoChunk;
+import org.spongepowered.api.world.ProtoWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.common.interfaces.world.gen.IFlaggedPopulator;
 import org.spongepowered.common.world.gen.WorldGenConstants;
@@ -57,7 +58,7 @@ public abstract class MixinMapGenVillage extends MapGenStructure implements IFla
     }
 
     @Override
-    public void populate(org.spongepowered.api.world.World worldIn, Extent extent, Random random) {
+    public void populate(ProtoWorld<?> worldIn, ProtoChunk extent, Random random) {
         Vector3i min = extent.getBlockMin();
         World world = (World) worldIn;
         generateStructure(world, random, new ChunkPos((min.getX() - 8) / 16, (min.getZ() - 8) / 16));

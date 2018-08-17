@@ -30,7 +30,6 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.After;
 import org.spongepowered.api.event.filter.cause.Before;
-import org.spongepowered.api.world.extent.Extent;
 import org.spongepowered.common.event.EventFilterTest;
 
 public class BeforeAfterCauseListener {

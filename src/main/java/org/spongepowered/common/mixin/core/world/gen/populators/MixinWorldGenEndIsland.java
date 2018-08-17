@@ -38,7 +38,8 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.util.weighted.VariableAmount;
-import org.spongepowered.api.world.extent.Extent;
+import org.spongepowered.api.world.chunk.ProtoChunk;
+import org.spongepowered.api.world.ProtoWorld;
 import org.spongepowered.api.world.gen.PopulatorType;
 import org.spongepowered.api.world.gen.PopulatorTypes;
 import org.spongepowered.api.world.gen.populator.EndIsland;
@@ -115,7 +116,7 @@ public abstract class MixinWorldGenEndIsland extends WorldGenerator implements E
     }
 
     @Override
-    public void populate(org.spongepowered.api.world.World worldIn, Extent extent, Random rand) {
+    public void populate(ProtoWorld<?> worldIn, ProtoChunk extent, Random rand) {
         Vector3i min = extent.getBlockMin();
         Vector3i size = extent.getBlockSize();
         World world = (World) worldIn;

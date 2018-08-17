@@ -26,7 +26,7 @@ package org.spongepowered.common.mixin.core.world;
 
 import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.util.annotation.NonnullByDefault;
-import org.spongepowered.api.world.ChunkPreGenerate;
+import org.spongepowered.api.world.chunk.ChunkPreGenerate;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.WorldBorder;
 import org.spongepowered.asm.mixin.Implements;

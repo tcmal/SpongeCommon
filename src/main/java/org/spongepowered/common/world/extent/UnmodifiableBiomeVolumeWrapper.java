@@ -27,14 +27,17 @@ package org.spongepowered.common.world.extent;
 import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.util.DiscreteTransform3;
 import org.spongepowered.api.world.biome.BiomeType;
-import org.spongepowered.api.world.extent.StorageType;
+import org.spongepowered.api.world.extent.Volume;
+import org.spongepowered.api.world.biome.ImmutableBiomeVolume;
+import org.spongepowered.api.world.biome.UnmodifiableBiomeVolume;
+import org.spongepowered.api.world.biome.worker.BiomeVolumeWorker;
 import org.spongepowered.common.world.extent.worker.SpongeBiomeVolumeWorker;
 
-public class UnmodifiableBiomeVolumeWrapper implements UnmodifiableBiomeVolume {
+public class UnmodifiableBiomeVolumeWrapper<V extends BlockVolume> implements UnmodifiableBiomeVolume<UnmodifiableBlockVolumeWrapper<V>> {
 
-    private final MutableBiomeVolume volume;
+    private final V volume;
 
-    public UnmodifiableBiomeVolumeWrapper(MutableBiomeVolume volume) {
+    public UnmodifiableBiomeVolumeWrapper(V volume) {
         this.volume = volume;
     }
 
@@ -74,18 +77,42 @@ public class UnmodifiableBiomeVolumeWrapper implements UnmodifiableBiomeVolume {
     }
 
     @Override
-    public BiomeVolumeWorker<? extends UnmodifiableBiomeVolume> getBiomeWorker() {
+    public BiomeVolumeWorker<UnmodifiableBlockVolumeWrapper<V>, ?> getBiomeWorker() {
         return new SpongeBiomeVolumeWorker<>(this);
     }
 
     @Override
-    public MutableBiomeVolume getBiomeCopy(StorageType type) {
-        return this.volume.getBiomeCopy(type);
+    public ImmutableBiomeVolume asImmutableBiomeVolume() {
+        return null;
     }
 
     @Override
-    public ImmutableBiomeVolume getImmutableBiomeCopy() {
-        return this.volume.getImmutableBiomeCopy();
+    public Vector3i getBlockMin() {
+        return null;
     }
 
+    @Override
+    public Vector3i getBlockMax() {
+        return null;
+    }
+
+    @Override
+    public Vector3i getBlockSize() {
+        return null;
+    }
+
+    @Override
+    public boolean containsBlock(int x, int y, int z) {
+        return false;
+    }
+
+    @Override
+    public boolean isAreaAvailable(int x, int y, int z) {
+        return false;
+    }
+
+    @Override
+    public Volume getView(Vector3i newMin, Vector3i newMax) {
+        return null;
+    }
 }

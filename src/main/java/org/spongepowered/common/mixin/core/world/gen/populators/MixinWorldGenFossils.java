@@ -27,8 +27,8 @@ package org.spongepowered.common.mixin.core.world.gen.populators;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.feature.WorldGenFossils;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.Extent;
+import org.spongepowered.api.world.chunk.ProtoChunk;
+import org.spongepowered.api.world.ProtoWorld;
 import org.spongepowered.api.world.gen.PopulatorType;
 import org.spongepowered.api.world.gen.PopulatorTypes;
 import org.spongepowered.api.world.gen.populator.Fossil;
@@ -47,7 +47,7 @@ public abstract class MixinWorldGenFossils extends WorldGenerator implements Fos
     }
 
     @Override
-    public void populate(World world, Extent volume, Random random) {
+    public void populate(ProtoWorld<?> world, ProtoChunk volume, Random random) {
         if (random.nextDouble() > this.chance) {
             return;
         }

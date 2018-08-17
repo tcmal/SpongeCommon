@@ -28,7 +28,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.world.biome.BiomeType;
-import org.spongepowered.api.world.extent.BiomeVolume;
+import org.spongepowered.api.world.biome.worker.BiomeVolumeWorker;
 import org.spongepowered.api.world.extent.worker.procedure.BiomeVolumeMapper;
 import org.spongepowered.api.world.extent.worker.procedure.BiomeVolumeMerger;
 import org.spongepowered.api.world.extent.worker.procedure.BiomeVolumeReducer;

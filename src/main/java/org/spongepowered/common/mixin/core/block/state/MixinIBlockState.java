@@ -49,7 +49,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.common.data.util.DataQueries;
 import org.spongepowered.common.data.util.DataVersions;
-import org.spongepowered.common.interfaces.world.IMixinLocation;
 import org.spongepowered.common.util.VecHelper;
 
 import java.util.ArrayList;
@@ -73,7 +72,7 @@ public interface MixinIBlockState extends IBlockState, BlockState {
 
     @Override
     default BlockState withExtendedProperties(Location<World> location) {
-        return (BlockState) this.getActualState((net.minecraft.world.World) location.getExtent(), VecHelper.toBlockPos(location));
+        return (BlockState) this.getActualState((net.minecraft.world.World) location.getWorld(), VecHelper.toBlockPos(location));
 
     }
 

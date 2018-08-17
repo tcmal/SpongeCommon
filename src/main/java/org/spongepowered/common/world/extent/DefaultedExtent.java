@@ -31,9 +31,6 @@ import org.spongepowered.api.block.tileentity.TileEntity;
 import org.spongepowered.api.block.tileentity.TileEntityArchetype;
 import org.spongepowered.api.util.DiscreteTransform3;
 import org.spongepowered.api.util.PositionOutOfBoundsException;
-import org.spongepowered.api.world.extent.ArchetypeVolume;
-import org.spongepowered.api.world.extent.BiomeVolume;
-import org.spongepowered.api.world.extent.Extent;
 import org.spongepowered.api.world.extent.StorageType;
 import org.spongepowered.common.util.gen.ArrayMutableBlockBuffer;
 import org.spongepowered.common.util.gen.ByteArrayImmutableBiomeBuffer;
@@ -61,11 +58,6 @@ public interface DefaultedExtent extends Extent {
             throw new PositionOutOfBoundsException(newMax, getBiomeMin(), getBiomeMax());
         }
         return new MutableBiomeViewDownsize(this, newMin, newMax);
-    }
-
-    @Override
-    default MutableBiomeVolume getBiomeView(DiscreteTransform3 transform) {
-        return new MutableBiomeViewTransform(this, transform);
     }
 
     @Override

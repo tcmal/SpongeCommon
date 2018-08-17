@@ -43,13 +43,13 @@ public class PoweredPropertyStore extends AbstractSpongePropertyStore<PoweredPro
     @Override
     public Optional<PoweredProperty> getFor(Location<World> location) {
         final BlockPos pos = VecHelper.toBlockPos(location);
-        final net.minecraft.world.World world = (net.minecraft.world.World) location.getExtent();
+        final net.minecraft.world.World world = (net.minecraft.world.World) location.getWorld();
         return Optional.of(world.isBlockPowered(pos) ? TRUE : FALSE);
     }
 
     @Override
     public Optional<PoweredProperty> getFor(Location<World> location, Direction direction) {
-        final net.minecraft.world.World world = (net.minecraft.world.World) location.getExtent();
+        final net.minecraft.world.World world = (net.minecraft.world.World) location.getWorld();
         final EnumFacing facing = toEnumFacing(direction);
         final boolean powered = world.getStrongPower(VecHelper.toBlockPos(location).offset(facing), facing) > 0;
         return Optional.of(powered ? TRUE : FALSE);

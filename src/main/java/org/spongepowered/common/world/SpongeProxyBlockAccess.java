@@ -33,7 +33,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.WorldServer;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.Transaction;
-import org.spongepowered.common.interfaces.world.IMixinLocation;
 import org.spongepowered.common.util.VecHelper;
 
 import java.util.LinkedHashMap;
@@ -57,7 +56,7 @@ public final class SpongeProxyBlockAccess implements IBlockAccess {
             .map(VecHelper::toBlockPos)
             .collect(ImmutableList.toImmutableList());
         this.index = 0;
-        this.processingWorld = ((WorldServer) snapshotTransaction.get(0).getOriginal().getLocation().get().getExtent());
+        this.processingWorld = ((WorldServer) snapshotTransaction.get(0).getOriginal().getLocation().get().getWorld());
     }
 
     public void proceed() {

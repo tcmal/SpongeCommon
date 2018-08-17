@@ -28,15 +28,18 @@ import com.flowpowered.math.vector.Vector3i;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.util.DiscreteTransform3;
+import org.spongepowered.api.fluid.FluidState;
+import org.spongepowered.api.world.extent.MutableVolume;
+import org.spongepowered.api.world.extent.block.ImmutableBlockVolume;
+import org.spongepowered.api.world.extent.block.MutableBlockVolume;
+import org.spongepowered.api.world.extent.block.UnmodifiableBlockVolume;
+import org.spongepowered.api.world.extent.block.worker.MutableBlockVolumeWorker;
 import org.spongepowered.api.world.schematic.BlockPalette;
-import org.spongepowered.common.world.extent.MutableBlockViewTransform;
-import org.spongepowered.common.world.extent.UnmodifiableBlockVolumeWrapper;
 import org.spongepowered.common.world.extent.worker.SpongeMutableBlockVolumeWorker;
 import org.spongepowered.common.world.schematic.BimapPalette;
 import org.spongepowered.common.world.schematic.GlobalPalette;
 
-public class ArrayMutableBlockBuffer extends AbstractBlockBuffer implements MutableBlockVolume {
+public class ArrayMutableBlockBuffer extends AbstractBlockBuffer implements MutableBlockVolume<ArrayMutableBlockBuffer> {
 
     /**
      * If the area is lower than this amount, a global palette will be used.<br/>
@@ -84,7 +87,6 @@ public class ArrayMutableBlockBuffer extends AbstractBlockBuffer implements Muta
      * @param palette The palette
      * @param start The start block position
      * @param size The block size
-     * @param data The backing data
      */
     ArrayMutableBlockBuffer(BlockPalette palette, BackingData blocks, Vector3i start, Vector3i size) {
         super(start, size);
@@ -131,28 +133,53 @@ public class ArrayMutableBlockBuffer extends AbstractBlockBuffer implements Muta
     }
 
     @Override
+    public boolean removeBlock(int x, int y, int z) {
+        return false;
+    }
+
+    @Override
     public BlockState getBlock(int x, int y, int z) {
         checkRange(x, y, z);
         return this.palette.get(this.data.get(getIndex(x, y, z))).orElse(AIR);
     }
 
     @Override
-    public MutableBlockVolume getBlockView(DiscreteTransform3 transform) {
-        return new MutableBlockViewTransform(this, transform);
+    public FluidState getFluid(int x, int y, int z) {
+        return null;
     }
 
     @Override
-    public MutableBlockVolumeWorker<? extends MutableBlockVolume> getBlockWorker() {
+    public UnmodifiableBlockVolume<?> asUnmodifiableBlockVolume() {
+        return null;
+    }
+
+    @Override
+    public ImmutableBlockVolume asImmutableBlockVolume() {
+        return null;
+    }
+
+    @Override
+    public int getHighestYAt(int x, int z) {
+        return 0;
+    }
+
+    @Override
+    public MutableBlockVolumeWorker<ArrayMutableBlockBuffer> getBlockWorker() {
         return new SpongeMutableBlockVolumeWorker<>(this);
-    }
-
-    @Override
-    public UnmodifiableBlockVolume getUnmodifiableBlockView() {
-        return new UnmodifiableBlockVolumeWrapper(this);
     }
 
     private int area() {
         return this.size.getX() * this.size.getY() * this.size.getZ();
+    }
+
+    @Override
+    public boolean isAreaAvailable(int x, int y, int z) {
+        return false;
+    }
+
+    @Override
+    public MutableVolume getView(Vector3i newMin, Vector3i newMax) {
+        return null;
     }
 
     /**

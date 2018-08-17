@@ -30,8 +30,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.biome.Biome;
 import org.spongepowered.api.world.biome.BiomeType;
 import org.spongepowered.api.world.biome.VirtualBiomeType;
-import org.spongepowered.api.world.extent.BiomeVolume;
-import org.spongepowered.api.world.extent.BlockVolume;
 
 public class ExtentBufferUtil {
 

@@ -51,7 +51,6 @@ import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.tileentity.TileEntity;
 import org.spongepowered.api.data.Transaction;
 import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.ExperienceOrb;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.event.CauseStackManager;
 import org.spongepowered.api.event.CauseStackManager.StackFrame;
@@ -88,7 +87,6 @@ import org.spongepowered.common.interfaces.block.tile.IMixinTileEntity;
 import org.spongepowered.common.interfaces.entity.IMixinEntity;
 import org.spongepowered.common.interfaces.world.IMixinWorldServer;
 import org.spongepowered.common.item.inventory.util.ItemStackUtil;
-import org.spongepowered.common.registry.type.event.SpawnTypeRegistryModule;
 import org.spongepowered.common.util.SpongeHooks;
 import org.spongepowered.common.util.VecHelper;
 import org.spongepowered.common.world.BlockChange;
@@ -130,7 +128,7 @@ public final class TrackingUtil {
     private static final int EVENT_COUNT = 5;
     static final Function<BlockSnapshot, Transaction<BlockSnapshot>> TRANSACTION_CREATION = (blockSnapshot) -> {
         final Location<World> originalLocation = blockSnapshot.getLocation().get();
-        final WorldServer worldServer = (WorldServer) originalLocation.getExtent();
+        final WorldServer worldServer = (WorldServer) originalLocation.getWorld();
         final BlockPos blockPos = VecHelper.toBlockPos(originalLocation);
         final IBlockState newState = worldServer.getBlockState(blockPos);
         final IBlockState newActualState = newState.getActualState(worldServer, blockPos);
@@ -422,7 +420,7 @@ public final class TrackingUtil {
     @Nullable
     public static User getNotifierOrOwnerFromBlock(Location<World> location) {
         final BlockPos blockPos = VecHelper.toBlockPos(location);
-        return getNotifierOrOwnerFromBlock((WorldServer) location.getExtent(), blockPos);
+        return getNotifierOrOwnerFromBlock((WorldServer) location.getWorld(), blockPos);
     }
 
     @Nullable
@@ -660,7 +658,7 @@ public final class TrackingUtil {
             PhaseTracker.getInstance().printMessageWithCaughtException("BlockSnapshot does not have a valid location object, usually because the world is unloaded!", "", exception);
             return exception;
         });
-        final IMixinWorldServer mixinWorld = (IMixinWorldServer) worldLocation.getExtent();
+        final IMixinWorldServer mixinWorld = (IMixinWorldServer) worldLocation.getWorld();
         final BlockPos pos = VecHelper.toBlockPos(worldLocation);
         performBlockEntitySpawns(phaseState, phaseContext, oldBlockSnapshot, pos);
 
@@ -743,7 +741,7 @@ public final class TrackingUtil {
             }
         }
         Location<World> worldLocation = oldBlockSnapshot.getLocation().get();
-        final World world = worldLocation.getExtent();
+        final World world = worldLocation.getWorld();
         final WorldServer worldServer = (WorldServer) world;
         // Now we can spawn the entity items appropriately
         final List<Entity> itemDrops = itemStacks.stream().map(itemStack -> {
