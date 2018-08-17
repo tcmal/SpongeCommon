@@ -30,23 +30,21 @@ import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.event.CauseStackManager;
-import org.spongepowered.api.world.extent.BlockVolume;
-import org.spongepowered.api.world.extent.MutableBlockVolume;
-import org.spongepowered.api.world.extent.UnmodifiableBlockVolume;
-import org.spongepowered.api.world.extent.worker.BlockVolumeWorker;
-import org.spongepowered.api.world.extent.worker.procedure.BlockVolumeMapper;
-import org.spongepowered.api.world.extent.worker.procedure.BlockVolumeMerger;
-import org.spongepowered.api.world.extent.worker.procedure.BlockVolumeReducer;
-import org.spongepowered.api.world.extent.worker.procedure.BlockVolumeVisitor;
+import org.spongepowered.api.world.extent.beta.block.MutableBlockVolume;
+import org.spongepowered.api.world.extent.beta.block.ReadableBlockVolume;
+import org.spongepowered.api.world.extent.beta.block.UnmodifiableBlockVolume;
+import org.spongepowered.api.world.extent.beta.block.WorkableBlockVolume;
+import org.spongepowered.api.world.extent.beta.block.worker.BlockVolumeWorker;
+import org.spongepowered.api.world.extent.beta.worker.function.VolumeMapper;
+import org.spongepowered.api.world.extent.beta.worker.function.VolumeMerger;
+import org.spongepowered.api.world.extent.beta.worker.function.VolumeVisitor;
 import org.spongepowered.common.event.tracking.phase.plugin.BasicPluginContext;
 import org.spongepowered.common.event.tracking.phase.plugin.PluginPhase;
-
-import java.util.function.BiFunction;
 
 /**
  *
  */
-public class SpongeBlockVolumeWorker<V extends BlockVolume> implements BlockVolumeWorker<V> {
+public class SpongeBlockVolumeWorker<V extends WorkableBlockVolume<V>> implements BlockVolumeWorker<V> {
 
     protected final V volume;
 
@@ -60,12 +58,12 @@ public class SpongeBlockVolumeWorker<V extends BlockVolume> implements BlockVolu
     }
 
     @Override
-    public void map(BlockVolumeMapper mapper, MutableBlockVolume destination) {
+    public void map(VolumeMapper<BlockState, UnmodifiableBlockVolume> mapper, MutableBlockVolume destination) {
         final Vector3i offset = align(destination);
         final int xOffset = offset.getX();
         final int yOffset = offset.getY();
         final int zOffset = offset.getZ();
-        final UnmodifiableBlockVolume unmodifiableVolume = this.volume.getUnmodifiableBlockView();
+        final UnmodifiableBlockVolume unmodifiableVolume = this.volume.asUnmodifiableBlockVolume();
         final int xMin = unmodifiableVolume.getBlockMin().getX();
         final int yMin = unmodifiableVolume.getBlockMin().getY();
         final int zMin = unmodifiableVolume.getBlockMin().getZ();
@@ -89,7 +87,7 @@ public class SpongeBlockVolumeWorker<V extends BlockVolume> implements BlockVolu
     }
 
     @Override
-    public void merge(BlockVolume second, BlockVolumeMerger merger, MutableBlockVolume destination) {
+    public void merge(V second, VolumeMerger<BlockState, UnmodifiableBlockVolume> merger, MutableBlockVolume destination) {
         final Vector3i offsetSecond = align(second);
         final int xOffsetSecond = offsetSecond.getX();
         final int yOffsetSecond = offsetSecond.getY();
@@ -98,14 +96,14 @@ public class SpongeBlockVolumeWorker<V extends BlockVolume> implements BlockVolu
         final int xOffsetDestination = offsetDestination.getX();
         final int yOffsetDestination = offsetDestination.getY();
         final int zOffsetDestination = offsetDestination.getZ();
-        final UnmodifiableBlockVolume firstUnmodifiableVolume = this.volume.getUnmodifiableBlockView();
+        final UnmodifiableBlockVolume firstUnmodifiableVolume = this.volume.asUnmodifiableBlockVolume();
         final int xMin = firstUnmodifiableVolume.getBlockMin().getX();
         final int yMin = firstUnmodifiableVolume.getBlockMin().getY();
         final int zMin = firstUnmodifiableVolume.getBlockMin().getZ();
         final int xMax = firstUnmodifiableVolume.getBlockMax().getX();
         final int yMax = firstUnmodifiableVolume.getBlockMax().getY();
         final int zMax = firstUnmodifiableVolume.getBlockMax().getZ();
-        final UnmodifiableBlockVolume secondUnmodifiableVolume = second.getUnmodifiableBlockView();
+        final UnmodifiableBlockVolume secondUnmodifiableVolume = second.asUnmodifiableBlockVolume();
         try (BasicPluginContext context = PluginPhase.State.BLOCK_WORKER.createPhaseContext()
             .source(this)) {
             context.buildAndSwitch();
@@ -122,7 +120,7 @@ public class SpongeBlockVolumeWorker<V extends BlockVolume> implements BlockVolu
     }
 
     @Override
-    public void iterate(BlockVolumeVisitor<V> visitor) {
+    public void iterate(VolumeVisitor<V> visitor) {
         final int xMin = this.volume.getBlockMin().getX();
         final int yMin = this.volume.getBlockMin().getY();
         final int zMin = this.volume.getBlockMin().getZ();
@@ -130,8 +128,8 @@ public class SpongeBlockVolumeWorker<V extends BlockVolume> implements BlockVolu
         final int yMax = this.volume.getBlockMax().getY();
         final int zMax = this.volume.getBlockMax().getZ();
         try (CauseStackManager.StackFrame frame = Sponge.getCauseStackManager().pushCauseFrame();
-            BasicPluginContext context = PluginPhase.State.BLOCK_WORKER.createPhaseContext()
-                .source(this)) {
+             BasicPluginContext context = PluginPhase.State.BLOCK_WORKER.createPhaseContext()
+                 .source(this)) {
             context.buildAndSwitch();
             for (int z = zMin; z <= zMax; z++) {
                 for (int y = yMin; y <= yMax; y++) {
@@ -143,27 +141,8 @@ public class SpongeBlockVolumeWorker<V extends BlockVolume> implements BlockVolu
         }
     }
 
-    @Override
-    public <T> T reduce(BlockVolumeReducer<T> reducer, BiFunction<T, T, T> merge, T identity) {
-        final UnmodifiableBlockVolume unmodifiableVolume = this.volume.getUnmodifiableBlockView();
-        final int xMin = unmodifiableVolume.getBlockMin().getX();
-        final int yMin = unmodifiableVolume.getBlockMin().getY();
-        final int zMin = unmodifiableVolume.getBlockMin().getZ();
-        final int xMax = unmodifiableVolume.getBlockMax().getX();
-        final int yMax = unmodifiableVolume.getBlockMax().getY();
-        final int zMax = unmodifiableVolume.getBlockMax().getZ();
-        T reduction = identity;
-        for (int z = zMin; z <= zMax; z++) {
-            for (int y = yMin; y <= yMax; y++) {
-                for (int x = xMin; x <= xMax; x++) {
-                    reduction = reducer.reduce(unmodifiableVolume, x, y, z, reduction);
-                }
-            }
-        }
-        return reduction;
-    }
 
-    private Vector3i align(BlockVolume other) {
+    private Vector3i align(ReadableBlockVolume other) {
         final Vector3i thisSize = this.volume.getBlockSize();
         final Vector3i otherSize = other.getBlockSize();
         checkArgument(otherSize.getX() >= thisSize.getX() && otherSize.getY() >= thisSize.getY() && otherSize.getZ() >= thisSize.getZ(),

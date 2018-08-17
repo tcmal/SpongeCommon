@@ -28,8 +28,6 @@ import com.google.common.base.Preconditions;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.MapGenBase;
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
-import org.spongepowered.api.world.extent.MutableBlockVolume;
 import org.spongepowered.api.world.gen.GenerationPopulator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

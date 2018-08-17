@@ -35,8 +35,6 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
-import org.spongepowered.api.world.extent.MutableBlockVolume;
 import org.spongepowered.api.world.gen.GenerationPopulator;
 
 import java.util.Arrays;

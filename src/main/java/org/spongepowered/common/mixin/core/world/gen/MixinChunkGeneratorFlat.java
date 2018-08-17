@@ -37,8 +37,6 @@ import org.spongepowered.api.util.weighted.VariableAmount;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.biome.BiomeGenerationSettings;
 import org.spongepowered.api.world.biome.BiomeType;
-import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
-import org.spongepowered.api.world.extent.MutableBlockVolume;
 import org.spongepowered.api.world.gen.GenerationPopulator;
 import org.spongepowered.api.world.gen.Populator;
 import org.spongepowered.api.world.gen.WorldGenerator;

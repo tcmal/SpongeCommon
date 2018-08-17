@@ -35,7 +35,6 @@ import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.world.extent.ArchetypeVolume;
 import org.spongepowered.api.world.extent.Extent;
-import org.spongepowered.api.world.extent.MutableBlockVolume;
 import org.spongepowered.api.world.schematic.BlockPalette;
 import org.spongepowered.api.world.schematic.BlockPaletteType;
 import org.spongepowered.api.world.schematic.BlockPaletteTypes;

@@ -33,11 +33,6 @@ import org.spongepowered.api.world.BlockChangeFlag;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.ArchetypeVolume;
-import org.spongepowered.api.world.extent.ImmutableBlockVolume;
-import org.spongepowered.api.world.extent.MutableBlockVolume;
-import org.spongepowered.api.world.extent.StorageType;
-import org.spongepowered.api.world.extent.UnmodifiableBlockVolume;
-import org.spongepowered.api.world.extent.worker.MutableBlockVolumeWorker;
 import org.spongepowered.api.world.schematic.BlockPalette;
 import org.spongepowered.common.util.gen.AbstractBlockBuffer;
 import org.spongepowered.common.world.extent.worker.SpongeMutableBlockVolumeWorker;
@@ -93,11 +88,6 @@ public class SpongeArchetypeVolume extends AbstractBlockBuffer implements Archet
     }
 
     @Override
-    public MutableBlockVolume getBlockView(Vector3i newMin, Vector3i newMax) {
-        return this.backing.getBlockView(newMin, newMax);
-    }
-
-    @Override
     public MutableBlockVolume getBlockView(DiscreteTransform3 transform) {
         return this.backing.getBlockView(transform);
     }
@@ -110,16 +100,6 @@ public class SpongeArchetypeVolume extends AbstractBlockBuffer implements Archet
     @Override
     public UnmodifiableBlockVolume getUnmodifiableBlockView() {
         return this.backing.getUnmodifiableBlockView();
-    }
-
-    @Override
-    public MutableBlockVolume getBlockCopy(StorageType type) {
-        return this.backing.getBlockCopy(type);
-    }
-
-    @Override
-    public ImmutableBlockVolume getImmutableBlockCopy() {
-        return this.backing.getImmutableBlockCopy();
     }
 
     public MutableBlockVolume getBacking() {

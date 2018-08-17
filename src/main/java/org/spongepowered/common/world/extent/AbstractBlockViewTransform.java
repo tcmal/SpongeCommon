@@ -26,13 +26,8 @@ package org.spongepowered.common.world.extent;
 
 import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.block.BlockState;
-import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.util.DiscreteTransform3;
 import org.spongepowered.api.world.extent.BlockVolume;
-import org.spongepowered.api.world.extent.MutableBlockVolume;
-import org.spongepowered.api.world.extent.StorageType;
-import org.spongepowered.common.util.gen.ArrayMutableBlockBuffer;
-import org.spongepowered.common.world.schematic.GlobalPalette;
 
 public abstract class AbstractBlockViewTransform<V extends BlockVolume> implements BlockVolume {
 
@@ -78,27 +73,9 @@ public abstract class AbstractBlockViewTransform<V extends BlockVolume> implemen
     }
 
     @Override
-    public BlockType getBlockType(int x, int y, int z) {
-        return getBlock(x, y, z).getType();
-    }
-
-    @Override
     public BlockState getBlock(int x, int y, int z) {
         return this.volume.getBlock(this.inverseTransform.transformX(x, y, z), this.inverseTransform.transformY(x, y, z), this.inverseTransform
             .transformZ(x, y, z));
-    }
-
-    @Override
-    public MutableBlockVolume getBlockCopy(StorageType type) {
-        switch (type) {
-            case STANDARD:
-                // TODO: Optimize and use a local palette
-                char[] data = ExtentBufferUtil.copyToArray(this, this.min, this.max, this.size);
-                return new ArrayMutableBlockBuffer(GlobalPalette.instance, this.min, this.size, data);
-            case THREAD_SAFE:
-            default:
-                throw new UnsupportedOperationException(type.name());
-        }
     }
 
 }

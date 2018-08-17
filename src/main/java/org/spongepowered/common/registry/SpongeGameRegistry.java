@@ -80,7 +80,6 @@ import org.spongepowered.api.text.translation.Translation;
 import org.spongepowered.api.util.ResettableBuilder;
 import org.spongepowered.api.util.Tuple;
 import org.spongepowered.api.util.rotation.Rotation;
-import org.spongepowered.api.world.extent.ExtentBufferFactory;
 import org.spongepowered.api.world.gamerule.DefaultGameRules;
 import org.spongepowered.asm.util.PrettyPrinter;
 import org.spongepowered.common.SpongeImpl;
@@ -106,7 +105,6 @@ import org.spongepowered.common.util.graph.CyclicGraphException;
 import org.spongepowered.common.util.graph.DirectedGraph;
 import org.spongepowered.common.util.graph.DirectedGraph.DataNode;
 import org.spongepowered.common.util.graph.TopologicalOrder;
-import org.spongepowered.common.world.extent.SpongeExtentBufferFactory;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -490,11 +488,6 @@ public class SpongeGameRegistry implements GameRegistry {
     @Override
     public Optional<DisplaySlot> getDisplaySlotForColor(TextColor color) {
         return Optional.ofNullable(DisplaySlotRegistryModule.getInstance().map.get(color.getKey().toString()));
-    }
-
-    @Override
-    public ExtentBufferFactory getExtentBufferFactory() {
-        return SpongeExtentBufferFactory.INSTANCE;
     }
 
     @Override

@@ -25,37 +25,14 @@
 package org.spongepowered.common.world.extent;
 
 import com.flowpowered.math.vector.Vector3i;
-import org.spongepowered.api.util.DiscreteTransform3;
 import org.spongepowered.api.world.extent.BlockVolume;
-import org.spongepowered.api.world.extent.ImmutableBlockVolume;
-import org.spongepowered.api.world.extent.UnmodifiableBlockVolume;
-import org.spongepowered.api.world.extent.worker.BlockVolumeWorker;
-import org.spongepowered.common.util.gen.ArrayImmutableBlockBuffer;
+import org.spongepowered.api.world.extent.beta.block.worker.BlockVolumeWorker;
 import org.spongepowered.common.world.extent.worker.SpongeBlockVolumeWorker;
-import org.spongepowered.common.world.schematic.GlobalPalette;
 
 public class UnmodifiableBlockViewDownsize extends AbstractBlockViewDownsize<BlockVolume> implements UnmodifiableBlockVolume {
 
     public UnmodifiableBlockViewDownsize(BlockVolume volume, Vector3i min, Vector3i max) {
         super(volume, min, max);
-    }
-
-    @Override
-    public UnmodifiableBlockVolume getBlockView(Vector3i newMin, Vector3i newMax) {
-        checkRange(newMin.getX(), newMin.getY(), newMin.getZ());
-        checkRange(newMax.getX(), newMax.getY(), newMax.getZ());
-        return new UnmodifiableBlockViewDownsize(this.volume, newMin, newMax);
-    }
-
-    @Override
-    public UnmodifiableBlockVolume getBlockView(DiscreteTransform3 transform) {
-        return new UnmodifiableBlockViewTransform(this, transform);
-    }
-
-    @Override
-    public ImmutableBlockVolume getImmutableBlockCopy() {
-        char[] data = ExtentBufferUtil.copyToArray(this, this.min, this.max, this.size);
-        return ArrayImmutableBlockBuffer.newWithoutArrayClone(GlobalPalette.instance, this.min, this.size, data);
     }
 
     @Override

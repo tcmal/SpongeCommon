@@ -170,12 +170,6 @@ public class ExtentViewDownsize implements DefaultedExtent {
     }
 
     @Override
-    public BlockType getBlockType(int x, int y, int z) {
-        checkBlockRange(x, y, z);
-        return this.extent.getBlockType(x, y, z);
-    }
-
-    @Override
     public BlockState getBlock(int x, int y, int z) {
         checkBlockRange(x, y, z);
         return this.extent.getBlock(x, y, z);
@@ -389,14 +383,6 @@ public class ExtentViewDownsize implements DefaultedExtent {
             }
         }
         return tileEntities;
-    }
-
-    @Override
-    public Collection<TileEntity> getTileEntities(Predicate<TileEntity> filter) {
-        // Order matters! Bounds filter before the argument filter so it doesn't see out of bounds entities
-        final Vector3i max = this.blockMax.add(Vector3i.ONE);
-        return this.extent.getTileEntities(Functional.predicateAnd(input ->
-            VecHelper.inBounds(input.getLocation().getPosition(), this.blockMin, max), filter));
     }
 
     @Override

@@ -25,8 +25,6 @@
 package org.spongepowered.common.world.extent.worker;
 
 import org.spongepowered.api.world.biome.BiomeType;
-import org.spongepowered.api.world.extent.MutableBiomeVolume;
-import org.spongepowered.api.world.extent.worker.MutableBiomeVolumeWorker;
 import org.spongepowered.api.world.extent.worker.procedure.BiomeVolumeFiller;
 
 /**

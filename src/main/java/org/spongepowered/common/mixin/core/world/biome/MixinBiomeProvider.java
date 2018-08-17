@@ -28,7 +28,6 @@ import com.flowpowered.math.vector.Vector3i;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
 import org.spongepowered.api.world.biome.BiomeType;
-import org.spongepowered.api.world.extent.MutableBiomeVolume;
 import org.spongepowered.api.world.gen.BiomeGenerator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

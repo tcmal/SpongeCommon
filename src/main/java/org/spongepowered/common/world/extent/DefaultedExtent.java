@@ -33,25 +33,14 @@ import org.spongepowered.api.util.DiscreteTransform3;
 import org.spongepowered.api.util.PositionOutOfBoundsException;
 import org.spongepowered.api.world.extent.ArchetypeVolume;
 import org.spongepowered.api.world.extent.BiomeVolume;
-import org.spongepowered.api.world.extent.BlockVolume;
 import org.spongepowered.api.world.extent.Extent;
-import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
-import org.spongepowered.api.world.extent.ImmutableBlockVolume;
-import org.spongepowered.api.world.extent.MutableBiomeVolume;
-import org.spongepowered.api.world.extent.MutableBlockVolume;
 import org.spongepowered.api.world.extent.StorageType;
-import org.spongepowered.api.world.extent.UnmodifiableBiomeVolume;
-import org.spongepowered.api.world.extent.UnmodifiableBlockVolume;
-import org.spongepowered.api.world.extent.worker.MutableBiomeVolumeWorker;
-import org.spongepowered.api.world.extent.worker.MutableBlockVolumeWorker;
-import org.spongepowered.common.util.gen.ArrayImmutableBlockBuffer;
 import org.spongepowered.common.util.gen.ArrayMutableBlockBuffer;
 import org.spongepowered.common.util.gen.ByteArrayImmutableBiomeBuffer;
 import org.spongepowered.common.util.gen.ByteArrayMutableBiomeBuffer;
 import org.spongepowered.common.world.extent.worker.SpongeMutableBiomeVolumeWorker;
 import org.spongepowered.common.world.extent.worker.SpongeMutableBlockVolumeWorker;
 import org.spongepowered.common.world.schematic.BimapPalette;
-import org.spongepowered.common.world.schematic.GlobalPalette;
 import org.spongepowered.common.world.schematic.SpongeArchetypeVolume;
 
 import java.util.Map;
@@ -103,17 +92,6 @@ public interface DefaultedExtent extends Extent {
     }
 
     @Override
-    default MutableBlockVolume getBlockView(Vector3i newMin, Vector3i newMax) {
-        if (!containsBlock(newMin.getX(), newMin.getY(), newMin.getZ())) {
-            throw new PositionOutOfBoundsException(newMin, getBlockMin(), getBlockMax());
-        }
-        if (!containsBlock(newMax.getX(), newMax.getY(), newMax.getZ())) {
-            throw new PositionOutOfBoundsException(newMax, getBlockMin(), getBlockMax());
-        }
-        return new MutableBlockViewDownsize(this, newMin, newMax);
-    }
-
-    @Override
     default MutableBlockVolume getBlockView(DiscreteTransform3 transform) {
         return new MutableBlockViewTransform(this, transform);
     }
@@ -121,25 +99,6 @@ public interface DefaultedExtent extends Extent {
     @Override
     default UnmodifiableBlockVolume getUnmodifiableBlockView() {
         return new UnmodifiableBlockVolumeWrapper(this);
-    }
-
-    @Override
-    default MutableBlockVolume getBlockCopy(StorageType type) {
-        switch (type) {
-            case STANDARD:
-                // TODO: Optimize and use a local palette
-                return new ArrayMutableBlockBuffer(GlobalPalette.instance, getBlockMin(), getBlockSize(),
-                        ExtentBufferUtil.copyToArray((BlockVolume) this, getBlockMin(), getBlockMax(), getBlockSize()));
-            case THREAD_SAFE:
-            default:
-                throw new UnsupportedOperationException(type.name());
-        }
-    }
-
-    @Override
-    default ImmutableBlockVolume getImmutableBlockCopy() {
-        char[] data = ExtentBufferUtil.copyToArray((BlockVolume) this, getBlockMin(), getBlockMax(), getBlockSize());
-        return ArrayImmutableBlockBuffer.newWithoutArrayClone(GlobalPalette.instance, getBlockMin(), getBlockSize(), data);
     }
 
     @Override

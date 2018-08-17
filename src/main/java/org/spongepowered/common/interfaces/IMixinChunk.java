@@ -35,7 +35,6 @@ import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.BlockChangeFlag;
 import org.spongepowered.api.world.Chunk;
-import org.spongepowered.api.world.extent.EntityUniverse;
 import org.spongepowered.common.entity.PlayerTracker;
 
 import java.util.List;

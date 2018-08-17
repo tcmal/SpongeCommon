@@ -75,8 +75,8 @@ public class FurnaceDataProcessor extends AbstractTileEntityDataProcessor<TileEn
 
         if (needsUpdate) {
             final World world = (World) tileEntity.getWorld();
-            world.setBlockType(tileEntity.getPos().getX(), tileEntity.getPos().getY(),
-                    tileEntity.getPos().getZ(), maxBurnTime > 0 ? BlockTypes.LIT_FURNACE : BlockTypes.FURNACE);
+            world.setBlock(tileEntity.getPos().getX(), tileEntity.getPos().getY(),
+                    tileEntity.getPos().getZ(), maxBurnTime > 0 ? BlockTypes.LIT_FURNACE.getDefaultState() : BlockTypes.FURNACE.getDefaultState());
             tileEntity = (TileEntityFurnace) tileEntity.getWorld().getTileEntity(tileEntity.getPos());
         }
 

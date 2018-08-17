@@ -27,7 +27,6 @@ package org.spongepowered.common.world.gen.populators;
 import com.google.common.collect.Lists;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
-import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
 import org.spongepowered.api.world.gen.Populator;
 import org.spongepowered.api.world.gen.PopulatorType;
 import org.spongepowered.common.interfaces.world.gen.IFlaggedPopulator;

@@ -194,7 +194,7 @@ public class LegacySchematicTranslator implements DataTranslator<Schematic> {
         data.set(DataQueries.Schematic.LEGACY_OFFSET_Y, -yMin);
         data.set(DataQueries.Schematic.LEGACY_OFFSET_Z, -zMin);
         SaveIterator itr = new SaveIterator(width, height, length);
-        schematic.getBlockWorker().iterate(itr);
+        schematic.getBlockWorker().it(itr);
         byte[] blockids = itr.blockids;
         byte[] extraids = itr.extraids;
         byte[] blockdata = itr.blockdata;

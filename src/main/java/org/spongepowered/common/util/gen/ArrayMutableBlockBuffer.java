@@ -29,13 +29,7 @@ import net.minecraft.util.math.MathHelper;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.util.DiscreteTransform3;
-import org.spongepowered.api.world.extent.ImmutableBlockVolume;
-import org.spongepowered.api.world.extent.MutableBlockVolume;
-import org.spongepowered.api.world.extent.StorageType;
-import org.spongepowered.api.world.extent.UnmodifiableBlockVolume;
-import org.spongepowered.api.world.extent.worker.MutableBlockVolumeWorker;
 import org.spongepowered.api.world.schematic.BlockPalette;
-import org.spongepowered.common.world.extent.MutableBlockViewDownsize;
 import org.spongepowered.common.world.extent.MutableBlockViewTransform;
 import org.spongepowered.common.world.extent.UnmodifiableBlockVolumeWrapper;
 import org.spongepowered.common.world.extent.worker.SpongeMutableBlockVolumeWorker;
@@ -143,13 +137,6 @@ public class ArrayMutableBlockBuffer extends AbstractBlockBuffer implements Muta
     }
 
     @Override
-    public MutableBlockVolume getBlockView(Vector3i newMin, Vector3i newMax) {
-        checkRange(newMin.getX(), newMin.getY(), newMin.getZ());
-        checkRange(newMax.getX(), newMax.getY(), newMax.getZ());
-        return new MutableBlockViewDownsize(this, newMin, newMax);
-    }
-
-    @Override
     public MutableBlockVolume getBlockView(DiscreteTransform3 transform) {
         return new MutableBlockViewTransform(this, transform);
     }
@@ -162,22 +149,6 @@ public class ArrayMutableBlockBuffer extends AbstractBlockBuffer implements Muta
     @Override
     public UnmodifiableBlockVolume getUnmodifiableBlockView() {
         return new UnmodifiableBlockVolumeWrapper(this);
-    }
-
-    @Override
-    public MutableBlockVolume getBlockCopy(StorageType type) {
-        switch (type) {
-            case STANDARD:
-                return new ArrayMutableBlockBuffer(this.palette, this.data.copyOf(), this.start, this.size);
-            case THREAD_SAFE:
-            default:
-                throw new UnsupportedOperationException(type.name());
-        }
-    }
-
-    @Override
-    public ImmutableBlockVolume getImmutableBlockCopy() {
-        return new ArrayImmutableBlockBuffer(this.palette, this.data.copyOf(), this.start, this.size);
     }
 
     private int area() {

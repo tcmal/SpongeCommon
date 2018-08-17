@@ -31,8 +31,6 @@ import net.minecraft.world.gen.ChunkGeneratorHell;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.structure.MapGenNetherBridge;
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
-import org.spongepowered.api.world.extent.MutableBlockVolume;
 import org.spongepowered.api.world.gen.GenerationPopulator;
 import org.spongepowered.api.world.gen.Populator;
 import org.spongepowered.api.world.gen.WorldGenerator;

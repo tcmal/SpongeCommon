@@ -178,12 +178,6 @@ public class SoftBufferExtentViewDownsize implements DefaultedExtent {
     }
 
     @Override
-    public BlockType getBlockType(int x, int y, int z) {
-        checkBlockRange(x, y, z);
-        return this.extent.getBlockType(x, y, z);
-    }
-
-    @Override
     public BlockState getBlock(int x, int y, int z) {
         checkBlockRange(x, y, z);
         return this.extent.getBlock(x, y, z);
@@ -397,15 +391,6 @@ public class SoftBufferExtentViewDownsize implements DefaultedExtent {
             }
         }
         return tileEntities;
-    }
-
-    @Override
-    public Collection<TileEntity> getTileEntities(Predicate<TileEntity> filter) {
-        // Order matters! Bounds filter before the argument filter so it doesn't see out of bounds entities
-        return this.extent.getTileEntities(Functional.predicateAnd(input -> {
-            final Location<World> block = input.getLocation();
-            return VecHelper.inBounds(block.getX(), block.getY(), block.getZ(), this.blockMin, this.blockMax);
-        }, filter));
     }
 
     @Override

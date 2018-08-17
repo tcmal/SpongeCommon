@@ -27,17 +27,10 @@ package org.spongepowered.common.util.gen;
 import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.util.DiscreteTransform3;
-import org.spongepowered.api.world.extent.ImmutableBlockVolume;
-import org.spongepowered.api.world.extent.MutableBlockVolume;
-import org.spongepowered.api.world.extent.StorageType;
-import org.spongepowered.api.world.extent.UnmodifiableBlockVolume;
-import org.spongepowered.api.world.extent.worker.BlockVolumeWorker;
+import org.spongepowered.api.world.extent.beta.block.worker.BlockVolumeWorker;
 import org.spongepowered.api.world.schematic.BlockPalette;
 import org.spongepowered.common.util.gen.ArrayMutableBlockBuffer.BackingData;
 import org.spongepowered.common.util.gen.ArrayMutableBlockBuffer.CharBackingData;
-import org.spongepowered.common.world.extent.ImmutableBlockViewDownsize;
-import org.spongepowered.common.world.extent.ImmutableBlockViewTransform;
 import org.spongepowered.common.world.extent.worker.SpongeBlockVolumeWorker;
 import org.spongepowered.common.world.schematic.GlobalPalette;
 
@@ -81,18 +74,6 @@ public class ArrayImmutableBlockBuffer extends AbstractBlockBuffer implements Im
     }
 
     @Override
-    public ImmutableBlockVolume getBlockView(Vector3i newMin, Vector3i newMax) {
-        checkRange(newMin.getX(), newMin.getY(), newMin.getZ());
-        checkRange(newMax.getX(), newMax.getY(), newMax.getZ());
-        return new ImmutableBlockViewDownsize(this, newMin, newMax);
-    }
-
-    @Override
-    public ImmutableBlockVolume getBlockView(DiscreteTransform3 transform) {
-        return new ImmutableBlockViewTransform(this, transform);
-    }
-
-    @Override
     public UnmodifiableBlockVolume getUnmodifiableBlockView() {
         return this;
     }
@@ -100,17 +81,6 @@ public class ArrayImmutableBlockBuffer extends AbstractBlockBuffer implements Im
     @Override
     public BlockVolumeWorker<? extends ImmutableBlockVolume> getBlockWorker() {
         return new SpongeBlockVolumeWorker<>(this);
-    }
-
-    @Override
-    public MutableBlockVolume getBlockCopy(StorageType type) {
-        switch (type) {
-            case STANDARD:
-                return new ArrayMutableBlockBuffer(this.palette, this.data.copyOf(), this.start, this.size);
-            case THREAD_SAFE:
-            default:
-                throw new UnsupportedOperationException(type.name());
-        }
     }
 
     /**

@@ -26,13 +26,7 @@ package org.spongepowered.common.world.extent;
 
 import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.block.BlockState;
-import org.spongepowered.api.block.BlockType;
-import org.spongepowered.api.util.DiscreteTransform3;
-import org.spongepowered.api.world.extent.ImmutableBlockVolume;
-import org.spongepowered.api.world.extent.MutableBlockVolume;
-import org.spongepowered.api.world.extent.StorageType;
-import org.spongepowered.api.world.extent.UnmodifiableBlockVolume;
-import org.spongepowered.api.world.extent.worker.BlockVolumeWorker;
+import org.spongepowered.api.world.extent.beta.block.worker.BlockVolumeWorker;
 import org.spongepowered.common.world.extent.worker.SpongeBlockVolumeWorker;
 
 public class UnmodifiableBlockVolumeWrapper implements UnmodifiableBlockVolume {
@@ -64,38 +58,13 @@ public class UnmodifiableBlockVolumeWrapper implements UnmodifiableBlockVolume {
     }
 
     @Override
-    public BlockType getBlockType(int x, int y, int z) {
-        return this.volume.getBlockType(x, y, z);
-    }
-
-    @Override
     public BlockState getBlock(int x, int y, int z) {
         return this.volume.getBlock(x, y, z);
     }
 
     @Override
-    public UnmodifiableBlockVolume getBlockView(Vector3i newMin, Vector3i newMax) {
-        return new UnmodifiableBlockVolumeWrapper(this.volume.getBlockView(newMin, newMax));
-    }
-
-    @Override
-    public UnmodifiableBlockVolume getBlockView(DiscreteTransform3 transform) {
-        return new UnmodifiableBlockVolumeWrapper(this.volume.getBlockView(transform));
-    }
-
-    @Override
     public BlockVolumeWorker<? extends UnmodifiableBlockVolume> getBlockWorker() {
         return new SpongeBlockVolumeWorker<>(this);
-    }
-
-    @Override
-    public MutableBlockVolume getBlockCopy(StorageType type) {
-        return this.volume.getBlockCopy(type);
-    }
-
-    @Override
-    public ImmutableBlockVolume getImmutableBlockCopy() {
-        return this.volume.getImmutableBlockCopy();
     }
 
 }

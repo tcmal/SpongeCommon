@@ -26,8 +26,6 @@ package org.spongepowered.common.world.extent;
 
 import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.util.DiscreteTransform3;
-import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
-import org.spongepowered.api.world.extent.worker.BiomeVolumeWorker;
 import org.spongepowered.common.world.extent.worker.SpongeBiomeVolumeWorker;
 
 public class ImmutableBiomeViewTransform extends AbstractBiomeViewTransform<ImmutableBiomeVolume> implements ImmutableBiomeVolume {

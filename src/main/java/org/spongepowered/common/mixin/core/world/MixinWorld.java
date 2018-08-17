@@ -79,7 +79,6 @@ import net.minecraft.world.storage.WorldInfo;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
-import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.tileentity.TileEntity;
 import org.spongepowered.api.data.DataContainer;
@@ -109,8 +108,6 @@ import org.spongepowered.api.world.WorldBorder;
 import org.spongepowered.api.world.biome.BiomeType;
 import org.spongepowered.api.world.explosion.Explosion;
 import org.spongepowered.api.world.extent.Extent;
-import org.spongepowered.api.world.extent.worker.MutableBiomeVolumeWorker;
-import org.spongepowered.api.world.extent.worker.MutableBlockVolumeWorker;
 import org.spongepowered.api.world.storage.WorldProperties;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -401,15 +398,6 @@ public abstract class MixinWorld implements World, IMixinWorld {
         return (BlockState) getBlockState(new BlockPos(x, y, z));
     }
 
-    @Override
-    public BlockType getBlockType(int x, int y, int z) {
-        if (!containsBlock(x, y, z)) {
-            return BlockTypes.AIR;
-        }
-        checkBlockBounds(x, y, z);
-        // avoid intermediate object creation from using BlockState
-        return (BlockType) getChunk(x >> 4, z >> 4).getBlockState(new BlockPos(x, y, z)).getBlock();
-    }
 
     @Override
     public boolean setBlock(int x, int y, int z, BlockState block) {
@@ -698,14 +686,6 @@ public abstract class MixinWorld implements World, IMixinWorld {
     @Override
     public Collection<TileEntity> getTileEntities() {
         return Lists.newArrayList((List<TileEntity>) (Object) this.loadedTileEntityList);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Collection<TileEntity> getTileEntities(Predicate<TileEntity> filter) {
-        return ((List<TileEntity>) (Object) this.loadedTileEntityList).stream()
-                .filter(filter)
-                .collect(Collectors.toList());
     }
 
     @Override

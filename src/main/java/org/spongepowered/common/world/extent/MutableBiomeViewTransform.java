@@ -27,10 +27,6 @@ package org.spongepowered.common.world.extent;
 import com.flowpowered.math.vector.Vector3i;
 import org.spongepowered.api.util.DiscreteTransform3;
 import org.spongepowered.api.world.biome.BiomeType;
-import org.spongepowered.api.world.extent.ImmutableBiomeVolume;
-import org.spongepowered.api.world.extent.MutableBiomeVolume;
-import org.spongepowered.api.world.extent.UnmodifiableBiomeVolume;
-import org.spongepowered.api.world.extent.worker.MutableBiomeVolumeWorker;
 import org.spongepowered.common.util.gen.ByteArrayImmutableBiomeBuffer;
 import org.spongepowered.common.world.extent.worker.SpongeMutableBiomeVolumeWorker;
 

@@ -60,7 +60,6 @@ import net.minecraft.world.gen.IChunkGenerator;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
-import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.ScheduledBlockUpdate;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.entity.EntitySnapshot;
@@ -80,8 +79,6 @@ import org.spongepowered.api.world.BlockChangeFlags;
 import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.biome.BiomeType;
 import org.spongepowered.api.world.extent.Extent;
-import org.spongepowered.api.world.extent.worker.MutableBiomeVolumeWorker;
-import org.spongepowered.api.world.extent.worker.MutableBlockVolumeWorker;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -123,7 +120,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -416,12 +412,6 @@ public abstract class MixinChunk implements Chunk, IMixinChunk, IMixinCachable {
     public boolean setBlock(int x, int y, int z, BlockState block, BlockChangeFlag flag) {
         return BlockUtil.setBlockState((net.minecraft.world.chunk.Chunk) (Object) this, (this.x << 4) + (x & 15), y, (this.z << 4) + (z & 15),
                 block, flag.updateNeighbors());
-    }
-
-    @Override
-    public BlockType getBlockType(int x, int y, int z) {
-        checkBlockBounds(x, y, z);
-        return (BlockType) getBlockState(x, y, z).getBlock();
     }
 
     @Override
@@ -857,18 +847,6 @@ public abstract class MixinChunk implements Chunk, IMixinChunk, IMixinCachable {
     @Override
     public Collection<org.spongepowered.api.block.tileentity.TileEntity> getTileEntities() {
         return Sets.newHashSet((Collection) this.tileEntities.values());
-    }
-
-    @Override
-    public Collection<org.spongepowered.api.block.tileentity.TileEntity>
-    getTileEntities(java.util.function.Predicate<org.spongepowered.api.block.tileentity.TileEntity> filter) {
-        Set<org.spongepowered.api.block.tileentity.TileEntity> tiles = Sets.newHashSet();
-        for (Entry<BlockPos, TileEntity> entry : this.tileEntities.entrySet()) {
-            if (filter.test((org.spongepowered.api.block.tileentity.TileEntity) entry.getValue())) {
-                tiles.add((org.spongepowered.api.block.tileentity.TileEntity) entry.getValue());
-            }
-        }
-        return tiles;
     }
 
     @Override

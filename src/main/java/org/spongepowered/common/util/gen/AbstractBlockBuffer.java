@@ -85,11 +85,6 @@ public abstract class AbstractBlockBuffer implements BlockVolume {
     }
 
     @Override
-    public BlockType getBlockType(int x, int y, int z) {
-        return getBlock(x, y, z).getType();
-    }
-
-    @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
             .add("min", this.getBlockMin())

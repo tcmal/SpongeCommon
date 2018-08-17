@@ -29,7 +29,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.chunk.ChunkPrimer;
 import org.spongepowered.api.block.BlockState;
-import org.spongepowered.api.world.extent.MutableBlockVolume;
 
 /**
  * Wraps a {@link MutableBlockVolume} within a ChunkPrimer in order to be able

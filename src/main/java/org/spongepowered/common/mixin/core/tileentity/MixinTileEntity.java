@@ -126,7 +126,7 @@ public abstract class MixinTileEntity implements TileEntity, IMixinTileEntity {
             PhaseTracker.getInstance().getCurrentPhaseData().context.getSource(TileEntity.class).ifPresent(currentTick -> {
                 if (currentTick != this) {
                     net.minecraft.tileentity.TileEntity te = (net.minecraft.tileentity.TileEntity) currentTick;
-//                    world.getCauseTracker().trackTargetBlockFromSource(te, te.getPos(), this.getBlockType(), this.pos, PlayerTracker.Type.NOTIFIER);
+//                    world.getCauseTracker().trackTargetBlockFromSource(te, te.getPos(), thisgetBlockType(), this.pos, PlayerTracker.Type.NOTIFIER);
                 }
             });
         }
