@@ -85,7 +85,7 @@ public class SpongeLaunch {
     }
 
     public static void initPaths(File gameDirIn) {
-        gameDir = gameDirIn.toPath();
+        gameDir = gameDirIn.toPath().normalize();
         pluginsDir = gameDir.resolve("mods");
         configDir = gameDir.resolve("config");
         spongeConfigDir = configDir.resolve(ECOSYSTEM_ID);
@@ -125,7 +125,6 @@ public class SpongeLaunch {
         Mixins.addConfiguration("mixins.common.api.json");
         Mixins.addConfiguration("mixins.common.core.json");
         Mixins.addConfiguration("mixins.common.core.optional.json");
-        Mixins.addConfiguration("mixins.common.blockcapturing.json");
         Mixins.addConfiguration("mixins.common.bungeecord.json");
         Mixins.addConfiguration("mixins.common.concurrentchecks.json");
         Mixins.addConfiguration("mixins.common.entityactivation.json");

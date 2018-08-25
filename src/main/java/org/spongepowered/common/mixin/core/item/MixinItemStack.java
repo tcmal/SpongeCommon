@@ -74,6 +74,7 @@ import org.spongepowered.common.event.tracking.PhaseData;
 import org.spongepowered.common.interfaces.data.IMixinCustomDataHolder;
 import org.spongepowered.common.interfaces.item.IMixinItem;
 import org.spongepowered.common.interfaces.item.IMixinItemStack;
+import org.spongepowered.common.interfaces.world.IMixinWorld;
 import org.spongepowered.common.item.inventory.SpongeItemStackSnapshot;
 import org.spongepowered.common.text.translation.SpongeTranslation;
 
@@ -148,14 +149,14 @@ public abstract class MixinItemStack implements DataHolder, IMixinItemStack, IMi
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Inject(method = "onBlockDestroyed", at = @At("HEAD"))
     private void capturePlayerOnBlockDestroyed(World worldIn, IBlockState blockIn, BlockPos pos, EntityPlayer playerIn, CallbackInfo ci) {
-        if (!worldIn.isRemote) {
+        if (!((IMixinWorld) worldIn).isFake()) {
             final PhaseTracker phaseTracker = PhaseTracker.getInstance();
             final PhaseData peek = phaseTracker.getCurrentPhaseData();
             final IPhaseState state = peek.state;
-            state.capturePlayerUsingStackToBreakBlock((ItemStack)this, (EntityPlayerMP) playerIn, peek.context);
+            state.capturePlayerUsingStackToBreakBlock((ItemStack) this, (EntityPlayerMP) playerIn, peek.context);
         }
     }
 
@@ -203,7 +204,7 @@ public abstract class MixinItemStack implements DataHolder, IMixinItemStack, IMi
     public DataContainer toContainer() {
         final DataContainer container = DataContainer.createNew()
             .set(Queries.CONTENT_VERSION, getContentVersion())
-                .set(DataQueries.ITEM_TYPE, this.itemstack$getType().getId())
+                .set(DataQueries.ITEM_TYPE, this.itemstack$getType().getKey())
                 .set(DataQueries.ITEM_COUNT, this.itemstack$getQuantity())
                 .set(DataQueries.ITEM_DAMAGE_VALUE, this.getItemDamage());
         if (hasTagCompound()) { // no tag? no data, simple as that.
@@ -215,7 +216,7 @@ public abstract class MixinItemStack implements DataHolder, IMixinItemStack, IMi
                 }
             }
             NbtDataUtil.filterSpongeCustomData(compound); // We must filter the custom data so it isn't stored twice
-            if (!compound.hasNoTags()) {
+            if (!compound.isEmpty()) {
                 final DataContainer unsafeNbt = NbtTranslator.getInstance().translateFrom(compound);
                 container.set(DataQueries.UNSAFE_NBT, unsafeNbt);
             }
@@ -229,7 +230,7 @@ public abstract class MixinItemStack implements DataHolder, IMixinItemStack, IMi
     }
 
     public Translation itemstack$getTranslation() {
-        return new SpongeTranslation(shadow$getItem().getUnlocalizedName((net.minecraft.item.ItemStack) (Object) this) + ".name");
+        return new SpongeTranslation(shadow$getItem().getTranslationKey((net.minecraft.item.ItemStack) (Object) this) + ".name");
     }
 
     public ItemStackSnapshot itemstack$createSnapshot() {
@@ -275,7 +276,7 @@ public abstract class MixinItemStack implements DataHolder, IMixinItemStack, IMi
     public void readFromNbt(NBTTagCompound compound) {
         if (compound.hasKey(NbtDataUtil.CUSTOM_MANIPULATOR_TAG_LIST, NbtDataUtil.TAG_LIST)) {
             final NBTTagList list = compound.getTagList(NbtDataUtil.CUSTOM_MANIPULATOR_TAG_LIST, NbtDataUtil.TAG_COMPOUND);
-            if (!list.hasNoTags()) {
+            if (!list.isEmpty()) {
                 compound.removeTag(NbtDataUtil.CUSTOM_MANIPULATOR_TAG_LIST);
                 final List<DataView> views = Lists.newArrayList();
                 for (int i = 0; i < list.tagCount(); i++) {
@@ -292,7 +293,7 @@ public abstract class MixinItemStack implements DataHolder, IMixinItemStack, IMi
                 }
             } else {
                 compound.removeTag(NbtDataUtil.CUSTOM_MANIPULATOR_TAG_LIST);
-                if (compound.hasNoTags()) {
+                if (compound.isEmpty()) {
                     getTagCompound().removeTag(NbtDataUtil.SPONGE_DATA);
                     return;
                 }
@@ -317,9 +318,9 @@ public abstract class MixinItemStack implements DataHolder, IMixinItemStack, IMi
                 this.addFailedData(transaction.failedData);
             }
         }
-        if (compound.hasNoTags()) {
+        if (compound.isEmpty()) {
             getTagCompound().removeTag(NbtDataUtil.SPONGE_DATA);
-            if (getTagCompound().hasNoTags()) {
+            if (getTagCompound().isEmpty()) {
                 setTagCompound(null);
             }
         }
@@ -397,7 +398,7 @@ public abstract class MixinItemStack implements DataHolder, IMixinItemStack, IMi
             if (hasTagCompound()) {
                 this.getTagCompound().removeTag(NbtDataUtil.SPONGE_DATA);
             }
-            if (this.getTagCompound().hasNoTags()) {
+            if (this.getTagCompound().isEmpty()) {
                 this.setTagCompound(null);
             }
         }

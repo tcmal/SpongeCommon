@@ -111,7 +111,7 @@ public abstract class MixinEntityLiving extends MixinEntityLivingBase implements
     @Override
     public void firePostConstructEvents() {
         super.firePostConstructEvents();
-        if (ShouldFire.AI_TASK_EVENT_ADD) {
+        if (ShouldFire.A_I_TASK_EVENT_ADD) {
             handleDelayedTaskEventFiring((IMixinEntityAITasks) this.tasks);
             handleDelayedTaskEventFiring((IMixinEntityAITasks) this.targetTasks);
         }

@@ -34,6 +34,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateBase;
 import net.minecraft.nbt.NBTTagCompound;
+import org.spongepowered.api.CatalogKey;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
@@ -89,7 +90,7 @@ public abstract class MixinStateImplementation extends BlockStateBase implements
     @Nullable private ImmutableList<ImmutableDataManipulator<?, ?>> manipulators;
     @Nullable private ImmutableMap<Key<?>, Object> keyMap;
     @Nullable private ImmutableMap<Class<? extends Property<?, ?>>, Property<?, ?>> dataProperties;
-    @Nullable private String id;
+    @Nullable private CatalogKey id;
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
@@ -132,6 +133,14 @@ public abstract class MixinStateImplementation extends BlockStateBase implements
     @Override
     public List<ImmutableDataManipulator<?, ?>> getManipulators() {
         return lazyLoadManipulatorsAndKeys();
+    }
+
+    @Nullable
+    private ImmutableMap<Key<?>, Object> getKeyMap() {
+        if (this.keyMap == null) {
+            lazyLoadManipulatorsAndKeys();
+        }
+        return this.keyMap;
     }
 
     private ImmutableList<ImmutableDataManipulator<?, ?>> lazyLoadManipulatorsAndKeys() {
@@ -293,13 +302,7 @@ public abstract class MixinStateImplementation extends BlockStateBase implements
     @SuppressWarnings("unchecked")
     @Override
     public <E> Optional<E> get(Key<? extends Value<E>> key) {
-        if(this.keyMap == null) {
-            lazyLoadManipulatorsAndKeys();
-        }
-        if (this.keyMap.containsKey(checkNotNull(key))) {
-            return Optional.of((E) this.keyMap.get(key));
-        }
-        return Optional.empty();
+        return Optional.ofNullable((E) this.getKeyMap().get(key));
     }
 
     @SuppressWarnings("unchecked")
@@ -349,7 +352,7 @@ public abstract class MixinStateImplementation extends BlockStateBase implements
     public DataContainer toContainer() {
         return DataContainer.createNew()
             .set(Queries.CONTENT_VERSION, getContentVersion())
-            .set(DataQueries.BLOCK_STATE, this.getId());
+            .set(DataQueries.BLOCK_STATE, this.getKey());
     }
 
     @Override
@@ -359,23 +362,26 @@ public abstract class MixinStateImplementation extends BlockStateBase implements
 
     @Override
     public void generateId(Block block) {
+        final String nameSpace = ((BlockType) block).getKey().getNamespace();
         StringBuilder builder = new StringBuilder();
-        builder.append(((BlockType) block).getId());
-        if (!this.properties.isEmpty()) {
+        builder.append(((BlockType) block).getKey().getValue());
+
+        final ImmutableMap<IProperty<?>, Comparable<?>> properties = this.getProperties();
+        if (!properties.isEmpty()) {
             builder.append('[');
             Joiner joiner = Joiner.on(',');
             List<String> propertyValues = new ArrayList<>();
-            for (Map.Entry<IProperty<?>, Comparable<?>> entry : this.properties.entrySet()) {
+            for (Map.Entry<IProperty<?>, Comparable<?>> entry : properties.entrySet()) {
                 propertyValues.add(entry.getKey().getName() + "=" + entry.getValue());
             }
             builder.append(joiner.join(propertyValues));
             builder.append(']');
         }
-        this.id = builder.toString();
+        this.id =  CatalogKey.of(nameSpace, builder.toString());
     }
 
     @Override
-    public String getId() {
+    public CatalogKey getKey() {
         if (this.id == null) {
             generateId(this.block);
         }
@@ -387,6 +393,6 @@ public abstract class MixinStateImplementation extends BlockStateBase implements
         if (this.id == null) {
             generateId(this.block);
         }
-        return this.id;
+        return this.id.getValue();
     }
 }

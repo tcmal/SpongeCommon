@@ -28,20 +28,33 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
+import org.spongepowered.api.event.CauseStackManager;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.common.SpongeImpl;
 import org.spongepowered.common.entity.PlayerTracker;
 import org.spongepowered.common.event.tracking.TrackingUtil;
 import org.spongepowered.common.interfaces.IMixinChunk;
-import org.spongepowered.common.interfaces.event.forge.IMixinWorldTickEvent;
+
+import java.util.function.BiConsumer;
 
 import javax.annotation.Nullable;
 
 final class EventListenerPhaseState extends ListenerPhaseState {
 
+    public final BiConsumer<CauseStackManager.StackFrame, ListenerPhaseContext> LISTENER_MODIFIER = super.getFrameModifier()
+        .andThen((frame, context) -> {
+            context.getSource(PluginContainer.class)
+                .ifPresent(frame::pushCause);
+        });
     private boolean hasPrintedEntities = false;
 
     EventListenerPhaseState() {
+    }
+
+    @Override
+    public BiConsumer<CauseStackManager.StackFrame, ListenerPhaseContext> getFrameModifier() {
+        return this.LISTENER_MODIFIER;
     }
 
     @Override
@@ -60,12 +73,14 @@ final class EventListenerPhaseState extends ListenerPhaseState {
 
     }
 
+    // TODO - even listeners can be better managed with regards to entity captures and item drops.
+
     @Override
     public void associateNeighborBlockNotifier(ListenerPhaseContext context, @Nullable BlockPos sourcePos, Block block, BlockPos notifyPos,
                                                WorldServer minecraftWorld, PlayerTracker.Type notifier) {
         context.getCapturedPlayer().ifPresent(player ->
-                ((IMixinChunk) minecraftWorld.getChunkFromBlockCoords(notifyPos))
-                        .setBlockNotifier(notifyPos, player.getUniqueId())
+                ((IMixinChunk) minecraftWorld.getChunk(notifyPos))
+                        .addTrackedBlockPosition(block, notifyPos, player, PlayerTracker.Type.NOTIFIER)
         );
     }
 

@@ -66,7 +66,7 @@ public abstract class AbstractImmutableSingleCatalogData<E extends CatalogType, 
 
     @Override
     public DataContainer toContainer() {
-        return super.toContainer().set(this.usedKey.getQuery(), this.value.getId());
+        return super.toContainer().set(this.usedKey.getQuery(), this.value.getKey());
     }
 
     @Override

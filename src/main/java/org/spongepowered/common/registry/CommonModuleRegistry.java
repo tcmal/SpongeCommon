@@ -24,6 +24,7 @@
  */
 package org.spongepowered.common.registry;
 
+import org.spongepowered.api.CatalogKey;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.advancement.Advancement;
 import org.spongepowered.api.advancement.AdvancementTree;
@@ -35,6 +36,7 @@ import org.spongepowered.api.advancement.criteria.trigger.FilteredTrigger;
 import org.spongepowered.api.advancement.criteria.trigger.Trigger;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
+import org.spongepowered.api.block.BlockStateMatcher;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.tileentity.TileEntityArchetype;
 import org.spongepowered.api.block.tileentity.TileEntityType;
@@ -93,8 +95,20 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.ItemStackGenerator;
 import org.spongepowered.api.item.inventory.InventoryTransformation;
 import org.spongepowered.api.item.inventory.equipment.EquipmentType;
+import org.spongepowered.api.item.inventory.property.EquipmentSlotType;
 import org.spongepowered.api.item.inventory.property.GuiId;
+import org.spongepowered.api.item.inventory.property.GuiIdProperty;
+import org.spongepowered.api.item.inventory.property.Identifiable;
+import org.spongepowered.api.item.inventory.property.IntProperty;
+import org.spongepowered.api.item.inventory.property.InventoryCapacity;
+import org.spongepowered.api.item.inventory.property.InventoryDimension;
+import org.spongepowered.api.item.inventory.property.InventoryTitle;
+import org.spongepowered.api.item.inventory.property.SlotIndex;
+import org.spongepowered.api.item.inventory.property.SlotPos;
+import org.spongepowered.api.item.inventory.property.SlotSide;
+import org.spongepowered.api.item.inventory.property.StringProperty;
 import org.spongepowered.api.item.inventory.query.QueryOperationType;
+import org.spongepowered.api.item.inventory.transaction.InventoryTransactionResult;
 import org.spongepowered.api.item.merchant.TradeOffer;
 import org.spongepowered.api.item.merchant.TradeOfferGenerator;
 import org.spongepowered.api.item.recipe.crafting.CraftingRecipe;
@@ -115,11 +129,22 @@ import org.spongepowered.api.scoreboard.objective.displaymode.ObjectiveDisplayMo
 import org.spongepowered.api.service.economy.transaction.TransactionType;
 import org.spongepowered.api.statistic.Statistic;
 import org.spongepowered.api.statistic.StatisticType;
+import org.spongepowered.api.text.BookView;
+import org.spongepowered.api.text.LiteralText;
+import org.spongepowered.api.text.ScoreText;
+import org.spongepowered.api.text.SelectorText;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.TextTemplate;
+import org.spongepowered.api.text.TranslatableText;
+import org.spongepowered.api.text.action.ClickAction;
+import org.spongepowered.api.text.action.HoverAction;
+import org.spongepowered.api.text.action.ShiftClickAction;
 import org.spongepowered.api.text.chat.ChatVisibility;
 import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextStyle;
 import org.spongepowered.api.text.selector.SelectorType;
 import org.spongepowered.api.text.serializer.TextSerializer;
+import org.spongepowered.api.text.title.Title;
 import org.spongepowered.api.util.ban.Ban;
 import org.spongepowered.api.util.ban.BanType;
 import org.spongepowered.api.util.rotation.Rotation;
@@ -156,11 +181,13 @@ import org.spongepowered.common.advancement.SpongeTriggerBuilder;
 import org.spongepowered.common.ban.SpongeBanBuilder;
 import org.spongepowered.common.block.SpongeBlockSnapshotBuilder;
 import org.spongepowered.common.block.SpongeBlockStateBuilder;
+import org.spongepowered.common.block.SpongeBlockStateMatcherBuilder;
 import org.spongepowered.common.block.SpongeTileEntityArchetypeBuilder;
 import org.spongepowered.common.boss.ServerBossBarBuilder;
 import org.spongepowered.common.data.SpongeDataRegistrationBuilder;
 import org.spongepowered.common.data.SpongeKeyBuilder;
 import org.spongepowered.common.data.SpongeManipulatorRegistry;
+import org.spongepowered.common.data.builder.CatalogKeyBuilder;
 import org.spongepowered.common.item.enchantment.SpongeEnchantmentBuilder;
 import org.spongepowered.common.data.builder.meta.SpongePatternLayerBuilder;
 import org.spongepowered.common.effect.particle.SpongeParticleEffectBuilder;
@@ -176,10 +203,22 @@ import org.spongepowered.common.event.damage.*;
 import org.spongepowered.common.extra.fluid.SpongeFluidStackBuilder;
 import org.spongepowered.common.extra.fluid.SpongeFluidStackSnapshotBuilder;
 import org.spongepowered.common.item.SpongeFireworkEffectBuilder;
+import org.spongepowered.common.item.inventory.InventoryTransactionResultImpl;
 import org.spongepowered.common.item.inventory.SpongeInventoryBuilder;
 import org.spongepowered.common.item.inventory.SpongeItemStackBuilder;
 import org.spongepowered.common.item.inventory.archetype.SpongeInventoryArchetypeBuilder;
 import org.spongepowered.common.item.inventory.generation.SpongeItemStackGenerator;
+import org.spongepowered.common.item.inventory.property.EquipmentSlotTypeImpl;
+import org.spongepowered.common.item.inventory.property.GuiIdPropertyImpl;
+import org.spongepowered.common.item.inventory.property.IdentifiableImpl;
+import org.spongepowered.common.item.inventory.property.IntPropertyImpl;
+import org.spongepowered.common.item.inventory.property.InventoryCapacityImpl;
+import org.spongepowered.common.item.inventory.property.InventoryDimensionImpl;
+import org.spongepowered.common.item.inventory.property.InventoryTitleImpl;
+import org.spongepowered.common.item.inventory.property.SlotIndexImpl;
+import org.spongepowered.common.item.inventory.property.SlotPosImpl;
+import org.spongepowered.common.item.inventory.property.SlotSideImpl;
+import org.spongepowered.common.item.inventory.property.StringPropertyImpl;
 import org.spongepowered.common.item.inventory.query.SpongeTransformationBuilder;
 import org.spongepowered.common.item.merchant.SpongeTradeOfferBuilder;
 import org.spongepowered.common.item.merchant.SpongeTradeOfferGenerator;
@@ -239,6 +278,16 @@ import org.spongepowered.common.registry.type.world.gen.PopulatorTypeRegistryMod
 import org.spongepowered.common.scoreboard.builder.SpongeObjectiveBuilder;
 import org.spongepowered.common.scoreboard.builder.SpongeScoreboardBuilder;
 import org.spongepowered.common.scoreboard.builder.SpongeTeamBuilder;
+import org.spongepowered.common.text.action.ClickTextActionImpl;
+import org.spongepowered.common.text.action.HoverTextActionImpl;
+import org.spongepowered.common.text.action.ShiftClickTextActionImpl;
+import org.spongepowered.common.text.impl.BookViewImpl;
+import org.spongepowered.common.text.impl.LiteralTextImpl;
+import org.spongepowered.common.text.impl.ScoreTextImpl;
+import org.spongepowered.common.text.impl.SelectorTextImpl;
+import org.spongepowered.common.text.impl.TextTemplateImpl;
+import org.spongepowered.common.text.impl.TitleImpl;
+import org.spongepowered.common.text.impl.TranslatableTextImpl;
 import org.spongepowered.common.world.SpongeExplosionBuilder;
 import org.spongepowered.common.world.SpongeLocatableBlockBuilder;
 import org.spongepowered.common.world.SpongeWorldArchetypeBuilder;
@@ -250,7 +299,6 @@ import org.spongepowered.common.world.gen.builders.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public final class CommonModuleRegistry {
@@ -284,7 +332,25 @@ public final class CommonModuleRegistry {
     }
 
     private void registerDefaultSuppliers(SpongeGameRegistry registry) {
-        registry.registerBuilderSupplier(ItemStack.Builder.class, SpongeItemStackBuilder::new)
+        registry
+            .registerBuilderSupplier(Text.Builder.class, LiteralTextImpl.Builder::new)
+            .registerBuilderSupplier(LiteralText.Builder.class, LiteralTextImpl.Builder::new)
+            .registerBuilderSupplier(TranslatableText.Builder.class, TranslatableTextImpl.Builder::new)
+            .registerBuilderSupplier(ScoreText.Builder.class, ScoreTextImpl.Builder::new)
+            .registerBuilderSupplier(SelectorText.Builder.class, SelectorTextImpl.Builder::new)
+            .registerBuilderSupplier(ClickAction.OpenUrl.Builder.class, ClickTextActionImpl.OpenUrlImpl.Builder::new)
+            .registerBuilderSupplier(ClickAction.RunCommand.Builder.class, ClickTextActionImpl.RunCommandImpl.Builder::new)
+            .registerBuilderSupplier(ClickAction.ChangePage.Builder.class, ClickTextActionImpl.ChangePageImpl.Builder::new)
+            .registerBuilderSupplier(ClickAction.SuggestCommand.Builder.class, ClickTextActionImpl.SuggestCommandImpl.Builder::new)
+            .registerBuilderSupplier(ClickAction.ExecuteCallback.Builder.class, ClickTextActionImpl.ExecuteCallbackImpl.Builder::new)
+            .registerBuilderSupplier(HoverAction.ShowText.Builder.class, HoverTextActionImpl.ShowTextImpl.Builder::new)
+            .registerBuilderSupplier(HoverAction.ShowItem.Builder.class, HoverTextActionImpl.ShowItemImpl.Builder::new)
+            .registerBuilderSupplier(HoverAction.ShowEntity.Builder.class, HoverTextActionImpl.ShowEntityImpl.Builder::new)
+            .registerBuilderSupplier(HoverAction.ShowEntity.Ref.Builder.class, HoverTextActionImpl.ShowEntityImpl.Ref.Builder::new)
+            .registerBuilderSupplier(ShiftClickAction.InsertText.Builder.class, ShiftClickTextActionImpl.InsertTextImpl.Builder::new)
+            .registerBuilderSupplier(Title.Builder.class, TitleImpl.BuilderImpl::new)
+            .registerBuilderSupplier(BookView.Builder.class, BookViewImpl.Builder::new)
+            .registerBuilderSupplier(ItemStack.Builder.class, SpongeItemStackBuilder::new)
             .registerBuilderSupplier(TradeOffer.Builder.class, SpongeTradeOfferBuilder::new)
             .registerBuilderSupplier(FireworkEffect.Builder.class, SpongeFireworkEffectBuilder::new)
             .registerBuilderSupplier(PotionEffect.Builder.class, SpongePotionBuilder::new)
@@ -299,6 +365,7 @@ public final class CommonModuleRegistry {
             .registerBuilderSupplier(WorldArchetype.Builder.class, SpongeWorldArchetypeBuilder::new)
             .registerBuilderSupplier(Explosion.Builder.class, SpongeExplosionBuilder::new)
             .registerBuilderSupplier(BlockState.Builder.class, SpongeBlockStateBuilder::new)
+            .registerBuilderSupplier(BlockStateMatcher.Builder.class, SpongeBlockStateMatcherBuilder::new)
             .registerBuilderSupplier(BlockSnapshot.Builder.class, SpongeBlockSnapshotBuilder::new)
             .registerBuilderSupplier(EntitySnapshot.Builder.class, SpongeEntitySnapshotBuilder::new)
             .registerBuilderSupplier(ParticleEffect.Builder.class, SpongeParticleEffectBuilder::new)
@@ -374,6 +441,20 @@ public final class CommonModuleRegistry {
             .registerBuilderSupplier(ScoreAdvancementCriterion.Builder.class, SpongeScoreCriterionBuilder::new)
             .registerBuilderSupplier(FilteredTrigger.Builder.class, SpongeFilteredTriggerBuilder::new)
             .registerBuilderSupplier(Trigger.Builder.class, SpongeTriggerBuilder::new)
+            .registerBuilderSupplier(SlotPos.Builder.class, SlotPosImpl.BuilderImpl::new)
+            .registerBuilderSupplier(SlotSide.Builder.class, SlotSideImpl.BuilderImpl::new)
+            .registerBuilderSupplier(StringProperty.Builder.class, StringPropertyImpl.BuilderImpl::new)
+            .registerBuilderSupplier(IntProperty.Builder.class, IntPropertyImpl.BuilderImpl::new)
+            .registerBuilderSupplier(SlotIndex.Builder.class, SlotIndexImpl.BuilderImpl::new)
+            .registerBuilderSupplier(InventoryCapacity.Builder.class, InventoryCapacityImpl.BuilderImpl::new)
+            .registerBuilderSupplier(Identifiable.Builder.class, IdentifiableImpl.BuilderImpl::new)
+            .registerBuilderSupplier(GuiIdProperty.Builder.class, GuiIdPropertyImpl.BuilderImpl::new)
+            .registerBuilderSupplier(EquipmentSlotType.Builder.class, EquipmentSlotTypeImpl.BuilderImpl::new)
+            .registerBuilderSupplier(InventoryDimension.Builder.class, InventoryDimensionImpl.BuilderImpl::new)
+            .registerBuilderSupplier(InventoryTitle.Builder.class, InventoryTitleImpl.BuilderImpl::new)
+            .registerBuilderSupplier(InventoryTransactionResult.Builder.class, InventoryTransactionResultImpl.Builder::new)
+            .registerBuilderSupplier(CatalogKey.Builder.class, CatalogKeyBuilder::new)
+            .registerBuilderSupplier(TextTemplate.Arg.Builder.class, TextTemplateImpl.ArgImpl.BuilderImpl::new)
         ;
     }
 
@@ -462,7 +543,7 @@ public final class CommonModuleRegistry {
             .registerModule(StoneType.class, new StoneTypeRegistryModule())
             .registerModule(TeleportHelperFilter.class, new TeleportHelperFilterRegistryModule())
             .registerModule(TeleportType.class, TeleportTypeRegistryModule.getInstance())
-            .registerModule(TextColor.class, new TextColorRegistryModule())
+            .registerModule(TextColor.class, TextColorRegistryModule.getInstance())
             .registerModule(TextSerializer.class, new TextSerializerRegistryModule())
             .registerModule(TextStyle.Base.class, new TextStyleRegistryModule())
             .registerModule(TileEntityType.class, TileEntityTypeRegistryModule.getInstance())
@@ -473,6 +554,7 @@ public final class CommonModuleRegistry {
             .registerModule(StatisticType.class, new StatisticTypeRegistryModule())
             .registerModule(WallType.class, new WallTypeRegistryModule())
             .registerModule(Weather.class, new WeatherRegistryModule())
+            .registerModule(WireAttachmentType.class, new WireAttachmentRegistryModule())
             .registerModule(WorldGeneratorModifier.class, WorldGeneratorModifierRegistryModule.getInstance())
             .registerModule(TransactionType.class, new TransactionTypeRegistryModule())
             .registerModule(ChatVisibility.class, new ChatVisibilityRegistryModule())

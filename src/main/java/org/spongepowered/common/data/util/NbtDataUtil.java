@@ -64,6 +64,7 @@ public final class NbtDataUtil {
     public static final String BANNER_PATTERNS = "Patterns";
     public static final String FAILED_CUSTOM_DATA = "FailedData";
     public static final String HAS_CUSTOM_DIFFICULTY = "HasCustomDifficulty";
+    public static final String ARMOR_COLOR_DISPLAY_TAG = "display";
 
     private NbtDataUtil() {
     }
@@ -75,6 +76,7 @@ public final class NbtDataUtil {
         public static final String IS_FLYING = "flying";
 
         public static final String INVENTORY = "Inventory";
+        public static final String ENDERCHEST_INVENTORY = "EnderItems";
 
         public static final String SELECTED_ITEM_SLOT = "SelectedItemSlot";
     }
@@ -174,6 +176,11 @@ public final class NbtDataUtil {
     public static final String BUKKIT = "bukkit";
     public static final String BUKKIT_FIRST_PLAYED = "firstPlayed";
     public static final String BUKKIT_LAST_PLAYED = "lastPlayed";
+
+    // Legacy migration tags from CanaryMod
+    public static final String CANARY = "Canary";
+    public static final String CANARY_FIRST_JOINED = "FirstJoin";
+    public static final String CANARY_LAST_JOINED = "LastJoin";
 
     // These are used by Minecraft's internals for entity spawning
     public static final String ENTITY_TYPE_ID = "id";
@@ -280,7 +287,7 @@ public final class NbtDataUtil {
 
     private static void cleanseInnerCompound(NBTTagCompound compound, String innerCompound) {
         final NBTTagCompound inner = compound.getCompoundTag(innerCompound);
-        if (inner.hasNoTags()) {
+        if (inner.isEmpty()) {
             compound.removeTag(innerCompound);
         }
     }
@@ -329,7 +336,7 @@ public final class NbtDataUtil {
 
     public static List<Text> getPagesFromNBT(NBTTagCompound compound) {
         final NBTTagList list = compound.getTagList(ITEM_BOOK_PAGES, TAG_STRING);
-        if (list.hasNoTags()) {
+        if (list.isEmpty()) {
             return new ArrayList<>();
         }
         return SpongeTexts.fromNbtLegacy(list);

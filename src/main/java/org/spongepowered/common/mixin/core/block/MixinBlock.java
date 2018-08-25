@@ -47,6 +47,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import org.apache.logging.log4j.Level;
+import org.spongepowered.api.CatalogKey;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSoundGroup;
 import org.spongepowered.api.block.BlockState;
@@ -77,10 +79,16 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.util.PrettyPrinter;
 import org.spongepowered.common.SpongeImpl;
 import org.spongepowered.common.SpongeImplHooks;
+import org.spongepowered.common.config.SpongeConfig;
+import org.spongepowered.common.config.category.BlockTrackerCategory;
+import org.spongepowered.common.config.category.BlockTrackerModCategory;
+import org.spongepowered.common.config.type.TrackerConfig;
 import org.spongepowered.common.event.tracking.IPhaseState;
 import org.spongepowered.common.event.tracking.PhaseContext;
+import org.spongepowered.common.event.tracking.PhaseData;
 import org.spongepowered.common.event.tracking.PhaseTracker;
 import org.spongepowered.common.event.tracking.phase.block.BlockPhase;
 import org.spongepowered.common.interfaces.block.IMixinBlock;
@@ -89,6 +97,7 @@ import org.spongepowered.common.interfaces.world.IMixinWorldServer;
 import org.spongepowered.common.registry.type.BlockTypeRegistryModule;
 import org.spongepowered.common.text.translation.SpongeTranslation;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -107,12 +116,17 @@ public abstract class MixinBlock implements BlockType, IMixinBlock {
     private boolean requiresBlockCapture = true;
     private static boolean canCaptureItems = true;
     private Timing timing;
+    // Used by tracker config
+    private boolean allowsBlockBulkCapture = true;
+    private boolean allowsEntityBulkCapture = true;
+    private boolean allowsBlockEventCreation = true;
+    private boolean allowsEntityEventCreation = true;
 
     @Shadow private boolean needsRandomTick;
     @Shadow protected SoundType blockSoundType;
     @Shadow @Final protected BlockStateContainer blockState;
 
-    @Shadow public abstract String getUnlocalizedName();
+    @Shadow public abstract String getTranslationKey();
     @Shadow public abstract Material getMaterial(IBlockState state);
     @Shadow public abstract IBlockState shadow$getDefaultState();
     @Shadow public abstract boolean shadow$getTickRandomly();
@@ -143,9 +157,9 @@ public abstract class MixinBlock implements BlockType, IMixinBlock {
             // ignore
         }
 
-        // onEntityCollidedWithBlock (IBlockState)
+        // onEntityCollision (IBlockState)
         try {
-            String mapping = SpongeImplHooks.isDeobfuscatedEnvironment() ? "onEntityCollidedWithBlock" : "func_180634_a";
+            String mapping = SpongeImplHooks.isDeobfuscatedEnvironment() ? "onEntityCollision" : "func_180634_a";
             Class<?>[] argTypes = { net.minecraft.world.World.class, BlockPos.class, IBlockState.class, Entity.class };
             Class<?> clazz = this.getClass().getMethod(mapping, argTypes).getDeclaringClass();
             if (clazz.equals(Block.class)) {
@@ -163,17 +177,27 @@ public abstract class MixinBlock implements BlockType, IMixinBlock {
 
     @Inject(method = "registerBlock(ILnet/minecraft/util/ResourceLocation;Lnet/minecraft/block/Block;)V", at = @At("RETURN"))
     private static void onRegisterBlock(int id, ResourceLocation location, Block block, CallbackInfo ci) {
-        BlockTypeRegistryModule.getInstance().registerFromGameData(location.toString(), (BlockType) block);
+        BlockTypeRegistryModule.getInstance().registerFromGameData(location, (BlockType) block);
     }
 
     @Override
-    public String getId() {
-        return Block.REGISTRY.getNameForObject((Block) (Object) this).toString();
+    public CatalogKey getKey() {
+        return (CatalogKey) (Object) Block.REGISTRY.getNameForObject((Block) (Object) this);
     }
 
     @Override
     public String getName() {
-        return Block.REGISTRY.getNameForObject((Block) (Object) this).toString();
+        return this.getNameFromRegistry();
+    }
+
+    private String getNameFromRegistry() {
+        // This should always succeed when things are working properly,
+        // so we just catch the exception instead of doing a null check.
+        try {
+            return Block.REGISTRY.getNameForObject((Block) (Object) this).toString();
+        } catch (NullPointerException e) {
+            throw new RuntimeException(String.format("Block '%s' (class '%s') is not registered with the block registry! This is likely a bug in the corresponding mod.", this, this.getClass().getName()), e);
+        }
     }
 
     @Override
@@ -195,7 +219,7 @@ public abstract class MixinBlock implements BlockType, IMixinBlock {
 
     @Override
     public Translation getTranslation() {
-        return new SpongeTranslation(getUnlocalizedName() + ".name");
+        return new SpongeTranslation(getTranslationKey() + ".name");
     }
 
     @Intrinsic
@@ -288,7 +312,7 @@ public abstract class MixinBlock implements BlockType, IMixinBlock {
         // Sponge Start - short circuit up top to reduce indentation as necessary
         final boolean doTileDrops = worldIn.getGameRules().getBoolean("doTileDrops");
 
-        if (worldIn.isRemote || !SpongeImpl.isMainThread() || stack.isEmpty() || !doTileDrops) {
+        if (worldIn.isRemote || !SpongeImplHooks.isMainThread() || stack.isEmpty() || !doTileDrops) {
             return;
         }
         // Double check we aren't performing drops during restores.
@@ -333,15 +357,11 @@ public abstract class MixinBlock implements BlockType, IMixinBlock {
             final IMixinWorldServer mixinWorld = (IMixinWorldServer) worldIn;
             final PhaseTracker phaseTracker = PhaseTracker.getInstance();
             final IPhaseState<?> currentState = phaseTracker.getCurrentState();
-            final boolean shouldEnterBlockDropPhase = !phaseTracker.getCurrentContext().isCapturingBlockItemDrops() && !currentState.alreadyCapturingItemSpawns() && !currentState.isWorldGeneration();
+            final boolean shouldEnterBlockDropPhase = !phaseTracker.getCurrentContext().isCapturingBlockItemDrops() && !currentState.alreadyProcessingBlockItemDrops() && !currentState.isWorldGeneration();
             if (shouldEnterBlockDropPhase) {
                 // TODO: Change source to LocatableBlock
                 PhaseContext<?> context = BlockPhase.State.BLOCK_DROP_ITEMS.createPhaseContext()
                         .source(mixinWorld.createSpongeBlockSnapshot(state, state, pos, BlockChangeFlags.PHYSICS_OBSERVER));
-
-                // unused, to be removed and re-located when phase context is cleaned up
-                //.add(NamedCause.of(InternalNamedCauses.General.BLOCK_BREAK_FORTUNE, fortune))
-                //.add(NamedCause.of(InternalNamedCauses.General.BLOCK_BREAK_POSITION, pos));
                 // use current notifier and owner if available
                 User notifier = phaseTracker.getCurrentContext().getNotifier().orElse(null);
                 User owner = phaseTracker.getCurrentContext().getOwner().orElse(null);
@@ -356,16 +376,29 @@ public abstract class MixinBlock implements BlockType, IMixinBlock {
         }
     }
 
+    @Nullable private PhaseData data = null; // Soft reference for the methods between this
+
     @Inject(method = "dropBlockAsItemWithChance", at = @At(value = "RETURN"), cancellable = true)
     private void onDropBlockAsItemWithChanceReturn(net.minecraft.world.World worldIn, BlockPos pos, IBlockState state, float chance, int fortune,
         CallbackInfo ci) {
         if (!((IMixinWorld) worldIn).isFake()) {
-            final PhaseTracker phaseTracker = PhaseTracker.getInstance();
-            final IPhaseState<?> currentState = phaseTracker.getCurrentState();
-            final boolean shouldEnterBlockDropPhase = !phaseTracker.getCurrentContext().isCapturingBlockItemDrops() && !currentState.alreadyCapturingItemSpawns() && !currentState.isWorldGeneration();
-            if (shouldEnterBlockDropPhase) {
-                phaseTracker.completePhase(BlockPhase.State.BLOCK_DROP_ITEMS);
+            if (this.data == null) {
+                // means that we didn't need to capture before
+                return;
             }
+            final PhaseTracker phaseTracker = PhaseTracker.getInstance();
+            if (phaseTracker.getCurrentPhaseData() != this.data) {
+                // illegal state exception maybe?
+                this.data = null;
+                return;
+            }
+            final PhaseData data = this.data;
+            final IPhaseState<?> currentState = data.state;
+            final boolean shouldEnterBlockDropPhase = !data.context.isCapturingBlockItemDrops() && !currentState.alreadyProcessingBlockItemDrops() && !currentState.isWorldGeneration();
+            if (shouldEnterBlockDropPhase) {
+                phaseTracker.getCurrentContext().close();
+            }
+            this.data = null;
         }
     }
 
@@ -400,5 +433,65 @@ public abstract class MixinBlock implements BlockType, IMixinBlock {
     @Override
     public BlockSoundGroup getSoundGroup() {
         return (BlockSoundGroup) this.blockSoundType;
+    }
+
+    @Override
+    public boolean allowsBlockBulkCapture() {
+        return this.allowsBlockBulkCapture;
+    }
+
+    @Override
+    public boolean allowsEntityBulkCapture() {
+        return this.allowsEntityBulkCapture;
+    }
+
+    @Override
+    public boolean allowsBlockEventCreation() {
+        return this.allowsBlockEventCreation;
+    }
+
+    @Override
+    public boolean allowsEntityEventCreation() {
+        return this.allowsEntityEventCreation;
+    }
+
+    @Override
+    public void refreshCache() {
+        // not needed
+    }
+
+    @Override
+    public void initializeTrackerState() {
+        SpongeConfig<TrackerConfig> trackerConfig = SpongeImpl.getTrackerConfig();
+        BlockTrackerCategory blockTracker = trackerConfig.getConfig().getBlockTracker();
+        final String modId = getKey().getNamespace();
+        final String name = getKey().getValue();
+
+        BlockTrackerModCategory modCapturing = blockTracker.getModMappings().get(modId);
+
+        if (modCapturing == null) {
+            modCapturing = new BlockTrackerModCategory();
+            blockTracker.getModMappings().put(modId, modCapturing);
+        }
+
+        if (!modCapturing.isEnabled()) {
+            this.allowsBlockBulkCapture = false;
+            this.allowsEntityBulkCapture = false;
+            this.allowsBlockEventCreation = false;
+            this.allowsEntityEventCreation = false;
+            modCapturing.getBlockBulkCaptureMap().computeIfAbsent(name.toLowerCase(), k -> this.allowsBlockBulkCapture);
+            modCapturing.getEntityBulkCaptureMap().computeIfAbsent(name.toLowerCase(), k -> this.allowsEntityBulkCapture);
+            modCapturing.getBlockEventCreationMap().computeIfAbsent(name.toLowerCase(), k -> this.allowsBlockEventCreation);
+            modCapturing.getEntityEventCreationMap().computeIfAbsent(name.toLowerCase(), k -> this.allowsEntityEventCreation);
+        } else {
+            this.allowsBlockBulkCapture = modCapturing.getBlockBulkCaptureMap().computeIfAbsent(name.toLowerCase(), k -> true);
+            this.allowsEntityBulkCapture = modCapturing.getEntityBulkCaptureMap().computeIfAbsent(name.toLowerCase(), k -> true);
+            this.allowsBlockEventCreation = modCapturing.getBlockEventCreationMap().computeIfAbsent(name.toLowerCase(), k -> true);
+            this.allowsEntityEventCreation = modCapturing.getEntityEventCreationMap().computeIfAbsent(name.toLowerCase(), k -> true);
+        }
+
+        if (blockTracker.autoPopulateData()) {
+            trackerConfig.save();
+        }
     }
 }

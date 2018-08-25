@@ -26,6 +26,7 @@ package org.spongepowered.common.mixin.core.advancement;
 
 import net.minecraft.advancements.FrameType;
 import net.minecraft.util.text.TextFormatting;
+import org.spongepowered.api.CatalogKey;
 import org.spongepowered.api.advancement.AdvancementType;
 import org.spongepowered.api.text.format.TextFormat;
 import org.spongepowered.asm.mixin.Final;
@@ -35,7 +36,7 @@ import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.common.text.format.SpongeTextColor;
-import org.spongepowered.common.text.format.SpongeTextStyle;
+import org.spongepowered.common.text.format.TextStyleImpl;
 
 import javax.annotation.Nullable;
 
@@ -49,12 +50,13 @@ public class MixinFrameType {
     @Nullable private String id;
     @Nullable private String spongeName;
     @Nullable private TextFormat textFormat;
+    @Nullable private CatalogKey key;
 
-    public String type$getId() {
-        if (this.id == null) {
-            this.id = "minecraft:" + this.name;
+    public CatalogKey type$getKey() {
+        if (this.key == null) {
+            this.key = CatalogKey.minecraft(this.name);
         }
-        return this.id;
+        return this.key;
     }
 
     @Intrinsic
@@ -69,7 +71,7 @@ public class MixinFrameType {
         if (this.textFormat == null) {
             this.textFormat = TextFormat.of(
                     SpongeTextColor.of(this.format),
-                    SpongeTextStyle.of(this.format));
+                    TextStyleImpl.Real.of(this.format));
         }
         return this.textFormat;
     }

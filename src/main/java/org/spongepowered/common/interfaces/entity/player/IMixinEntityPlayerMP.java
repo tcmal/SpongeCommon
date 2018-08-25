@@ -30,22 +30,30 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import org.spongepowered.api.data.DataTransactionResult;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
+import org.spongepowered.api.profile.property.ProfileProperty;
 import org.spongepowered.api.scoreboard.Scoreboard;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageChannel;
+import org.spongepowered.common.interfaces.entity.IMixinSkinnable;
+import org.spongepowered.common.entity.player.tab.SpongeTabList;
 import org.spongepowered.common.interfaces.world.IMixinWorldServer;
 import org.spongepowered.common.world.border.PlayerOwnBorderListener;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-public interface IMixinEntityPlayerMP extends IMixinEntityPlayer {
+public interface IMixinEntityPlayerMP extends IMixinEntityPlayer, IMixinSkinnable {
 
     default boolean usesCustomClient() {
         return false;
     }
+
+    Optional<User> getBackingUser();
 
     User getUserObject();
 
@@ -94,5 +102,20 @@ public interface IMixinEntityPlayerMP extends IMixinEntityPlayer {
     boolean hasForcedGamemodeOverridePermission();
 
     void setContainerDisplay(Text displayName);
+
+    void refreshSkinOnRespawn();
+
+    void refreshSkinOnSpawnToOthers();
+
+    com.mojang.authlib.GameProfile getCustomSkinProfile();
+
+    void onSpawnToPlayers(Collection<Player> players);
+
+    boolean isRespawning();
+
+    void setRespawning(boolean respawning);
+
+    SpongeTabList removeTabList();
+
 
 }

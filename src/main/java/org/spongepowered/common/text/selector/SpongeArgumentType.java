@@ -27,8 +27,11 @@ package org.spongepowered.common.text.selector;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.collect.Maps;
+import net.minecraft.world.GameType;
+import org.spongepowered.api.CatalogKey;
 import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.entity.EntityType;
+import org.spongepowered.api.entity.living.player.gamemode.GameMode;
 import org.spongepowered.api.text.selector.ArgumentType;
 import org.spongepowered.api.util.annotation.NonnullByDefault;
 import org.spongepowered.common.SpongeImpl;
@@ -47,6 +50,14 @@ public class SpongeArgumentType<T> extends SpongeArgumentHolder<ArgumentType<T>>
         converters.put(String.class.getName(), Function.<String>identity());
         converters.put(EntityType.class.getName(),
                        (Function<String, EntityType>) input -> EntityTypeRegistryModule.getInstance().getById(input.toLowerCase()).orElse(null));
+        converters.put(GameMode.class.getName(), input -> {
+            try {
+                int i = Integer.parseInt(input);
+                return GameType.parseGameTypeWithDefault(i, GameType.NOT_SET);
+            } catch (NumberFormatException e) {
+                return GameType.parseGameTypeWithDefault(input, GameType.NOT_SET);
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -60,7 +71,7 @@ public class SpongeArgumentType<T> extends SpongeArgumentHolder<ArgumentType<T>>
                     final Class<? extends CatalogType> type2 = type.asSubclass(CatalogType.class);
                     converters.put(converterKey, (Function<String, T>) input -> {
                         // assume it exists for now
-                        return (T) SpongeImpl.getGame().getRegistry().getType(type2, input).get();
+                        return (T) SpongeImpl.getGame().getRegistry().getType(type2, CatalogKey.resolve(input)).get();
                     });
                 } else {
                     throw new IllegalStateException("can't convert " + type);

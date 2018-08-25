@@ -193,7 +193,7 @@ public abstract class MixinSaveHandler implements IMixinSaveHandler {
      *
      * @param inputStream The input stream to direct to compressed stream tools
      * @return The compound that may be modified
-     * @throws IOException
+     * @throws IOException for reasons
      */
     @Redirect(method = READ_PLAYER_DATA, at = @At(value = "INVOKE", target = COMPRESSED_READ_FILE))
     private NBTTagCompound spongeReadPlayerData(InputStream inputStream) throws IOException {
@@ -205,6 +205,12 @@ public abstract class MixinSaveHandler implements IMixinSaveHandler {
             final NBTTagCompound bukkitCompound = compound.getCompoundTag(NbtDataUtil.BUKKIT);
             creation = Instant.ofEpochMilli(bukkitCompound.getLong(NbtDataUtil.BUKKIT_FIRST_PLAYED));
             lastPlayed = Instant.ofEpochMilli(bukkitCompound.getLong(NbtDataUtil.BUKKIT_LAST_PLAYED));
+        }
+        // migrate canary join data
+        if (compound.hasKey(NbtDataUtil.CANARY, NbtDataUtil.TAG_COMPOUND)) {
+            final NBTTagCompound canaryCompound = compound.getCompoundTag(NbtDataUtil.CANARY);
+            creation = Instant.ofEpochMilli(canaryCompound.getLong(NbtDataUtil.CANARY_FIRST_JOINED));
+            lastPlayed = Instant.ofEpochMilli(canaryCompound.getLong(NbtDataUtil.CANARY_LAST_JOINED));
         }
         UUID playerId = null;
         if (compound.hasUniqueId(NbtDataUtil.UUID)) {
@@ -230,13 +236,28 @@ public abstract class MixinSaveHandler implements IMixinSaveHandler {
         SpongePlayerDataHandler.savePlayer(player.getUniqueID());
     }
 
-    @Inject(method = "writePlayerData", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
-    public void beforeLogWarning(EntityPlayer player, CallbackInfo ci, Exception exception) {
+    @Inject(
+        method = "writePlayerData",
+        at = @At(
+            value = "INVOKE",
+            target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V",
+            remap = false
+        ),
+        locals = LocalCapture.CAPTURE_FAILHARD
+    )
+    private void beforeLogWarning(EntityPlayer player, CallbackInfo ci, Exception exception) {
         this.capturedException = exception;
     }
 
-    @Redirect(method = "writePlayerData", at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V"))
-    public void onWarn(Logger logger, String message, Object param) {
+    @Redirect(
+        method = "writePlayerData",
+        at = @At(
+            value = "INVOKE",
+            target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V",
+            remap = false
+        )
+    )
+    private void onWarn(Logger logger, String message, Object param) {
         logger.warn(message, param, this.capturedException);
         this.capturedException = null;
     }

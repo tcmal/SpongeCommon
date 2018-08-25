@@ -39,7 +39,6 @@ import org.spongepowered.api.event.CauseStackManager;
 import org.spongepowered.api.event.SpongeEventFactory;
 import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
-import org.spongepowered.api.event.entity.SpawnEntityEvent;
 import org.spongepowered.api.event.item.inventory.DropItemEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -92,7 +91,7 @@ final class InteractionPacketState extends BasicPacketState implements IEntitySp
     }
 
     @Override
-    public boolean doesCaptureEntityDrops() {
+    public boolean doesCaptureEntityDrops(BasicPacketContext context) {
         return true;
     }
 
@@ -103,15 +102,16 @@ final class InteractionPacketState extends BasicPacketState implements IEntitySp
     }
 
     @Override
-    public boolean tracksBlockSpecificDrops() {
+    public boolean tracksBlockSpecificDrops(BasicPacketContext context) {
         return true;
     }
 
     @Override
-    public boolean alreadyCapturingItemSpawns() {
+    public boolean alreadyProcessingBlockItemDrops() {
         return true;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void unwind(BasicPacketContext phaseContext) {
 
@@ -122,6 +122,7 @@ final class InteractionPacketState extends BasicPacketState implements IEntitySp
         try (CauseStackManager.StackFrame frame = Sponge.getCauseStackManager().pushCauseFrame()) {
             frame.pushCause(spongePlayer);
             frame.addContext(EventContextKeys.SPAWN_TYPE, SpawnTypes.DROPPED_ITEM);
+            frame.addContext(EventContextKeys.USED_ITEM, usedSnapshot);
             final boolean hasBlocks = !phaseContext.getCapturedBlockSupplier().isEmpty();
             final List<BlockSnapshot> capturedBlcoks = phaseContext.getCapturedBlocks();
             final @Nullable BlockSnapshot firstBlockChange = hasBlocks ? capturedBlcoks.get(0) : null;
@@ -131,7 +132,7 @@ final class InteractionPacketState extends BasicPacketState implements IEntitySp
                     return;
                 }
             } else {
-                phaseContext.getBlockItemDropSupplier().acceptIfNotEmpty(map -> {
+                phaseContext.getBlockItemDropSupplier().acceptAndClearIfNotEmpty(map -> {
                     if (ShouldFire.DROP_ITEM_EVENT_DESTRUCT) {
 
                         for (BlockSnapshot blockChange : capturedBlcoks) {
@@ -178,7 +179,7 @@ final class InteractionPacketState extends BasicPacketState implements IEntitySp
                     }
                 });
             phaseContext.getPerEntityItemDropSupplier()
-                .acceptIfNotEmpty(map -> {
+                .acceptAndClearIfNotEmpty(map -> {
                     if (map.isEmpty()) {
                         return;
                     }

@@ -65,7 +65,10 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.MapStorage;
 import org.apache.logging.log4j.Logger;
+import org.spongepowered.api.CatalogKey;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.ChildCommandElementExecutor;
+import org.spongepowered.api.data.type.Profession;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.crafting.CraftingGridInventory;
@@ -74,6 +77,7 @@ import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.storage.WorldProperties;
 import org.spongepowered.common.command.SpongeCommandFactory;
+import org.spongepowered.common.entity.SpongeProfession;
 import org.spongepowered.common.event.tracking.PhaseContext;
 import org.spongepowered.common.event.tracking.PhaseTracker;
 import org.spongepowered.common.event.tracking.context.ItemDropData;
@@ -87,11 +91,13 @@ import org.spongepowered.common.interfaces.world.IMixinWorldServer;
 import org.spongepowered.common.item.inventory.util.InventoryUtil;
 import org.spongepowered.common.item.inventory.util.ItemStackUtil;
 import org.spongepowered.common.mixin.core.world.MixinWorldServer;
+import org.spongepowered.common.registry.type.entity.ProfessionRegistryModule;
 import org.spongepowered.common.util.SpawnerSpawnType;
 import org.spongepowered.common.world.WorldManager;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.FutureTask;
 import java.util.function.Predicate;
@@ -107,6 +113,10 @@ public final class SpongeImplHooks {
 
     public static boolean isVanilla() {
         return true;
+    }
+
+    public static boolean isClientAvailable() {
+        return false;
     }
 
     public static boolean isDeobfuscatedEnvironment() {
@@ -279,8 +289,8 @@ public final class SpongeImplHooks {
     public static Object onUtilRunTask(FutureTask<?> task, Logger logger) {
         final PhaseTracker phaseTracker = PhaseTracker.getInstance();
         try (final BasicPluginContext context = PluginPhase.State.SCHEDULED_TASK.createPhaseContext()
-                .source(task)
-                .buildAndSwitch())  {
+                .source(task))  {
+            context.buildAndSwitch();
             final Object o = Util.runTask(task, logger);
             return o;
         } catch (Exception e) {
@@ -299,7 +309,7 @@ public final class SpongeImplHooks {
 
     public static void blockExploded(Block block, World world, BlockPos blockpos, Explosion explosion) {
         world.setBlockToAir(blockpos);
-        block.onBlockDestroyedByExplosion(world, blockpos, explosion);
+        block.onExplosionDestroy(world, blockpos, explosion);
     }
 
     public static boolean isRestoringBlocks(World world) {
@@ -343,7 +353,7 @@ public final class SpongeImplHooks {
 
     public static void onCraftingRecipeRegister(CraftingRecipe recipe) {
         // Overridden in SF
-        CraftingManager.register(recipe.getId(), ((IRecipe) recipe));
+        CraftingManager.register(recipe.getKey().toString(), ((IRecipe) recipe));
     }
 
     public static Optional<CraftingRecipe> findMatchingRecipe(CraftingGridInventory inventory, org.spongepowered.api.world.World world) {
@@ -363,8 +373,16 @@ public final class SpongeImplHooks {
         return Optional.of(((CraftingRecipe) recipe));
     }
 
+    public static Optional<CraftingRecipe> getRecipeById(CatalogKey id) {
+        IRecipe recipe = CraftingManager.REGISTRY.getObject((ResourceLocation) (Object) id);
+        if (recipe == null) {
+            return Optional.empty();
+        }
+        return Optional.of(((CraftingRecipe) recipe));
+    }
+
     public static Text getAdditionalCommandDescriptions() {
-        return Text.EMPTY;
+        return Text.empty();
     }
 
     public static void registerAdditionalCommands(ChildCommandElementExecutor flagChildren, ChildCommandElementExecutor nonFlagChildren) {
@@ -431,5 +449,49 @@ public final class SpongeImplHooks {
 
     public static double getWorldMaxEntityRadius(IMixinWorldServer mixinWorldServer) {
         return 2.0D;
+    }
+
+    /**
+     * Provides the {@link Profession} to set onto the villager. Since forge has it's own
+     * villager profession system, sponge has to bridge the compatibility and
+     * the profession may not be "properly" registered.
+     * @param professionId
+     * @return
+     */
+    public static Profession validateProfession(int professionId) {
+        List<Profession> professions = (List<Profession>) ProfessionRegistryModule.getInstance().getAll();
+        for (Profession profession : professions) {
+            if (profession instanceof SpongeProfession) {
+                if (professionId == ((SpongeProfession) profession).type) {
+                    return profession;
+                }
+            }
+        }
+        throw new IllegalStateException("Invalid Villager profession id is present! Found: " + professionId
+                                        + " when the expected contain: " + professions);
+
+    }
+
+    public static void onTETickStart(TileEntity te) {
+
+    }
+
+    public static void onTETickEnd(TileEntity te) {
+
+    }
+
+    public static void onEntityTickStart(Entity entity) {
+
+    }
+
+    public static void onEntityTickEnd(Entity entity) {
+
+    }
+
+    public static boolean isMainThread() {
+        // Return true when the server isn't yet initialized, this means on a client
+        // that the game is still being loaded. This is needed to support initialization
+        // events with cause tracking.
+        return !Sponge.isServerAvailable() || Sponge.getServer().isMainThread();
     }
 }

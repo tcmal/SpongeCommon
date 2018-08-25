@@ -42,6 +42,7 @@ import java.util.List;
  */
 public class ReverseTransformation implements InventoryTransformation {
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     public Inventory transform(Inventory inventory) {
 
@@ -51,7 +52,7 @@ public class ReverseTransformation implements InventoryTransformation {
         }
         Collections.reverse(slots);
 
-        CompoundSlotProvider slotProvider = new CompoundSlotProvider<>();
+        CompoundSlotProvider slotProvider = new CompoundSlotProvider();
         slots.forEach(slotProvider::add);
 
         MinecraftInventoryAdapter adapter = (MinecraftInventoryAdapter) inventory;

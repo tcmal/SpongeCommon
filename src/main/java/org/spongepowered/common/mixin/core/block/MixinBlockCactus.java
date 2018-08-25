@@ -30,6 +30,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
+import org.spongepowered.api.CatalogKey;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
@@ -50,14 +51,14 @@ import java.util.Optional;
 @Mixin(BlockCactus.class)
 public abstract class MixinBlockCactus extends MixinBlock {
 
-    @Redirect(method = "onEntityCollidedWithBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;attackEntityFrom(Lnet/minecraft/util/DamageSource;F)Z"))
+    @Redirect(method = "onEntityCollision", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;attackEntityFrom(Lnet/minecraft/util/DamageSource;F)Z"))
     private boolean onSpongeCactusDamage(Entity entity, DamageSource source, float damage, net.minecraft.world.World world, BlockPos pos, IBlockState state, Entity entityIn) {
         if (world.isRemote) {
             return entity.attackEntityFrom(source, damage);
         }
         try {
             Location<World> location = new Location<>((World) world, pos.getX(), pos.getY(), pos.getZ());
-            DamageSource.CACTUS = new MinecraftBlockDamageSource("cactus", location);
+            DamageSource.CACTUS = new MinecraftBlockDamageSource(CatalogKey.minecraft("cactus"), location);
             return entity.attackEntityFrom(DamageSource.CACTUS, damage);
         } finally {
             DamageSource.CACTUS = source;

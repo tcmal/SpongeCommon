@@ -53,9 +53,11 @@ import net.minecraft.world.chunk.storage.AnvilSaveHandler;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.SaveHandler;
 import net.minecraft.world.storage.WorldInfo;
+import org.spongepowered.api.CatalogKey;
 import org.spongepowered.api.GameState;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.SpongeEventFactory;
+import org.spongepowered.api.event.world.UnloadWorldEvent;
 import org.spongepowered.api.util.file.CopyFileVisitor;
 import org.spongepowered.api.util.file.DeleteFileVisitor;
 import org.spongepowered.api.util.file.ForwardingFileVisitor;
@@ -496,11 +498,13 @@ public final class WorldManager {
             }
         }
 
-        try (final PhaseContext<?> ignored = GeneralPhase.State.WORLD_UNLOAD.createPhaseContext().source(worldServer).buildAndSwitch()) {
+        try (final PhaseContext<?> ignored = GeneralPhase.State.WORLD_UNLOAD.createPhaseContext().source(worldServer)) {
+            ignored.buildAndSwitch();
+            final UnloadWorldEvent event = SpongeEventFactory.createUnloadWorldEvent(Sponge.getCauseStackManager().getCurrentCause(),
+                (org.spongepowered.api.world.World) worldServer);
+            final boolean isCancelled = SpongeImpl.postEvent(event);
 
-            if (SpongeImpl.postEvent(
-                SpongeEventFactory.createUnloadWorldEvent(Sponge.getCauseStackManager().getCurrentCause(), (org.spongepowered.api.world.World)
-                    worldServer))) {
+            if (server.isServerRunning() && isCancelled) {
                 return false;
             }
 
@@ -958,7 +962,7 @@ public final class WorldManager {
 
                 dimensionTypeId = fixDimensionTypeId(dimensionTypeId);
                 org.spongepowered.api.world.DimensionType dimensionType
-                        = Sponge.getRegistry().getType(org.spongepowered.api.world.DimensionType.class, dimensionTypeId).orElse(null);
+                        = Sponge.getRegistry().getType(org.spongepowered.api.world.DimensionType.class, CatalogKey.resolve(dimensionTypeId)).orElse(null);
                 if (dimensionType == null) {
                     SpongeImpl.getLogger().warn("World [{}] (DIM{}) has specified dimension type that is not registered. Skipping...",
                             worldFolderName, dimensionId);
@@ -986,9 +990,9 @@ public final class WorldManager {
         // Since we now store the modid, we need to support older save files that only include id without modid.
         if (!name.contains(":")) {
             for (org.spongepowered.api.world.DimensionType type : Sponge.getRegistry().getAllOf(org.spongepowered.api.world.DimensionType.class)) {
-                String typeId = (type.getId().substring(type.getId().lastIndexOf(":") + 1));
+                String typeId = type.getKey().getValue();
                 if (typeId.equals(name)) {
-                    return type.getId();
+                    return type.getKey().toString();
                     // Note: We don't update the NBT here but instead fix it on next
                     //       world save in case there are 2 types using same name.
                 }

@@ -114,7 +114,7 @@ public abstract class MixinBlockDispenser extends MixinBlock {
     public void onDispenseHead(World worldIn, BlockPos pos, CallbackInfo ci) {
         final IBlockState state = worldIn.getBlockState(pos);
         final SpongeBlockSnapshot spongeBlockSnapshot = ((IMixinWorldServer) worldIn).createSpongeBlockSnapshot(state, state, pos, BlockChangeFlags.ALL);
-        final IMixinChunk mixinChunk = (IMixinChunk) worldIn.getChunkFromBlockCoords(pos);
+        final IMixinChunk mixinChunk = (IMixinChunk) worldIn.getChunk(pos);
         this.context = BlockPhase.State.DISPENSE.createPhaseContext()
             .source(spongeBlockSnapshot)
             .owner(() -> mixinChunk.getBlockOwner(pos))
@@ -148,8 +148,7 @@ public abstract class MixinBlockDispenser extends MixinBlock {
         original.add(snapshot);
         try (CauseStackManager.StackFrame frame = Sponge.getCauseStackManager().pushCauseFrame()) {
             frame.pushCause(dispenser);
-            final DropItemEvent.Pre dropEvent = SpongeEventFactory.createDropItemEventPre(frame.getCurrentCause(),
-                    ImmutableList.of(snapshot), original);
+            final DropItemEvent.Pre dropEvent = SpongeEventFactory.createDropItemEventPre(frame.getCurrentCause(), ImmutableList.of(snapshot), original);
             SpongeImpl.postEvent(dropEvent);
             if (dropEvent.isCancelled()) {
                 dispenser.setInventorySlotContents(index, (net.minecraft.item.ItemStack) this.originalItem.createStack());

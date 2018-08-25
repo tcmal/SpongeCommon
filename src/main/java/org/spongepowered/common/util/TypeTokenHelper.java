@@ -36,8 +36,12 @@ import java.lang.reflect.WildcardType;
 
 import javax.annotation.Nullable;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes", "WeakerAccess"})
 public final class TypeTokenHelper {
+
+    public static Class<?>  getGenericParam(TypeToken<?> token, int typeIndex) {
+        return (Class) ((ParameterizedType) token.getType()).getActualTypeArguments()[typeIndex];
+    }
 
     public static boolean isAssignable(TypeToken<?> type, TypeToken<?> toType) {
         return isAssignable(type.getType(), toType.getType());
@@ -109,6 +113,7 @@ public final class TypeTokenHelper {
         throw new IllegalStateException("Unsupported type: " + type);
     }
 
+    @SuppressWarnings("rawtypes")
     private static boolean isAssignable(Type type, ParameterizedType toType, @Nullable Type parent, int index) {
         if (type instanceof Class) {
             final Class<?> otherRaw = (Class<?>) type;

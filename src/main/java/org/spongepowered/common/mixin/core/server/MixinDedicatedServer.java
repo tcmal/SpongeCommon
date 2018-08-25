@@ -90,7 +90,7 @@ public abstract class MixinDedicatedServer extends MinecraftServer implements Se
     @Redirect(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/dedicated/PropertyManager;getIntProperty(Ljava/lang/String;I)I"))
     private int fixWrongDefaultDifficulty(PropertyManager propertyManager, String key, int defaultValue) {
         if ("difficulty".equalsIgnoreCase(key)) {
-            return propertyManager.getIntProperty(key, WorldInfo.DEFAULT_DIFFICULTY.getDifficultyId());
+            return propertyManager.getIntProperty(key, WorldInfo.DEFAULT_DIFFICULTY.getId());
         }
 
         return propertyManager.getIntProperty(key, defaultValue);
@@ -110,8 +110,8 @@ public abstract class MixinDedicatedServer extends MinecraftServer implements Se
         // Mods such as ComputerCraft and Thaumcraft check this method before attempting to set a blockstate.
         final PhaseTracker phaseTracker = PhaseTracker.getInstance();
         final PhaseData peek = phaseTracker.getCurrentPhaseData();
-        final IPhaseState phaseState = peek.state;
-        if (phaseState == null || !phaseState.isInteraction()) {
+        final IPhaseState<?> phaseState = peek.state;
+        if (!phaseState.isInteraction()) {
             // TODO BLOCK_PROTECTED flag
             if (SpongeCommonEventFactory.callChangeBlockEventPre((IMixinWorldServer) worldIn, pos, playerIn).isCancelled()) {
                 return true;

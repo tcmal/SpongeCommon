@@ -64,7 +64,7 @@ public final class ArgumentRegistryModule implements RegistryModule {
         this.argumentTypeMap.put("radius", radius);
 
         // GAME_MODE
-        this.argumentTypeMap.put("game_mode", factory.createArgumentType("m", GameMode.class));
+        this.argumentTypeMap.put("game_mode", factory.createInvertibleArgumentType("m", GameMode.class));
 
         // COUNT
         this.argumentTypeMap.put("count", factory.createArgumentType("c", Integer.class));
@@ -76,8 +76,7 @@ public final class ArgumentRegistryModule implements RegistryModule {
         this.argumentTypeMap.put("level", level);
 
         // TEAM
-        this.argumentTypeMap.put("team", factory.createInvertibleArgumentType("team", Integer.class,
-                                                                              org.spongepowered.api.scoreboard.Team.class.getName()));
+        this.argumentTypeMap.put("team", factory.createInvertibleArgumentType("team", String.class));
 
         // NAME
         this.argumentTypeMap.put("name", factory.createInvertibleArgumentType("name", String.class));

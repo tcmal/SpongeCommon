@@ -50,6 +50,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.common.SpongeImpl;
+import org.spongepowered.common.SpongeImplHooks;
 import org.spongepowered.common.interfaces.advancement.IMixinAdvancementProgress;
 import org.spongepowered.common.interfaces.advancement.IMixinCriterion;
 import org.spongepowered.common.interfaces.advancement.IMixinCriterionProgress;
@@ -70,18 +71,23 @@ public class MixinPlayerAdvancements implements IMixinPlayerAdvancements {
     @Shadow private EntityPlayerMP player;
 
     private boolean wasSuccess;
-    private Text message;
+    @Nullable private Text message;
 
-    @Inject(method = "startProgress", at = @At("RETURN"))
+    @Inject(method = "startProgress", at = @At("HEAD"))
     private void onStartProgress(Advancement advancement, AdvancementProgress progress, CallbackInfo ci) {
         final IMixinAdvancementProgress advancementProgress = (IMixinAdvancementProgress) progress;
-        advancementProgress.setAdvancement(((org.spongepowered.api.advancement.Advancement) advancement).getId());
+        advancementProgress.setAdvancement(((org.spongepowered.api.advancement.Advancement) advancement).getKey().toString());
         advancementProgress.setPlayerAdvancements((PlayerAdvancements) (Object) this);
     }
 
     @Redirect(method = "registerListeners(Lnet/minecraft/advancements/Advancement;)V", at = @At(value = "INVOKE", ordinal = 0,
             target = "Lnet/minecraft/advancements/CriterionProgress;isObtained()Z"))
     private boolean onUnregisterListenersGetProgress(CriterionProgress progress) {
+        final IMixinCriterionProgress mixinCriterionProgress = (IMixinCriterionProgress) progress;
+        if (SpongeImplHooks.isFakePlayer(this.player) || !mixinCriterionProgress.isCriterionAvailable()) {
+            return progress.isObtained();
+        }
+
         final AdvancementCriterion criterion = ((org.spongepowered.api.advancement.criteria.CriterionProgress) progress).getCriterion();
         final IMixinCriterion mixinCriterion = (IMixinCriterion) criterion;
         // Only remove the trigger once the goal is reached
@@ -96,6 +102,10 @@ public class MixinPlayerAdvancements implements IMixinPlayerAdvancements {
     @Redirect(method = "unregisterListeners", at = @At(value = "INVOKE", ordinal = 0, target =
             "Lnet/minecraft/advancements/AdvancementProgress;getCriterionProgress(Ljava/lang/String;)Lnet/minecraft/advancements/CriterionProgress;"))
     private CriterionProgress onUnregisterListenersGetProgress(AdvancementProgress advancementProgress, String criterion) {
+        if (SpongeImplHooks.isFakePlayer(this.player)) {
+            return advancementProgress.getCriterionProgress(criterion);
+        }
+
         final org.spongepowered.api.advancement.Advancement advancement =
                 ((org.spongepowered.api.advancement.AdvancementProgress) advancementProgress).getAdvancement();
         final AdvancementCriterion advancementCriterion = (AdvancementCriterion) ((Advancement) advancement).getCriteria().get(criterion);
@@ -170,5 +180,12 @@ public class MixinPlayerAdvancements implements IMixinPlayerAdvancements {
     @Override
     public Player getPlayer() {
         return (Player) this.player;
+    }
+
+    @Override
+    public void reloadAdvancementProgress() {
+        for (AdvancementProgress progress : this.progress.values()) {
+            ((IMixinAdvancementProgress) progress).updateProgressMap();
+        }
     }
 }

@@ -27,6 +27,7 @@ package org.spongepowered.common.event;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.spongepowered.api.event.EventManager;
 import org.spongepowered.api.event.Listener;
@@ -34,6 +35,7 @@ import org.spongepowered.api.event.entity.SpawnEntityEvent;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.plugin.PluginManager;
 import org.spongepowered.common.InjectedTest;
+import org.spongepowered.lwts.runner.LaunchWrapperTestRunner;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -70,14 +72,14 @@ public class ShouldFireTest extends InjectedTest {
         SpawnListener listener = new SpawnListener();
 
         Assert.assertFalse("SPAWN_ENTITY_EVENT is not false!", ShouldFire.SPAWN_ENTITY_EVENT);
-        Assert.assertFalse("SPAWN_ENTITY_EVENT_CHUNKLOAD is not false!", ShouldFire.SPAWN_ENTITY_EVENT_CHUNKLOAD);
+        Assert.assertFalse("SPAWN_ENTITY_EVENT_CHUNK_LOAD is not false!", ShouldFire.SPAWN_ENTITY_EVENT_CHUNK_LOAD);
         this.eventManager.registerListeners(this.plugin, listener);
         Assert.assertTrue("SPAWN_ENTITY_EVENT is not true!", ShouldFire.SPAWN_ENTITY_EVENT);
-        Assert.assertFalse("SPAWN_ENTITY_EVENT_CHUNKLOAD is not false!", ShouldFire.SPAWN_ENTITY_EVENT_CHUNKLOAD);
+        Assert.assertFalse("SPAWN_ENTITY_EVENT_CHUNK_LOAD is not false!", ShouldFire.SPAWN_ENTITY_EVENT_CHUNK_LOAD);
 
         this.eventManager.unregisterListeners(listener);
         Assert.assertFalse("SPAWN_ENTITY_EVENT is not false!", ShouldFire.SPAWN_ENTITY_EVENT);
-        Assert.assertFalse("SPAWN_ENTITY_EVENT_CHUNKLOAD is not false!", ShouldFire.SPAWN_ENTITY_EVENT_CHUNKLOAD);
+        Assert.assertFalse("SPAWN_ENTITY_EVENT_CHUNK_LOAD is not false!", ShouldFire.SPAWN_ENTITY_EVENT_CHUNK_LOAD);
     }
 
     @Test

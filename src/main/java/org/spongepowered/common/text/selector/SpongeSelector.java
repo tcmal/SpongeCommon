@@ -32,6 +32,7 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.text.selector.Argument;
 import org.spongepowered.api.text.selector.ArgumentType;
+import org.spongepowered.api.text.selector.ArgumentTypes;
 import org.spongepowered.api.text.selector.Selector;
 import org.spongepowered.api.text.selector.SelectorType;
 import org.spongepowered.api.util.annotation.NonnullByDefault;
@@ -40,10 +41,9 @@ import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.extent.Extent;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @NonnullByDefault
 public class SpongeSelector implements Selector {
@@ -102,43 +102,33 @@ public class SpongeSelector implements Selector {
     }
 
     @Override
-    public Set<Entity> resolve(CommandSource origin) {
-        return new SelectorResolver(origin, this, false).resolve();
+    public ImmutableSet<Entity> resolve(CommandSource origin) {
+        return new SelectorResolver(this, origin).resolve();
     }
 
     @Override
-    public Set<Entity> resolve(Extent... extents) {
+    public ImmutableSet<Entity> resolve(Extent... extents) {
         return resolve(ImmutableSet.copyOf(extents));
     }
 
     @Override
-    public Set<Entity> resolve(Collection<? extends Extent> extents) {
-        return new SelectorResolver(extents, this, false).resolve();
+    public ImmutableSet<Entity> resolve(Collection<? extends Extent> extents) {
+        return new SelectorResolver(this, extents).resolve();
     }
 
     @Override
-    public Set<Entity> resolve(Location<World> location) {
-        return new SelectorResolver(location, this, false).resolve();
-    }
-
-    @Override
-    public Set<Entity> resolveForce(CommandSource origin) {
-        return new SelectorResolver(origin, this, true).resolve();
-    }
-
-    @Override
-    public Set<Entity> resolveForce(Extent... extents) {
-        return resolveForce(ImmutableSet.copyOf(extents));
-    }
-
-    @Override
-    public Set<Entity> resolveForce(Collection<? extends Extent> extents) {
-        return new SelectorResolver(extents, this, true).resolve();
-    }
-
-    @Override
-    public Set<Entity> resolveForce(Location<World> location) {
-        return new SelectorResolver(location, this, true).resolve();
+    public ImmutableSet<Entity> resolve(Location<World> location) {
+        Builder selector = Selector.builder().from(this);
+        if (!this.has(ArgumentTypes.POSITION.x())) {
+            selector.add(ArgumentTypes.POSITION.x(), location.getPosition().getFloorX());
+        }
+        if (!this.has(ArgumentTypes.POSITION.y())) {
+            selector.add(ArgumentTypes.POSITION.y(), location.getPosition().getFloorY());
+        }
+        if (!this.has(ArgumentTypes.POSITION.z())) {
+            selector.add(ArgumentTypes.POSITION.z(), location.getPosition().getFloorZ());
+        }
+        return new SelectorResolver(selector.build(), ImmutableSet.of(location.getExtent())).resolve();
     }
 
     @Override
@@ -154,19 +144,10 @@ public class SpongeSelector implements Selector {
     private String buildString() {
         StringBuilder result = new StringBuilder();
 
-        result.append('@').append(this.type.getId());
-
+        result.append('@').append(this.type.getName());
         if (!this.arguments.isEmpty()) {
-            result.append('[');
             Collection<Argument<?>> args = this.arguments.values();
-            for (Iterator<Argument<?>> iter = args.iterator(); iter.hasNext();) {
-                Argument<?> arg = iter.next();
-                result.append(arg.toPlain());
-                if (iter.hasNext()) {
-                    result.append(',');
-                }
-            }
-            result.append(']');
+            result.append(args.stream().map(Argument::toPlain).collect(Collectors.joining(",", "[", "]")));
         }
 
         return result.toString();

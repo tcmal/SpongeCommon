@@ -56,7 +56,7 @@ final class DeathUpdateState extends EntityPhaseState<BasicEntityContext> {
             .addEntityDropCaptures();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public void unwind(BasicEntityContext context) {
         final Entity dyingEntity = context.getSource(Entity.class)
@@ -99,7 +99,7 @@ final class DeathUpdateState extends EntityPhaseState<BasicEntityContext> {
                     }
 
                 });
-        context.getPerEntityItemDropSupplier().acceptIfNotEmpty(map -> {
+        context.getPerEntityItemDropSupplier().acceptAndClearIfNotEmpty(map -> {
             if (map.isEmpty()) {
                 return;
             }

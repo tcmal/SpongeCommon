@@ -27,6 +27,7 @@ package org.spongepowered.common.event;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import co.aikar.timings.Timing;
 import co.aikar.timings.TimingsManager;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
@@ -50,10 +51,12 @@ import org.spongepowered.api.event.impl.AbstractEvent;
 import org.spongepowered.api.event.item.inventory.InteractInventoryEvent;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.plugin.PluginManager;
+import org.spongepowered.asm.util.PrettyPrinter;
 import org.spongepowered.common.SpongeImpl;
 import org.spongepowered.common.event.filter.FilterFactory;
 import org.spongepowered.common.event.gen.DefineableClassLoader;
 import org.spongepowered.common.event.tracking.PhaseContext;
+import org.spongepowered.common.event.tracking.PhaseTracker;
 import org.spongepowered.common.event.tracking.phase.plugin.PluginPhase;
 import org.spongepowered.common.interfaces.IMixinContainer;
 import org.spongepowered.common.util.TypeTokenHelper;
@@ -73,6 +76,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -97,7 +101,7 @@ public class SpongeEventManager implements EventManager {
      * <p>The cache is currently entirely invalidated if handlers are added or
      * removed.</p>
      */
-    private final LoadingCache<EventType<?>, RegisteredListener.Cache> handlersCache =
+    protected final LoadingCache<EventType<?>, RegisteredListener.Cache> handlersCache =
             Caffeine.newBuilder().initialCapacity(150).build(this::bakeHandlers);
 
     @Inject
@@ -211,7 +215,7 @@ public class SpongeEventManager implements EventManager {
     }
 
     @SuppressWarnings("unchecked")
-    public void registerListener(PluginContainer plugin, Object listenerObject) {
+    private void registerListener(PluginContainer plugin, Object listenerObject) {
         checkNotNull(plugin, "plugin");
         checkNotNull(listenerObject, "listener");
 
@@ -241,7 +245,7 @@ public class SpongeEventManager implements EventManager {
             if (listener != null) {
                 String error = getHandlerErrorOrNull(method);
                 if (error == null) {
-                    @SuppressWarnings("unchecked")
+                    @SuppressWarnings({"unchecked", "rawtypes"})
                     final TypeToken eventType = TypeToken.of(method.getGenericParameterTypes()[0]);
                     AnnotatedEventListener handler;
                     try {
@@ -285,7 +289,7 @@ public class SpongeEventManager implements EventManager {
         return createRegistration(plugin, eventClass, listener.order(), listener.beforeModifications(), handler);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private static <T extends Event> RegisteredListener<T> createRegistration(PluginContainer plugin, TypeToken<T> eventType, Order order,
             boolean beforeModifications, EventListener<? super T> handler) {
         TypeToken<?> genericType = null;
@@ -372,7 +376,7 @@ public class SpongeEventManager implements EventManager {
         unregister(handler -> plugin.equals(handler.getPlugin()));
     }
 
-    @SuppressWarnings({"ConstantConditions", "unchecked"})
+    @SuppressWarnings({"ConstantConditions", "unchecked", "rawtypes"})
     protected RegisteredListener.Cache getHandlerCache(Event event) {
         checkNotNull(event, "event");
         final Class<? extends Event> eventClass = event.getClass();
@@ -407,22 +411,21 @@ public class SpongeEventManager implements EventManager {
         }
         TimingsManager.PLUGIN_EVENT_HANDLER.startTimingIfSync();
         for (@SuppressWarnings("rawtypes") RegisteredListener handler : handlers) {
-            Sponge.getCauseStackManager().pushCause(handler.getPlugin());
-            try (CauseStackManager.StackFrame frame = Sponge.getCauseStackManager().pushCauseFrame();
-                 final PhaseContext<?> context = PluginPhase.Listener.GENERAL_LISTENER.createPhaseContext()
-                            .source(handler.getPlugin())
-                            .buildAndSwitch()) {
-                handler.getTimingsHandler().startTimingIfSync();
+            try (final PhaseContext<?> context = PluginPhase.Listener.GENERAL_LISTENER.createPhaseContext()
+                            .source(handler.getPlugin());
+                 final Timing timings = handler.getTimingsHandler()) {
+                context.buildAndSwitch();
+                timings.startTimingIfSync();
                 if (event instanceof AbstractEvent) {
                     ((AbstractEvent) event).currentOrder = handler.getOrder();
                 }
                 handler.handle(event);
             } catch (Throwable e) {
+                // TODO - add some better handling, especially since we have the stakc frame and phase context to boot
+                final PrettyPrinter printer = new PrettyPrinter(60).add("Error with event listener handling").centre().hr();
+                printer.add("A listener threw an exception while being handled, this is usually not a sponge bug.");
                 this.logger.error("Could not pass {} to {}", event.getClass().getSimpleName(), handler.getPlugin(), e);
-            } finally {
-                handler.getTimingsHandler().stopTimingIfSync();
             }
-            Sponge.getCauseStackManager().popCause();
         }
         if (event instanceof AbstractEvent) {
             ((AbstractEvent) event).currentOrder = null;
@@ -449,7 +452,11 @@ public class SpongeEventManager implements EventManager {
 
     public boolean post(Event event, boolean allowClientThread) {
         return post(event, getHandlerCache(event).getListeners());
+    }
 
-
+    public boolean post(Event event, PluginContainer plugin) {
+        return post(event, getHandlerCache(event).getListeners().stream()
+                .filter(l -> l.getPlugin().equals(plugin))
+                .collect(Collectors.toList()));
     }
 }

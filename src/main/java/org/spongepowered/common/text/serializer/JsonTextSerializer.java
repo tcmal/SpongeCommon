@@ -26,11 +26,12 @@ package org.spongepowered.common.text.serializer;
 
 import com.google.gson.JsonParseException;
 import net.minecraft.util.text.ITextComponent;
+import org.spongepowered.api.CatalogKey;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextParseException;
 import org.spongepowered.api.text.serializer.TextSerializer;
 import org.spongepowered.common.interfaces.text.IMixinTextComponent;
-import org.spongepowered.common.interfaces.text.IMixinText;
+import org.spongepowered.common.text.impl.TextImpl;
 
 /**
  * TextSerializer implementation for the json format.
@@ -38,8 +39,8 @@ import org.spongepowered.common.interfaces.text.IMixinText;
 public final class JsonTextSerializer implements TextSerializer {
 
     @Override
-    public String getId() {
-        return "minecraft:json";
+    public CatalogKey getKey() {
+        return CatalogKey.minecraft("json");
     }
 
     @Override
@@ -49,7 +50,7 @@ public final class JsonTextSerializer implements TextSerializer {
 
     @Override
     public String serialize(Text text) {
-        return ((IMixinText) text).toJson();
+        return ((TextImpl) text).toJson();
     }
 
     @Override
@@ -57,7 +58,7 @@ public final class JsonTextSerializer implements TextSerializer {
         try {
             ITextComponent component = ITextComponent.Serializer.jsonToComponent(input);
             if (component == null) {
-                return Text.EMPTY;
+                return Text.empty();
             }
 
             return ((IMixinTextComponent) component).toText();
