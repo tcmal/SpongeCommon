@@ -38,7 +38,7 @@ import org.spongepowered.common.registry.type.event.DamageSourceRegistryModule;
 
 import java.util.Optional;
 
-public class HealthValueProcessor extends AbstractSpongeValueProcessor<EntityLivingBase, Double, BoundedValue.Mutable<Double>> {
+public class HealthValueProcessor extends AbstractSpongeValueProcessor<EntityLivingBase, Double, BoundedValue<Double>> {
 
     public HealthValueProcessor() {
         super(EntityLivingBase.class, Keys.HEALTH);
@@ -71,7 +71,7 @@ public class HealthValueProcessor extends AbstractSpongeValueProcessor<EntityLiv
     }
 
     @Override
-    public Optional<BoundedValue.Mutable<Double>> getApiValueFromContainer(ValueContainer<?> container) {
+    public Optional<BoundedValue<Double>> getApiValueFromContainer(ValueContainer<?> container) {
         if (container instanceof EntityLivingBase) {
             final double health = ((EntityLivingBase) container).getHealth();
             final double maxHealth = ((EntityLivingBase) container).getMaxHealth();

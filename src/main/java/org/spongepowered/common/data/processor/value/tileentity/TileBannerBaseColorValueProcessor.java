@@ -38,7 +38,7 @@ import org.spongepowered.common.interfaces.block.tile.IMixinBanner;
 
 import java.util.Optional;
 
-public class TileBannerBaseColorValueProcessor extends AbstractSpongeValueProcessor<TileEntityBanner, DyeColor, Value.Mutable<DyeColor>> {
+public class TileBannerBaseColorValueProcessor extends AbstractSpongeValueProcessor<TileEntityBanner, DyeColor, Value<DyeColor>> {
 
     public TileBannerBaseColorValueProcessor() {
         super(TileEntityBanner.class, Keys.BANNER_BASE_COLOR);

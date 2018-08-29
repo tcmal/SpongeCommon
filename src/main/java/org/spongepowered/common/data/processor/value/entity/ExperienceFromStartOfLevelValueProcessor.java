@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class ExperienceFromStartOfLevelValueProcessor extends AbstractSpongeValueProcessor<EntityPlayer, Integer, BoundedValue.Immutable<Integer>> {
+public class ExperienceFromStartOfLevelValueProcessor extends AbstractSpongeValueProcessor<EntityPlayer, Integer, BoundedValue<Integer>> {
 
     public ExperienceFromStartOfLevelValueProcessor() {
         super(EntityPlayer.class, Keys.EXPERIENCE_FROM_START_OF_LEVEL);

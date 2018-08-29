@@ -36,7 +36,7 @@ import org.spongepowered.common.interfaces.IMixinMobSpawner;
 
 import java.util.Optional;
 
-public class SpawnerRemainingDelayValueProcessor extends AbstractSpongeValueProcessor<IMixinMobSpawner, Short, BoundedValue.Mutable<Short>> {
+public class SpawnerRemainingDelayValueProcessor extends AbstractSpongeValueProcessor<IMixinMobSpawner, Short, BoundedValue<Short>> {
 
     public SpawnerRemainingDelayValueProcessor() {
         super(IMixinMobSpawner.class, Keys.SPAWNER_REMAINING_DELAY);

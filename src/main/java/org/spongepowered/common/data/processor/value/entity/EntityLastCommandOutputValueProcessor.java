@@ -38,7 +38,7 @@ import org.spongepowered.common.text.SpongeTexts;
 import java.util.Optional;
 
 public class EntityLastCommandOutputValueProcessor extends
-        AbstractSpongeValueProcessor<EntityMinecartCommandBlock, Optional<Text>, OptionalValue.Mutable<Text>> {
+        AbstractSpongeValueProcessor<EntityMinecartCommandBlock, Optional<Text>, OptionalValue<Text>> {
 
     public EntityLastCommandOutputValueProcessor() {
         super(EntityMinecartCommandBlock.class, Keys.LAST_COMMAND_OUTPUT);

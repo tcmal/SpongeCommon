@@ -32,7 +32,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeLayeredData
 import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProcessor;
 import org.spongepowered.common.data.value.SpongeValueFactory;
 
-public class LayeredDataProcessor extends AbstractBlockOnlyDataProcessor<Integer, BoundedValue.Mutable<Integer>, LayeredData, ImmutableLayeredData> {
+public class LayeredDataProcessor extends AbstractBlockOnlyDataProcessor<Integer, BoundedValue<Integer>, LayeredData, ImmutableLayeredData> {
 
     public LayeredDataProcessor() {
         super(Keys.LAYER);

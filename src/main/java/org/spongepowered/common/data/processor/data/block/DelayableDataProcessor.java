@@ -33,7 +33,7 @@ import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProce
 import org.spongepowered.common.data.value.SpongeValueFactory;
 
 public class DelayableDataProcessor extends
-        AbstractBlockOnlyDataProcessor<Integer, BoundedValue.Mutable<Integer>, DelayableData, ImmutableDelayableData> {
+        AbstractBlockOnlyDataProcessor<Integer, BoundedValue<Integer>, DelayableData, ImmutableDelayableData> {
 
     public DelayableDataProcessor() {
         super(Keys.DELAY);

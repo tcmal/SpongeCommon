@@ -40,7 +40,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class SheepDyeColorDataProcessor extends AbstractEntitySingleDataProcessor<EntitySheep, DyeColor, Value.Mutable<DyeColor>, DyeableData,
+public class SheepDyeColorDataProcessor extends AbstractEntitySingleDataProcessor<EntitySheep, DyeColor, Value<DyeColor>, DyeableData,
         ImmutableDyeableData> {
 
     public SheepDyeColorDataProcessor() {

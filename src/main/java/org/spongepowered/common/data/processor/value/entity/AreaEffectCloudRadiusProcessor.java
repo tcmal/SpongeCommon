@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class AreaEffectCloudRadiusProcessor extends AbstractSpongeValueProcessor<EntityAreaEffectCloud, Double, BoundedValue.Mutable<Double>> {
+public class AreaEffectCloudRadiusProcessor extends AbstractSpongeValueProcessor<EntityAreaEffectCloud, Double, BoundedValue<Double>> {
 
     public AreaEffectCloudRadiusProcessor() {
         super(EntityAreaEffectCloud.class, Keys.AREA_EFFECT_CLOUD_RADIUS);

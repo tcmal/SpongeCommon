@@ -36,7 +36,7 @@ import org.spongepowered.common.interfaces.entity.item.IMixinEntityItem;
 
 import java.util.Optional;
 
-public class DespawnDelayValueProcessor extends AbstractSpongeValueProcessor<EntityItem, Integer, BoundedValue.Mutable<Integer>> {
+public class DespawnDelayValueProcessor extends AbstractSpongeValueProcessor<EntityItem, Integer, BoundedValue<Integer>> {
 
     public DespawnDelayValueProcessor() {
         super(EntityItem.class, Keys.DESPAWN_DELAY);

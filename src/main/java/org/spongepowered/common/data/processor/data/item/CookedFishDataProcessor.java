@@ -44,7 +44,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class CookedFishDataProcessor extends AbstractItemSingleDataProcessor<CookedFish, Value.Mutable<CookedFish>, CookedFishData, ImmutableCookedFishData> {
+public class CookedFishDataProcessor extends AbstractItemSingleDataProcessor<CookedFish, Value<CookedFish>, CookedFishData, ImmutableCookedFishData> {
 
     public CookedFishDataProcessor() {
         super(stack -> stack.getItem().equals(Items.COOKED_FISH), Keys.COOKED_FISH);

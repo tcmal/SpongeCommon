@@ -38,7 +38,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class SilentDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Boolean, Value.Mutable<Boolean>, SilentData, ImmutableSilentData> {
+public class SilentDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Boolean, Value<Boolean>, SilentData, ImmutableSilentData> {
 
     public SilentDataProcessor() {
         super(Entity.class, Keys.IS_SILENT);

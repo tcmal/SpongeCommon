@@ -47,7 +47,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 import java.util.Optional;
 
 public class ItemSkullDataProcessor
-        extends AbstractItemSingleDataProcessor<SkullType, Value.Mutable<SkullType>, SkullData, ImmutableSkullData> {
+        extends AbstractItemSingleDataProcessor<SkullType, Value<SkullType>, SkullData, ImmutableSkullData> {
 
     public ItemSkullDataProcessor() {
         super(SkullUtils::supportsObject, Keys.SKULL_TYPE);

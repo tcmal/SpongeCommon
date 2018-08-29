@@ -36,7 +36,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongePistonData;
 import org.spongepowered.common.data.processor.common.AbstractCatalogDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class PistonDataProcessor extends AbstractCatalogDataProcessor<PistonType, Value.Mutable<PistonType>, PistonData, ImmutablePistonData> {
+public class PistonDataProcessor extends AbstractCatalogDataProcessor<PistonType, Value<PistonType>, PistonData, ImmutablePistonData> {
 
     public PistonDataProcessor() {
         super(Keys.PISTON_TYPE, input -> input.getItem() == ItemTypes.PISTON);

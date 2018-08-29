@@ -39,7 +39,7 @@ import org.spongepowered.common.interfaces.entity.monster.IMixinVindicator;
 
 import java.util.Optional;
 
-public class JohnnyDataProcessor extends AbstractEntitySingleDataProcessor<EntityVindicator, Boolean, Value.Mutable<Boolean>, JohnnyData, ImmutableJohnnyData> {
+public class JohnnyDataProcessor extends AbstractEntitySingleDataProcessor<EntityVindicator, Boolean, Value<Boolean>, JohnnyData, ImmutableJohnnyData> {
 
     public JohnnyDataProcessor() {
         super(EntityVindicator.class, Keys.IS_JOHNNY);

@@ -34,7 +34,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongePortionData
 import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class PortionDataProcessor extends AbstractBlockOnlyDataProcessor<PortionType, Value.Mutable<PortionType>, PortionData, ImmutablePortionData> {
+public class PortionDataProcessor extends AbstractBlockOnlyDataProcessor<PortionType, Value<PortionType>, PortionData, ImmutablePortionData> {
 
     public PortionDataProcessor() {
         super(Keys.PORTION_TYPE);

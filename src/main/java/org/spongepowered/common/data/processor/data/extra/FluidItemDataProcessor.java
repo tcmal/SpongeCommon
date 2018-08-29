@@ -43,7 +43,7 @@ import org.spongepowered.common.extra.fluid.SpongeFluidStackSnapshot;
 
 import java.util.Optional;
 
-public class FluidItemDataProcessor extends AbstractItemSingleDataProcessor<FluidStackSnapshot, Value.Mutable<FluidStackSnapshot>, FluidItemData,
+public class FluidItemDataProcessor extends AbstractItemSingleDataProcessor<FluidStackSnapshot, Value<FluidStackSnapshot>, FluidItemData,
         ImmutableFluidItemData> {
 
     private static final FluidStackSnapshot WATER = new SpongeFluidStackBuilder().fluid(FluidTypes.WATER).volume(1000).build().createSnapshot();

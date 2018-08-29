@@ -38,7 +38,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class SneakingDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Boolean, Value.Mutable<Boolean>, SneakingData, ImmutableSneakingData> {
+public class SneakingDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Boolean, Value<Boolean>, SneakingData, ImmutableSneakingData> {
 
     public SneakingDataProcessor() {
         super(Entity.class, Keys.IS_SNEAKING);

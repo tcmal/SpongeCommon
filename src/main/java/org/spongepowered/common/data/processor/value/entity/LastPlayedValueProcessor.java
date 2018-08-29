@@ -38,7 +38,7 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
-public class LastPlayedValueProcessor extends AbstractSpongeValueProcessor<EntityPlayer, Instant, Value.Mutable<Instant>> {
+public class LastPlayedValueProcessor extends AbstractSpongeValueProcessor<EntityPlayer, Instant, Value<Instant>> {
 
     public LastPlayedValueProcessor() {
         super(EntityPlayer.class, Keys.LAST_DATE_PLAYED);

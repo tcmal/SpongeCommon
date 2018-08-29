@@ -33,7 +33,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeAxisData;
 import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class AxisDataProcessor extends AbstractBlockOnlyDataProcessor<Axis, Value.Mutable<Axis>, AxisData, ImmutableAxisData> {
+public class AxisDataProcessor extends AbstractBlockOnlyDataProcessor<Axis, Value<Axis>, AxisData, ImmutableAxisData> {
 
     public AxisDataProcessor() {
         super(Keys.AXIS);

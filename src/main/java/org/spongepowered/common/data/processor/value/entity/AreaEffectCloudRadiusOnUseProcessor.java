@@ -36,7 +36,7 @@ import org.spongepowered.common.mixin.core.entity.IMixinAreaEffectCloud;
 
 import java.util.Optional;
 
-public class AreaEffectCloudRadiusOnUseProcessor extends AbstractSpongeValueProcessor<EntityAreaEffectCloud, Double, BoundedValue.Mutable<Double>> {
+public class AreaEffectCloudRadiusOnUseProcessor extends AbstractSpongeValueProcessor<EntityAreaEffectCloud, Double, BoundedValue<Double>> {
 
     public AreaEffectCloudRadiusOnUseProcessor() {
         super(EntityAreaEffectCloud.class, Keys.AREA_EFFECT_CLOUD_RADIUS_ON_USE);

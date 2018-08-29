@@ -36,7 +36,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class MaxFallDamageValueProcessor extends AbstractSpongeValueProcessor<EntityFallingBlock, Double, BoundedValue.Mutable<Double>> {
+public class MaxFallDamageValueProcessor extends AbstractSpongeValueProcessor<EntityFallingBlock, Double, BoundedValue<Double>> {
 
     public MaxFallDamageValueProcessor() {
         super(EntityFallingBlock.class, Keys.MAX_FALL_DAMAGE);

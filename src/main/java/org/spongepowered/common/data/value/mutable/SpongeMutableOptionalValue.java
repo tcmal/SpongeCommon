@@ -36,7 +36,7 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
-public class SpongeMutableOptionalValue<E> extends SpongeMutableValue<Optional<E>> implements OptionalValue.Mutable<E> {
+public class SpongeMutableOptionalValue<E> extends SpongeMutableValue<Optional<E>, OptionalValue.Mutable<E>, OptionalValue.Immutable<E>> implements OptionalValue.Mutable<E> {
 
     public SpongeMutableOptionalValue(Key<? extends Value<Optional<E>>> key) {
         this(key, Optional.<E>empty());
@@ -62,6 +62,12 @@ public class SpongeMutableOptionalValue<E> extends SpongeMutableValue<Optional<E
         return this;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Value<E> orElse(E defaultValue) {
+        return new SpongeMutableValue<>((Key<? extends Value<E>>) this.getKey(), get().orElse(defaultValue));
+    }
+
     @Override
     public OptionalValue.Immutable<E> asImmutable() {
         return new ImmutableSpongeOptionalValue<>(getKey(), this.actualValue);
@@ -77,8 +83,4 @@ public class SpongeMutableOptionalValue<E> extends SpongeMutableValue<Optional<E
         return set(Optional.ofNullable(value));
     }
 
-    @Override
-    public Value.Mutable or(E defaultValue) { // TODO actually construct the keys
-        return new SpongeMutableValue<>(null, null, get().isPresent() ? get().get() : checkNotNull(defaultValue));
-    }
 }

@@ -159,7 +159,7 @@ public class SelectorResolver {
 
     private void addGamemodeFilters(List<Predicate<Entity>> filters) {
         // TODO: For bleeding, update API to make ArgumentTypes.GAME_MODE invertible
-        Optional<Invertible<GameMode>> gamemode = this.selector.getArgument((ArgumentType.Invertible<GameMode>) ArgumentTypes.GAME_MODE);
+        Optional<Invertible<GameMode>> gamemode = this.selector.getArgument(ArgumentTypes.GAME_MODE);
         if (gamemode.isPresent()) {
             final GameMode actualMode = gamemode.get().getValue();
             // If the gamemode is NOT_SET, that means accept any

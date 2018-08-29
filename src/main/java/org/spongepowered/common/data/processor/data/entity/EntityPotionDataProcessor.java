@@ -45,7 +45,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public class EntityPotionDataProcessor extends AbstractSingleDataSingleTargetProcessor<EntityLivingBase, List<PotionEffect>, ListValue.Mutable<PotionEffect>,
+public class EntityPotionDataProcessor extends AbstractSingleDataSingleTargetProcessor<EntityLivingBase, List<PotionEffect>, ListValue<PotionEffect>,
         PotionEffectData, ImmutablePotionEffectData> {
 
     public EntityPotionDataProcessor() {

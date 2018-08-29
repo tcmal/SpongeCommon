@@ -133,12 +133,17 @@ public class SpongePatternMutableListValue extends SpongeMutableListValue<Patter
     }
 
     @Override
-    public I asImmutable() {
+    public ImmutableSpongePatternListValue asImmutable() {
         return new ImmutableSpongePatternListValue(getKey(), ImmutableList.copyOf(this.actualValue));
     }
 
     @Override
     public PatternListValue.Mutable copy() {
         return new SpongePatternMutableListValue(getKey(), Lists.newArrayList(this.actualValue));
+    }
+
+    @Override
+    public SpongePatternMutableListValue asMutable() {
+        return this;
     }
 }

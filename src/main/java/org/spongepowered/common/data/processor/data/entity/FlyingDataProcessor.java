@@ -39,7 +39,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class FlyingDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Boolean, Value.Mutable<Boolean>, FlyingData, ImmutableFlyingData> {
+public class FlyingDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Boolean, Value<Boolean>, FlyingData, ImmutableFlyingData> {
 
     public FlyingDataProcessor() {
         super(Entity.class, Keys.IS_FLYING);

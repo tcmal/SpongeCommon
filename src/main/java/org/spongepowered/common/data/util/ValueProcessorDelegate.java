@@ -42,7 +42,7 @@ import java.util.Optional;
  */
 public final class ValueProcessorDelegate<E, V extends Value<E>> implements ValueProcessor<E, V> {
 
-    private final Key<V> key;
+    private final Key<? extends V> key;
     private final ImmutableList<ValueProcessor<E, V>> processors;
 
     public ValueProcessorDelegate(Key<V> key, ImmutableList<ValueProcessor<E, V>> processors) {
@@ -51,7 +51,7 @@ public final class ValueProcessorDelegate<E, V extends Value<E>> implements Valu
     }
 
     @Override
-    public Key<? extends Value<E>> getKey() {
+    public Key<? extends V> getKey() {
         return this.key;
     }
 

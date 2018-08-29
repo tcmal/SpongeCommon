@@ -36,7 +36,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeSandstoneDa
 import org.spongepowered.common.data.processor.common.AbstractCatalogDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class SandstoneDataProcessor extends AbstractCatalogDataProcessor<SandstoneType, Value.Mutable<SandstoneType>, SandstoneData, ImmutableSandstoneData> {
+public class SandstoneDataProcessor extends AbstractCatalogDataProcessor<SandstoneType, Value<SandstoneType>, SandstoneData, ImmutableSandstoneData> {
 
     public SandstoneDataProcessor() {
         super(Keys.SANDSTONE_TYPE, input -> input.getItem() == ItemTypes.SANDSTONE || input.getItem() == ItemTypes.SANDSTONE_STAIRS

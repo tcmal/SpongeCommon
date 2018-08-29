@@ -39,7 +39,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 import java.util.Optional;
 
 public class PlayerCreatedDataProcessor
-        extends AbstractEntitySingleDataProcessor<EntityIronGolem, Boolean, Value.Mutable<Boolean>, PlayerCreatedData, ImmutablePlayerCreatedData> {
+        extends AbstractEntitySingleDataProcessor<EntityIronGolem, Boolean, Value<Boolean>, PlayerCreatedData, ImmutablePlayerCreatedData> {
 
     public PlayerCreatedDataProcessor() {
         super(EntityIronGolem.class, Keys.PLAYER_CREATED);

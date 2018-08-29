@@ -46,7 +46,7 @@ import org.spongepowered.common.interfaces.entity.IMixinEntity;
 
 import java.util.Optional;
 
-public class VelocityDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Vector3d, Value.Mutable<Vector3d>, VelocityData, ImmutableVelocityData> {
+public class VelocityDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Vector3d, Value<Vector3d>, VelocityData, ImmutableVelocityData> {
 
     public VelocityDataProcessor() {
         super(Entity.class, Keys.VELOCITY);

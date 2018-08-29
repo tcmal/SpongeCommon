@@ -36,7 +36,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeStoneData;
 import org.spongepowered.common.data.processor.common.AbstractCatalogDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class StoneDataProcessor extends AbstractCatalogDataProcessor<StoneType, Value.Mutable<StoneType>, StoneData, ImmutableStoneData> {
+public class StoneDataProcessor extends AbstractCatalogDataProcessor<StoneType, Value<StoneType>, StoneData, ImmutableStoneData> {
 
     public StoneDataProcessor() {
         super(Keys.STONE_TYPE, input -> input.getItem() == ItemTypes.STONE || input.getItem() == ItemTypes.STONE_STAIRS);

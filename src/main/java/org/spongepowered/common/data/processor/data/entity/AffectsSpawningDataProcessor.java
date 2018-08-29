@@ -40,7 +40,7 @@ import org.spongepowered.common.interfaces.entity.player.IMixinEntityPlayer;
 import java.util.Optional;
 
 public class AffectsSpawningDataProcessor extends
-        AbstractEntitySingleDataProcessor<EntityPlayerMP, Boolean, Value.Mutable<Boolean>, AffectsSpawningData, ImmutableAffectsSpawningData> {
+        AbstractEntitySingleDataProcessor<EntityPlayerMP, Boolean, Value<Boolean>, AffectsSpawningData, ImmutableAffectsSpawningData> {
 
     public AffectsSpawningDataProcessor() {
         super(EntityPlayerMP.class, Keys.AFFECTS_SPAWNING);

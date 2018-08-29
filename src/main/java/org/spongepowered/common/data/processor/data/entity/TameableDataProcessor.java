@@ -42,7 +42,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class TameableDataProcessor
-        extends AbstractEntitySingleDataProcessor<EntityTameable, Optional<UUID>, OptionalValue.Mutable<UUID>, TameableData, ImmutableTameableData> {
+        extends AbstractEntitySingleDataProcessor<EntityTameable, Optional<UUID>, OptionalValue<UUID>, TameableData, ImmutableTameableData> {
 
     public TameableDataProcessor() {
         super(EntityTameable.class, Keys.TAMED_OWNER);

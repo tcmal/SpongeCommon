@@ -36,7 +36,7 @@ import org.spongepowered.common.interfaces.entity.item.IMixinEntityItem;
 
 import java.util.Optional;
 
-public class InfiniteDespawnDelayValueProcessor extends AbstractSpongeValueProcessor<EntityItem, Boolean, Value.Mutable<Boolean>> {
+public class InfiniteDespawnDelayValueProcessor extends AbstractSpongeValueProcessor<EntityItem, Boolean, Value<Boolean>> {
 
     public InfiniteDespawnDelayValueProcessor() {
         super(EntityItem.class, Keys.INFINITE_DESPAWN_DELAY);

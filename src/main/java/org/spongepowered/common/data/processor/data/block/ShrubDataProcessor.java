@@ -36,7 +36,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeShrubData;
 import org.spongepowered.common.data.processor.common.AbstractCatalogDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class ShrubDataProcessor extends AbstractCatalogDataProcessor<ShrubType, Value.Mutable<ShrubType>, ShrubData, ImmutableShrubData> {
+public class ShrubDataProcessor extends AbstractCatalogDataProcessor<ShrubType, Value<ShrubType>, ShrubData, ImmutableShrubData> {
 
     public ShrubDataProcessor() {
         super(Keys.SHRUB_TYPE, input -> input.getItem() == ItemTypes.TALLGRASS);

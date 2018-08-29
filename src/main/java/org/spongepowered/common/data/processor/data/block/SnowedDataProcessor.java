@@ -32,7 +32,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeSnowedData;
 import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class SnowedDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value.Mutable<Boolean>, SnowedData, ImmutableSnowedData> {
+public class SnowedDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value<Boolean>, SnowedData, ImmutableSnowedData> {
 
     public SnowedDataProcessor() {
         super(Keys.SNOWED);

@@ -45,7 +45,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class PassengerDataProcessor extends AbstractEntitySingleDataProcessor<net.minecraft.entity.Entity, List<UUID>, ListValue.Mutable<UUID>, PassengerData, ImmutablePassengerData> {
+public class PassengerDataProcessor extends AbstractEntitySingleDataProcessor<net.minecraft.entity.Entity, List<UUID>, ListValue<UUID>, PassengerData, ImmutablePassengerData> {
 
     public PassengerDataProcessor() {
         super(net.minecraft.entity.Entity.class, Keys.PASSENGERS);

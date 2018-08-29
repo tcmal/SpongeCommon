@@ -40,7 +40,7 @@ import org.spongepowered.common.interfaces.entity.IMixinEntityXPOrb;
 import java.util.Optional;
 
 public class ExpOrbDataProcessor extends
-        AbstractEntitySingleDataProcessor<EntityXPOrb, Integer, BoundedValue.Mutable<Integer>, ExpOrbData, ImmutableExpOrbData> {
+        AbstractEntitySingleDataProcessor<EntityXPOrb, Integer, BoundedValue<Integer>, ExpOrbData, ImmutableExpOrbData> {
 
     public ExpOrbDataProcessor() {
         super(EntityXPOrb.class, Keys.CONTAINED_EXPERIENCE);

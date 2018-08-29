@@ -52,7 +52,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class TileEntitySignDataProcessor
-        extends AbstractTileEntitySingleDataProcessor<TileEntitySign, List<Text>, ListValue.Mutable<Text>, SignData, ImmutableSignData> {
+        extends AbstractTileEntitySingleDataProcessor<TileEntitySign, List<Text>, ListValue<Text>, SignData, ImmutableSignData> {
 
     public TileEntitySignDataProcessor() {
         super(TileEntitySign.class, Keys.SIGN_LINES);

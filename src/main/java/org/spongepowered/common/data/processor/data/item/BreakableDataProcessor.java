@@ -44,7 +44,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public class BreakableDataProcessor
-        extends AbstractItemSingleDataProcessor<Set<BlockType>, SetValue.Mutable<BlockType>, BreakableData, ImmutableBreakableData> {
+        extends AbstractItemSingleDataProcessor<Set<BlockType>, SetValue<BlockType>, BreakableData, ImmutableBreakableData> {
 
     public BreakableDataProcessor() {
         super(stack -> true, Keys.BREAKABLE_BLOCK_TYPES);

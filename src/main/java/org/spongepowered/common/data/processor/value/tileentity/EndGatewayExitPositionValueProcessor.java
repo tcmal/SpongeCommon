@@ -36,7 +36,7 @@ import org.spongepowered.common.interfaces.block.tile.IMixinTileEntityEndGateway
 
 import java.util.Optional;
 
-public class EndGatewayExitPositionValueProcessor extends AbstractSpongeValueProcessor<TileEntityEndGateway, Vector3i, Value.Mutable<Vector3i>> {
+public class EndGatewayExitPositionValueProcessor extends AbstractSpongeValueProcessor<TileEntityEndGateway, Vector3i, Value<Vector3i>> {
 
     public EndGatewayExitPositionValueProcessor() {
         super(TileEntityEndGateway.class, Keys.EXIT_POSITION);

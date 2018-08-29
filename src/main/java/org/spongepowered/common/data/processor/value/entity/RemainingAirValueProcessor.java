@@ -34,7 +34,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class RemainingAirValueProcessor extends AbstractSpongeValueProcessor<EntityLivingBase, Integer, BoundedValue.Mutable<Integer>> {
+public class RemainingAirValueProcessor extends AbstractSpongeValueProcessor<EntityLivingBase, Integer, BoundedValue<Integer>> {
 
     public RemainingAirValueProcessor() {
         super(EntityLivingBase.class, Keys.REMAINING_AIR);

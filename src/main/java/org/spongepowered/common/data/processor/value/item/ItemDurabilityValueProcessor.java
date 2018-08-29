@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class ItemDurabilityValueProcessor extends AbstractSpongeValueProcessor<ItemStack, Integer, BoundedValue.Mutable<Integer>> {
+public class ItemDurabilityValueProcessor extends AbstractSpongeValueProcessor<ItemStack, Integer, BoundedValue<Integer>> {
 
     public ItemDurabilityValueProcessor() {
         super(ItemStack.class, Keys.ITEM_DURABILITY);

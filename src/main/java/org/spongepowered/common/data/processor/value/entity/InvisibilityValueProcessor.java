@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class InvisibilityValueProcessor extends AbstractSpongeValueProcessor<Entity, Boolean, Value.Mutable<Boolean>> {
+public class InvisibilityValueProcessor extends AbstractSpongeValueProcessor<Entity, Boolean, Value<Boolean>> {
 
     public InvisibilityValueProcessor() {
         super(Entity.class, Keys.INVISIBLE);

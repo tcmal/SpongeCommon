@@ -42,7 +42,7 @@ import org.spongepowered.common.interfaces.entity.explosive.IMixinExplosive;
 
 import java.util.Optional;
 
-public class ExplosionRadiusDataProcessor extends AbstractSingleDataSingleTargetProcessor<Explosive, Optional<Integer>, OptionalValue.Mutable<Integer>,
+public class ExplosionRadiusDataProcessor extends AbstractSingleDataSingleTargetProcessor<Explosive, Optional<Integer>, OptionalValue<Integer>,
         ExplosionRadiusData, ImmutableExplosionRadiusData> {
 
     public ExplosionRadiusDataProcessor() {

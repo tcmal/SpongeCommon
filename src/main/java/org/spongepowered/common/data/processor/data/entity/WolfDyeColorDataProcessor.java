@@ -40,7 +40,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class WolfDyeColorDataProcessor extends AbstractEntitySingleDataProcessor<EntityWolf, DyeColor, Value.Mutable<DyeColor>, DyeableData, ImmutableDyeableData> {
+public class WolfDyeColorDataProcessor extends AbstractEntitySingleDataProcessor<EntityWolf, DyeColor, Value<DyeColor>, DyeableData, ImmutableDyeableData> {
 
     public WolfDyeColorDataProcessor() {
         super(EntityWolf.class, Keys.DYE_COLOR);

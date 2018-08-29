@@ -37,7 +37,7 @@ import org.spongepowered.common.data.processor.common.AbstractCatalogDataProcess
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 public class PrismarineDataProcessor extends
-        AbstractCatalogDataProcessor<PrismarineType, Value.Mutable<PrismarineType>, PrismarineData, ImmutablePrismarineData> {
+        AbstractCatalogDataProcessor<PrismarineType, Value<PrismarineType>, PrismarineData, ImmutablePrismarineData> {
 
     public PrismarineDataProcessor() {
         super(Keys.PRISMARINE_TYPE, input -> input.getItem() == ItemTypes.PRISMARINE);

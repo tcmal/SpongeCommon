@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class MaxHealthValueProcessor extends AbstractSpongeValueProcessor<EntityLivingBase, Double, BoundedValue.Mutable<Double>> {
+public class MaxHealthValueProcessor extends AbstractSpongeValueProcessor<EntityLivingBase, Double, BoundedValue<Double>> {
 
     public MaxHealthValueProcessor() {
         super(EntityLivingBase.class, Keys.MAX_HEALTH);

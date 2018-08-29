@@ -61,7 +61,7 @@ public class SpongeDisplayNameData extends AbstractSingleData<Text, DisplayNameD
     }
 
     @Override
-    public Value`.Mutable<Text> displayName() {
+    public Value.Mutable<Text> displayName() {
         return new SpongeMutableValue<>(this.usedKey, Text.empty(), this.getValue());
     }
 

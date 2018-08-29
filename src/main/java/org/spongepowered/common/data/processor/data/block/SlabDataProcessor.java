@@ -37,7 +37,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeSlabData;
 import org.spongepowered.common.data.processor.common.AbstractCatalogDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class SlabDataProcessor extends AbstractCatalogDataProcessor<SlabType, Value.Mutable<SlabType>, SlabData, ImmutableSlabData> {
+public class SlabDataProcessor extends AbstractCatalogDataProcessor<SlabType, Value<SlabType>, SlabData, ImmutableSlabData> {
 
     public SlabDataProcessor() {
         super(Keys.SLAB_TYPE, input -> input.getItem() == ItemTypes.STONE_SLAB || input.getItem() == ItemTypes.STONE_SLAB2);

@@ -37,11 +37,11 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public abstract class AbstractHideFlagsValueProcessor extends AbstractSpongeValueProcessor<ItemStack, Boolean, Value.Mutable<Boolean>> {
+public abstract class AbstractHideFlagsValueProcessor extends AbstractSpongeValueProcessor<ItemStack, Boolean, Value<Boolean>> {
 
     private final int flag;
 
-    protected AbstractHideFlagsValueProcessor(Key<Value.Mutable<Boolean>> key, int flag) {
+    protected AbstractHideFlagsValueProcessor(Key<Value<Boolean>> key, int flag) {
         super(ItemStack.class, key);
         this.flag = flag;
     }

@@ -38,7 +38,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 import java.util.Optional;
 
 public class CriticalHitDataProcessor
-        extends AbstractEntitySingleDataProcessor<EntityArrow, Boolean, Value.Mutable<Boolean>, CriticalHitData, ImmutableCriticalHitData> {
+        extends AbstractEntitySingleDataProcessor<EntityArrow, Boolean, Value<Boolean>, CriticalHitData, ImmutableCriticalHitData> {
 
     public CriticalHitDataProcessor() {
         super(EntityArrow.class, Keys.CRITICAL_HIT);

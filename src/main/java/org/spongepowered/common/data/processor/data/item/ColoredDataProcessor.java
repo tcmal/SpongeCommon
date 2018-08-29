@@ -41,7 +41,7 @@ import org.spongepowered.common.util.ColorUtil;
 
 import java.util.Optional;
 
-public class ColoredDataProcessor extends AbstractItemSingleDataProcessor<Color, Value.Mutable<Color>, ColoredData, ImmutableColoredData> {
+public class ColoredDataProcessor extends AbstractItemSingleDataProcessor<Color, Value<Color>, ColoredData, ImmutableColoredData> {
 
     public ColoredDataProcessor() {
         super(ColorUtil::hasColor, Keys.COLOR);

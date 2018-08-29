@@ -39,7 +39,7 @@ import org.spongepowered.common.interfaces.IMixinMobSpawner;
 import java.util.Optional;
 
 public class SpawnerNextEntityToSpawnValueProcessor extends AbstractSpongeValueProcessor<IMixinMobSpawner,
-        WeightedSerializableObject<EntityArchetype>, Value.Mutable<WeightedSerializableObject<EntityArchetype>>> {
+        WeightedSerializableObject<EntityArchetype>, Value<WeightedSerializableObject<EntityArchetype>>> {
 
     public SpawnerNextEntityToSpawnValueProcessor() {
         super(IMixinMobSpawner.class, Keys.SPAWNER_NEXT_ENTITY_TO_SPAWN);

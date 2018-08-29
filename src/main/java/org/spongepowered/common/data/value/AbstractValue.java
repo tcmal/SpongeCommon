@@ -57,11 +57,6 @@ public abstract class AbstractValue<E> implements Value<E> {
     }
 
     @Override
-    public boolean exists() {
-        return this.actualValue != null;
-    }
-
-    @Override
     public E getDefault() {
         return this.defaultValue;
     }

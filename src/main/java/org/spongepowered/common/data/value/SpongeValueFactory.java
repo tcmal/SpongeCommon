@@ -60,57 +60,57 @@ public class SpongeValueFactory implements ValueFactory {
     }
 
     @Override
-    public <E> Value.Mutable<E> createValue(Key<Value.Mutable<E>> key, E element) {
+    public <E> Value.Mutable<E> createValue(Key<Value<E>> key, E element) {
         return new SpongeMutableValue<>(checkNotNull(key, "key"), checkNotNull(element, "element"));
     }
 
     @Override
-    public <E> Value.Mutable<E> createValue(Key<Value.Mutable<E>> key, E element, E defaultValue) {
+    public <E> Value.Mutable<E> createValue(Key<? extends Value<E>> key, E element, E defaultValue) {
         return new SpongeMutableValue<>(checkNotNull(key, "key"), checkNotNull(defaultValue, "defaultValue"), checkNotNull(element, "element"));
     }
 
     @Override
-    public <E> ListValue.Mutable<E> createListValue(Key<ListValue.Mutable<E>> key, List<E> elements) {
+    public <E> ListValue.Mutable<E> createListValue(Key<? extends Value<List<E>>> key, List<E> elements) {
         return new SpongeMutableListValue<>(checkNotNull(key, "key"), Lists.<E>newArrayList(), Lists.newArrayList(elements));
     }
 
     @Override
-    public <E> ListValue.Mutable<E> createListValue(Key<ListValue.Mutable<E>> key, List<E> elements, List<E> defaults) {
+    public <E> ListValue.Mutable<E> createListValue(Key<? extends Value<List<E>>> key, List<E> elements, List<E> defaults) {
         return new SpongeMutableListValue<>(checkNotNull(key, "key"), checkNotNull(defaults, "defaults"), checkNotNull(elements));
     }
 
     @Override
-    public <E> SetValue.Mutable<E> createSetValue(Key<SetValue.Mutable<E>> key, Set<E> elements) {
+    public <E> SetValue.Mutable<E> createSetValue(Key<? extends Value<Set<E>>> key, Set<E> elements) {
         return new SpongeMutableSetValue<>(checkNotNull(key, "key"), checkNotNull(elements, "elements"));
     }
 
     @Override
-    public <E> SetValue.Mutable<E> createSetValue(Key<SetValue.Mutable<E>> key, Set<E> elements, Set<E> defaults) {
+    public <E> SetValue.Mutable<E> createSetValue(Key<? extends Value<Set<E>>> key, Set<E> elements, Set<E> defaults) {
         return new SpongeMutableSetValue<>(checkNotNull(key, "key"), checkNotNull(defaults, "defaults"), checkNotNull(elements, "elements"));
     }
 
     @Override
-    public <K, V> MapValue.Mutable<K, V> createMapValue(Key<MapValue.Mutable<K, V>> key, Map<K, V> map) {
+    public <K, V> MapValue.Mutable<K, V> createMapValue(Key<? extends Value<Map<K, V>>> key, Map<K, V> map) {
         return new SpongeMutableMapValue<>(checkNotNull(key, "key"), checkNotNull(map, "map"));
     }
 
     @Override
-    public <K, V> MapValue.Mutable<K, V> createMapValue(Key<MapValue.Mutable<K, V>> key, Map<K, V> map, Map<K, V> defaults) {
+    public <K, V> MapValue.Mutable<K, V> createMapValue(Key<? extends Value<Map<K, V>>> key, Map<K, V> map, Map<K, V> defaults) {
         return new SpongeMutableMapValue<>(checkNotNull(key, "key"), checkNotNull(defaults, "defaults"), checkNotNull(map, "map"));
     }
 
     @Override
-    public <E> BoundedValueBuilder<E> createBoundedValueBuilder(Key<BoundedValue.Mutable<E>> key) {
+    public <E> BoundedValueBuilder<E> createBoundedValueBuilder(Key<? extends BoundedValue<E>> key) {
         return new SpongeBoundedValueBuilder<>(checkNotNull(key));
     }
 
     @Override
-    public <E> OptionalValue.Mutable<E> createOptionalValue(Key<OptionalValue.Mutable<E>> key, @Nullable E element) {
+    public <E> OptionalValue.Mutable<E> createOptionalValue(Key<? extends OptionalValue<E>> key, @Nullable E element) {
         return new SpongeMutableOptionalValue<>(checkNotNull(key, "key"), Optional.<E>empty(), Optional.ofNullable(element));
     }
 
     @Override
-    public <E> OptionalValue.Mutable<E> createOptionalValue(Key<OptionalValue.Mutable<E>> key, @Nullable E element, E defaultElement) {
+    public <E> OptionalValue.Mutable<E> createOptionalValue(Key<? extends OptionalValue<E>> key, @Nullable E element, E defaultElement) {
         return new SpongeMutableOptionalValue<>(checkNotNull(key, "key"), Optional.of(defaultElement), Optional.ofNullable(element));
     }
 

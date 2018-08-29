@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 import java.util.Optional;
 
 public class ConnectedWestValueProcessor extends
-        AbstractSpongeValueProcessor<TileEntityChest, Boolean, Value.Mutable<Boolean>> {
+    AbstractSpongeValueProcessor<TileEntityChest, Boolean, Value<Boolean>> {
 
     public ConnectedWestValueProcessor() {
         super(TileEntityChest.class, Keys.CONNECTED_WEST);

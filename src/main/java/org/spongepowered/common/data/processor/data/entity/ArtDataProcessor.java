@@ -42,7 +42,7 @@ import org.spongepowered.common.data.value.immutable.ImmutableSpongeValue;
 
 import java.util.Optional;
 
-public class ArtDataProcessor extends AbstractEntitySingleDataProcessor<EntityPainting, Art, Value.Mutable<Art>, ArtData, ImmutableArtData> {
+public class ArtDataProcessor extends AbstractEntitySingleDataProcessor<EntityPainting, Art, Value<Art>, ArtData, ImmutableArtData> {
 
     public ArtDataProcessor() {
         super(EntityPainting.class, Keys.ART);

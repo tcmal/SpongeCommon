@@ -94,11 +94,6 @@ public class ImmutableSpongeSetValue<E> extends ImmutableSpongeCollectionValue<E
     }
 
     @Override
-    public SetValue.Immutable<E> filter(Predicate<? super E> predicate) {
-        return new ImmutableSpongeSetValue<>(this.getKey(), this.actualValue.stream().filter(predicate).collect(Collectors.toSet()));
-    }
-
-    @Override
     public Iterator<E> iterator() {
         return this.actualValue.iterator();
     }

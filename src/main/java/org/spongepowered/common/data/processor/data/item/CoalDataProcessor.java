@@ -44,7 +44,7 @@ import org.spongepowered.common.item.SpongeCoalType;
 import java.util.List;
 import java.util.Optional;
 
-public class CoalDataProcessor extends AbstractItemSingleDataProcessor<CoalType, Value.Mutable<CoalType>, CoalData, ImmutableCoalData> {
+public class CoalDataProcessor extends AbstractItemSingleDataProcessor<CoalType, Value<CoalType>, CoalData, ImmutableCoalData> {
 
     public CoalDataProcessor() {
         super(stack -> stack.getItem().equals(Items.COAL), Keys.COAL_TYPE);

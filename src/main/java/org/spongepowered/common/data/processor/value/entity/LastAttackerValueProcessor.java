@@ -41,7 +41,7 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 public class LastAttackerValueProcessor
-        extends AbstractSpongeValueProcessor<EntityLivingBase, Optional<EntitySnapshot>, OptionalValue.Mutable<EntitySnapshot>> {
+        extends AbstractSpongeValueProcessor<EntityLivingBase, Optional<EntitySnapshot>, OptionalValue<EntitySnapshot>> {
 
     public LastAttackerValueProcessor() {
         super(EntityLivingBase.class, Keys.LAST_ATTACKER);

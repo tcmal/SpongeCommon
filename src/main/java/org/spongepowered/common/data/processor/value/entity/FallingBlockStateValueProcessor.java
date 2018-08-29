@@ -37,7 +37,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class FallingBlockStateValueProcessor extends AbstractSpongeValueProcessor<EntityFallingBlock, BlockState, Value.Mutable<BlockState>> {
+public class FallingBlockStateValueProcessor extends AbstractSpongeValueProcessor<EntityFallingBlock, BlockState, Value<BlockState>> {
 
     public FallingBlockStateValueProcessor() {
         super(EntityFallingBlock.class, Keys.FALLING_BLOCK_STATE);

@@ -36,7 +36,7 @@ import org.spongepowered.common.interfaces.entity.item.IMixinEntityItem;
 
 import java.util.Optional;
 
-public class PickupDelayValueProcessor extends AbstractSpongeValueProcessor<EntityItem, Integer, BoundedValue.Mutable<Integer>> {
+public class PickupDelayValueProcessor extends AbstractSpongeValueProcessor<EntityItem, Integer, BoundedValue<Integer>> {
 
     public PickupDelayValueProcessor() {
         super(EntityItem.class, Keys.PICKUP_DELAY);

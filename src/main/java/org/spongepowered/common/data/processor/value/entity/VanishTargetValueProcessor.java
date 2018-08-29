@@ -36,7 +36,7 @@ import org.spongepowered.common.interfaces.entity.IMixinEntity;
 
 import java.util.Optional;
 
-public class VanishTargetValueProcessor extends AbstractSpongeValueProcessor<Entity, Boolean, Value.Mutable<Boolean>> {
+public class VanishTargetValueProcessor extends AbstractSpongeValueProcessor<Entity, Boolean, Value<Boolean>> {
 
     public VanishTargetValueProcessor() {
         super(Entity.class, Keys.VANISH_PREVENTS_TARGETING);
@@ -44,7 +44,7 @@ public class VanishTargetValueProcessor extends AbstractSpongeValueProcessor<Ent
 
     @Override
     protected Value.Mutable<Boolean> constructValue(Boolean actualValue) {
-        return new SpongeMutableValue<Boolean>(Keys.VANISH_PREVENTS_TARGETING, false, actualValue);
+        return new SpongeMutableValue<>(Keys.VANISH_PREVENTS_TARGETING, false, actualValue);
     }
 
     @Override

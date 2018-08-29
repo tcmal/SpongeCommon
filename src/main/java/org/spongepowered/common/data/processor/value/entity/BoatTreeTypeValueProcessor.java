@@ -40,7 +40,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class BoatTreeTypeValueProcessor extends AbstractEntitySingleDataProcessor<EntityBoat, TreeType, Value.Mutable<TreeType>, TreeData, ImmutableTreeData> {
+public class BoatTreeTypeValueProcessor extends AbstractEntitySingleDataProcessor<EntityBoat, TreeType, Value<TreeType>, TreeData, ImmutableTreeData> {
 
     public BoatTreeTypeValueProcessor() {
         super(EntityBoat.class, Keys.TREE_TYPE);

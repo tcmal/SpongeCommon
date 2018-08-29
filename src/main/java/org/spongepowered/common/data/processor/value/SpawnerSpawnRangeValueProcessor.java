@@ -36,7 +36,7 @@ import org.spongepowered.common.interfaces.IMixinMobSpawner;
 
 import java.util.Optional;
 
-public class SpawnerSpawnRangeValueProcessor extends AbstractSpongeValueProcessor<IMixinMobSpawner, Short, BoundedValue.Mutable<Short>> {
+public class SpawnerSpawnRangeValueProcessor extends AbstractSpongeValueProcessor<IMixinMobSpawner, Short, BoundedValue<Short>> {
 
     public SpawnerSpawnRangeValueProcessor() {
         super(IMixinMobSpawner.class, Keys.SPAWNER_SPAWN_RANGE);

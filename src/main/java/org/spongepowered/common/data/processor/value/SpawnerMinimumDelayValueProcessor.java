@@ -36,7 +36,7 @@ import org.spongepowered.common.interfaces.IMixinMobSpawner;
 
 import java.util.Optional;
 
-public class SpawnerMinimumDelayValueProcessor extends AbstractSpongeValueProcessor<IMixinMobSpawner, Short, BoundedValue.Mutable<Short>> {
+public class SpawnerMinimumDelayValueProcessor extends AbstractSpongeValueProcessor<IMixinMobSpawner, Short, BoundedValue<Short>> {
 
     public SpawnerMinimumDelayValueProcessor() {
         super(IMixinMobSpawner.class, Keys.SPAWNER_MINIMUM_DELAY);

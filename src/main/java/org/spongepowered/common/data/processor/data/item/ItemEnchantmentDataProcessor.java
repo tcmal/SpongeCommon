@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class ItemEnchantmentDataProcessor
-        extends AbstractItemSingleDataProcessor<List<Enchantment>, ListValue.Mutable<Enchantment>, EnchantmentData, ImmutableEnchantmentData> {
+        extends AbstractItemSingleDataProcessor<List<Enchantment>, ListValue<Enchantment>, EnchantmentData, ImmutableEnchantmentData> {
 
     public ItemEnchantmentDataProcessor() {
         super(input -> true, Keys.ITEM_ENCHANTMENTS);

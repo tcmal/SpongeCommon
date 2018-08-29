@@ -36,7 +36,7 @@ import org.spongepowered.common.mixin.core.entity.IMixinAreaEffectCloud;
 
 import java.util.Optional;
 
-public class AreaEffectCloudWaitTimeProcessor extends AbstractSpongeValueProcessor<EntityAreaEffectCloud, Integer, BoundedValue.Mutable<Integer>> {
+public class AreaEffectCloudWaitTimeProcessor extends AbstractSpongeValueProcessor<EntityAreaEffectCloud, Integer, BoundedValue<Integer>> {
 
     public AreaEffectCloudWaitTimeProcessor() {
         super(EntityAreaEffectCloud.class, Keys.AREA_EFFECT_CLOUD_WAIT_TIME);

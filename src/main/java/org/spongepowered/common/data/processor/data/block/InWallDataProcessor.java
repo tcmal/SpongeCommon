@@ -32,7 +32,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeInWallData;
 import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class InWallDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value.Mutable<Boolean>, InWallData, ImmutableInWallData> {
+public class InWallDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value<Boolean>, InWallData, ImmutableInWallData> {
 
     public InWallDataProcessor() {
         super(Keys.IN_WALL);

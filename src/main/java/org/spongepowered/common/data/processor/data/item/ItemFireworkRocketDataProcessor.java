@@ -45,7 +45,7 @@ import org.spongepowered.common.data.value.mutable.SpongeBoundedValue;
 import java.util.Optional;
 
 public class ItemFireworkRocketDataProcessor
-        extends AbstractItemSingleDataProcessor<Integer, BoundedValue.Mutable<Integer>, FireworkRocketData, ImmutableFireworkRocketData> {
+        extends AbstractItemSingleDataProcessor<Integer, BoundedValue<Integer>, FireworkRocketData, ImmutableFireworkRocketData> {
 
     public ItemFireworkRocketDataProcessor() {
         super(stack -> stack.getItem().equals(Items.FIREWORKS), Keys.FIREWORK_FLIGHT_MODIFIER);

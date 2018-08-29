@@ -40,7 +40,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class SpongeMutableMapValue<K, V> extends SpongeMutableValue<Map<K, V>> implements MapValue.Mutable<K, V> {
+public class SpongeMutableMapValue<K, V> extends SpongeMutableValue<Map<K, V>, MapValue.Mutable<K, V>, MapValue.Immutable<K, V>> implements MapValue.Mutable<K, V> {
 
     public SpongeMutableMapValue(Key<? extends Value<Map<K, V>>> key) {
         this(key, Maps.<K, V>newHashMap());

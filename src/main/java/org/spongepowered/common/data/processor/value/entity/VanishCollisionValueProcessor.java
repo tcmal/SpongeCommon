@@ -36,7 +36,7 @@ import org.spongepowered.common.interfaces.entity.IMixinEntity;
 
 import java.util.Optional;
 
-public class VanishCollisionValueProcessor extends AbstractSpongeValueProcessor<Entity, Boolean, Value.Mutable<Boolean>> {
+public class VanishCollisionValueProcessor extends AbstractSpongeValueProcessor<Entity, Boolean, Value<Boolean>> {
 
     public VanishCollisionValueProcessor() {
         super(Entity.class, Keys.VANISH_IGNORES_COLLISION);
@@ -44,7 +44,7 @@ public class VanishCollisionValueProcessor extends AbstractSpongeValueProcessor<
 
     @Override
     protected Value.Mutable<Boolean> constructValue(Boolean actualValue) {
-        return new SpongeMutableValue<Boolean>(Keys.VANISH_IGNORES_COLLISION, false, actualValue);
+        return new SpongeMutableValue<>(Keys.VANISH_IGNORES_COLLISION, false, actualValue);
     }
 
     @Override

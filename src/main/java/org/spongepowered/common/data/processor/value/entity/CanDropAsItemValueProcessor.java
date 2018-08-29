@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class CanDropAsItemValueProcessor extends AbstractSpongeValueProcessor<EntityFallingBlock, Boolean, Value.Mutable<Boolean>> {
+public class CanDropAsItemValueProcessor extends AbstractSpongeValueProcessor<EntityFallingBlock, Boolean, Value<Boolean>> {
 
     public CanDropAsItemValueProcessor() {
         super(EntityFallingBlock.class, Keys.CAN_DROP_AS_ITEM);

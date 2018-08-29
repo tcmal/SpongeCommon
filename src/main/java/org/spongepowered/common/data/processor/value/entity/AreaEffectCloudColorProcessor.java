@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class AreaEffectCloudColorProcessor extends AbstractSpongeValueProcessor<EntityAreaEffectCloud, Color, Value.Mutable<Color>> {
+public class AreaEffectCloudColorProcessor extends AbstractSpongeValueProcessor<EntityAreaEffectCloud, Color, Value<Color>> {
 
     public AreaEffectCloudColorProcessor() {
         super(EntityAreaEffectCloud.class, Keys.AREA_EFFECT_CLOUD_COLOR);

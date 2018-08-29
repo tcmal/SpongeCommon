@@ -42,7 +42,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 import java.util.Optional;
 
 public class GameModeDataProcessor extends
-        AbstractEntitySingleDataProcessor<EntityPlayerMP, GameMode, Value.Mutable<GameMode>, GameModeData, ImmutableGameModeData> {
+        AbstractEntitySingleDataProcessor<EntityPlayerMP, GameMode, Value<GameMode>, GameModeData, ImmutableGameModeData> {
 
     public GameModeDataProcessor() {
         super(EntityPlayerMP.class, Keys.GAME_MODE);

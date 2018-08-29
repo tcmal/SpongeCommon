@@ -1371,11 +1371,6 @@ public abstract class MixinEntity implements org.spongepowered.api.entity.Entity
     }
 
     @Override
-    public Value.Mutable<Boolean> gravity() {
-        return this.getValue(Keys.HAS_GRAVITY).get();
-    }
-
-    @Override
     @Nullable
     public IMixinChunk getActiveChunk() {
         return this.activeChunk.get();

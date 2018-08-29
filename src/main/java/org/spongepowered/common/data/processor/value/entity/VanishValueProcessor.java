@@ -37,7 +37,7 @@ import org.spongepowered.common.interfaces.entity.IMixinEntity;
 
 import java.util.Optional;
 
-public class VanishValueProcessor extends AbstractSpongeValueProcessor<Entity, Boolean, Value.Mutable<Boolean>> {
+public class VanishValueProcessor extends AbstractSpongeValueProcessor<Entity, Boolean, Value<Boolean>> {
 
     public VanishValueProcessor() {
         super(Entity.class, Keys.VANISH);

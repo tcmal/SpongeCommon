@@ -36,7 +36,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeWallData;
 import org.spongepowered.common.data.processor.common.AbstractCatalogDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class WallDataProcessor extends AbstractCatalogDataProcessor<WallType, Value.Mutable<WallType>, WallData, ImmutableWallData> {
+public class WallDataProcessor extends AbstractCatalogDataProcessor<WallType, Value<WallType>, WallData, ImmutableWallData> {
 
     public WallDataProcessor() {
         super(Keys.WALL_TYPE, input -> input.getItem() == ItemTypes.COBBLESTONE_WALL);

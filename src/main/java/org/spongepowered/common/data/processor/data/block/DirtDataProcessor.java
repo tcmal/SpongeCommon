@@ -36,7 +36,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeDirtData;
 import org.spongepowered.common.data.processor.common.AbstractCatalogDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class DirtDataProcessor extends AbstractCatalogDataProcessor<DirtType, Value.Mutable<DirtType>, DirtData, ImmutableDirtData> {
+public class DirtDataProcessor extends AbstractCatalogDataProcessor<DirtType, Value<DirtType>, DirtData, ImmutableDirtData> {
 
     public DirtDataProcessor() {
         super(Keys.DIRT_TYPE, input -> input.getItem() == ItemTypes.DIRT);

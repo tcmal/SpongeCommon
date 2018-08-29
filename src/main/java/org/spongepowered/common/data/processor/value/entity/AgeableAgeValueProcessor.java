@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class AgeableAgeValueProcessor extends AbstractSpongeValueProcessor<EntityAgeable, Integer, BoundedValue.Mutable<Integer>> {
+public class AgeableAgeValueProcessor extends AbstractSpongeValueProcessor<EntityAgeable, Integer, BoundedValue<Integer>> {
 
     public AgeableAgeValueProcessor() {
         super(EntityAgeable.class, Keys.AGE);

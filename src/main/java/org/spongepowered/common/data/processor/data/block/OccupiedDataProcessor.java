@@ -32,7 +32,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeOccupiedDat
 import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class OccupiedDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value.Mutable<Boolean>, OccupiedData, ImmutableOccupiedData> {
+public class OccupiedDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value<Boolean>, OccupiedData, ImmutableOccupiedData> {
 
     public OccupiedDataProcessor() {
         super(Keys.OCCUPIED);

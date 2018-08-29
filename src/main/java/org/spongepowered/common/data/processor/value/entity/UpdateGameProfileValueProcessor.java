@@ -26,12 +26,11 @@ package org.spongepowered.common.data.processor.value.entity;
 
 import org.spongepowered.api.data.DataTransactionResult;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.value.Value;
 import org.spongepowered.api.data.value.ValueContainer;
-import org.spongepowered.api.data.value.immutable.ImmutableValue;
-import org.spongepowered.api.data.value.mutable.Value;
 import org.spongepowered.common.data.processor.common.AbstractSpongeValueProcessor;
 import org.spongepowered.common.data.value.immutable.ImmutableSpongeValue;
-import org.spongepowered.common.data.value.mutable.SpongeValue;
+import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 import org.spongepowered.common.interfaces.entity.IMixinSkinnable;
 
 import java.util.Optional;
@@ -44,7 +43,7 @@ public class UpdateGameProfileValueProcessor extends AbstractSpongeValueProcesso
 
     @Override
     protected Value<Boolean> constructValue(Boolean actualValue) {
-        return new SpongeValue<>(Keys.UPDATE_GAME_PROFILE, false, actualValue);
+        return new SpongeMutableValue<>(Keys.UPDATE_GAME_PROFILE, false, actualValue);
     }
 
     @Override
@@ -59,7 +58,7 @@ public class UpdateGameProfileValueProcessor extends AbstractSpongeValueProcesso
     }
 
     @Override
-    protected ImmutableValue<Boolean> constructImmutableValue(Boolean value) {
+    protected Value.Immutable<Boolean> constructImmutableValue(Boolean value) {
         return ImmutableSpongeValue.cachedOf(Keys.UPDATE_GAME_PROFILE, false, value);
     }
 

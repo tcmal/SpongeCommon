@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class AreaEffectCloudPotionEffectsProcessor extends AbstractSpongeValueProcessor<EntityAreaEffectCloud, List<PotionEffect>, ListValue.Mutable<PotionEffect>> {
+public class AreaEffectCloudPotionEffectsProcessor extends AbstractSpongeValueProcessor<EntityAreaEffectCloud, List<PotionEffect>, ListValue<PotionEffect>> {
 
     public AreaEffectCloudPotionEffectsProcessor() {
         super(EntityAreaEffectCloud.class, Keys.POTION_EFFECTS);

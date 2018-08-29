@@ -24,19 +24,15 @@
  */
 package org.spongepowered.common.data.processor.value.entity;
 
-import com.mojang.authlib.properties.Property;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataTransactionResult;
-import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.value.Value;
 import org.spongepowered.api.data.value.ValueContainer;
-import org.spongepowered.api.data.value.immutable.ImmutableValue;
-import org.spongepowered.api.data.value.mutable.Value;
 import org.spongepowered.api.profile.property.ProfileProperty;
 import org.spongepowered.common.data.processor.common.AbstractSpongeValueProcessor;
 import org.spongepowered.common.data.processor.data.entity.SkinDataProcessor;
 import org.spongepowered.common.data.value.immutable.ImmutableSpongeValue;
-import org.spongepowered.common.data.value.mutable.SpongeValue;
+import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 import org.spongepowered.common.interfaces.entity.IMixinSkinnable;
 
 import java.util.Optional;
@@ -49,7 +45,7 @@ public class SkinValueProcessor extends AbstractSpongeValueProcessor<IMixinSkinn
 
     @Override
     protected Value<ProfileProperty> constructValue(ProfileProperty actualValue) {
-        return new SpongeValue<>(Keys.SKIN, SkinDataProcessor.EMPTY_SKIN,  actualValue);
+        return new SpongeMutableValue<>(Keys.SKIN, SkinDataProcessor.EMPTY_SKIN,  actualValue);
     }
 
     @Override
@@ -63,7 +59,7 @@ public class SkinValueProcessor extends AbstractSpongeValueProcessor<IMixinSkinn
     }
 
     @Override
-    protected ImmutableValue<ProfileProperty> constructImmutableValue(ProfileProperty value) {
+    protected Value.Immutable<ProfileProperty> constructImmutableValue(ProfileProperty value) {
         return new ImmutableSpongeValue<>(Keys.SKIN, SkinDataProcessor.EMPTY_SKIN, value);
     }
 

@@ -132,6 +132,7 @@ public class SpongeBlockVolumeWorker<V extends BlockVolume> implements BlockVolu
         try (CauseStackManager.StackFrame frame = Sponge.getCauseStackManager().pushCauseFrame();
             BasicPluginContext context = PluginPhase.State.BLOCK_WORKER.createPhaseContext()
                 .source(this)) {
+            frame.pushCause(this);
             context.buildAndSwitch();
             for (int z = zMin; z <= zMax; z++) {
                 for (int y = yMin; y <= yMax; y++) {

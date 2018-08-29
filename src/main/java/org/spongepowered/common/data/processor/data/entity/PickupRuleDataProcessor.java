@@ -41,7 +41,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public final class PickupRuleDataProcessor extends AbstractEntitySingleDataProcessor<EntityArrow, PickupRule, Value.Mutable<PickupRule>,
+public final class PickupRuleDataProcessor extends AbstractEntitySingleDataProcessor<EntityArrow, PickupRule, Value<PickupRule>,
         PickupRuleData, ImmutablePickupRuleData> {
 
     public PickupRuleDataProcessor() {

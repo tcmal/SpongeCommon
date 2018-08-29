@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class PassedCookTimeValueProcessor extends AbstractSpongeValueProcessor<TileEntityFurnace, Integer, BoundedValue.Mutable<Integer>> {
+public class PassedCookTimeValueProcessor extends AbstractSpongeValueProcessor<TileEntityFurnace, Integer, BoundedValue<Integer>> {
 
     public PassedCookTimeValueProcessor() {
         super(TileEntityFurnace.class, Keys.PASSED_COOK_TIME);

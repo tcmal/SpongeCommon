@@ -37,7 +37,7 @@ import org.spongepowered.common.data.processor.common.AbstractCatalogDataProcess
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 public class DisguisedBlockDataProcessor extends
-        AbstractCatalogDataProcessor<DisguisedBlockType, Value.Mutable<DisguisedBlockType>, DisguisedBlockData, ImmutableDisguisedBlockData> {
+        AbstractCatalogDataProcessor<DisguisedBlockType, Value<DisguisedBlockType>, DisguisedBlockData, ImmutableDisguisedBlockData> {
 
     public DisguisedBlockDataProcessor() {
         super(Keys.DISGUISED_BLOCK_TYPE, input -> input.getItem() == ItemTypes.MONSTER_EGG);

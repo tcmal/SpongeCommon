@@ -40,7 +40,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class PlantDataProcessor extends AbstractCatalogDataProcessor<PlantType, Value.Mutable<PlantType>, PlantData, ImmutablePlantData> {
+public class PlantDataProcessor extends AbstractCatalogDataProcessor<PlantType, Value<PlantType>, PlantData, ImmutablePlantData> {
 
     public PlantDataProcessor() {
         super(Keys.PLANT_TYPE, input -> input.getItem() == ItemTypes.YELLOW_FLOWER || input.getItem() == ItemTypes.RED_FLOWER);

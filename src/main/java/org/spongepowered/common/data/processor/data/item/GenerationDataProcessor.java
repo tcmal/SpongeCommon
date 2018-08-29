@@ -43,7 +43,7 @@ import org.spongepowered.common.data.value.immutable.ImmutableSpongeValue;
 import java.util.Optional;
 
 public final class GenerationDataProcessor
-        extends AbstractItemSingleDataProcessor<Integer, BoundedValue.Mutable<Integer>, GenerationData, ImmutableGenerationData> {
+        extends AbstractItemSingleDataProcessor<Integer, BoundedValue<Integer>, GenerationData, ImmutableGenerationData> {
 
     public GenerationDataProcessor() {
         super(stack -> stack.getItem().equals(Items.WRITTEN_BOOK), Keys.GENERATION);

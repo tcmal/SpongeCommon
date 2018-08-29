@@ -41,7 +41,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 import java.util.Optional;
 
 public class EndermiteExpirableDataProcessor extends
-        AbstractEntitySingleDataProcessor<EntityEndermite, Integer, BoundedValue.Mutable<Integer>, ExpirableData, ImmutableExpirableData> {
+        AbstractEntitySingleDataProcessor<EntityEndermite, Integer, BoundedValue<Integer>, ExpirableData, ImmutableExpirableData> {
 
     public EndermiteExpirableDataProcessor() {
         super(EntityEndermite.class, Keys.EXPIRATION_TICKS);

@@ -37,7 +37,7 @@ import org.spongepowered.common.util.VecHelper;
 
 import java.util.Optional;
 
-public class RightLegRotationValueProcessor extends AbstractSpongeValueProcessor<EntityArmorStand, Vector3d, Value.Mutable<Vector3d>> {
+public class RightLegRotationValueProcessor extends AbstractSpongeValueProcessor<EntityArmorStand, Vector3d, Value<Vector3d>> {
 
     public RightLegRotationValueProcessor() {
         super(EntityArmorStand.class, Keys.RIGHT_LEG_ROTATION);

@@ -38,7 +38,7 @@ import org.spongepowered.common.interfaces.entity.IMixinEntity;
 
 import java.util.Optional;
 
-public class EntityDisplayNameValueProcessor extends AbstractSpongeValueProcessor<Entity, Text, Value.Mutable<Text>> {
+public class EntityDisplayNameValueProcessor extends AbstractSpongeValueProcessor<Entity, Text, Value<Text>> {
 
     public EntityDisplayNameValueProcessor() {
         super(Entity.class, Keys.DISPLAY_NAME);

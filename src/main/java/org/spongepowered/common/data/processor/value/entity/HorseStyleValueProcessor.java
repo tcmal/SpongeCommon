@@ -42,7 +42,7 @@ import org.spongepowered.common.registry.type.entity.HorseStyleRegistryModule;
 
 import java.util.Optional;
 
-public class HorseStyleValueProcessor extends AbstractSpongeValueProcessor<EntityHorse, HorseStyle, Value.Mutable<HorseStyle>> {
+public class HorseStyleValueProcessor extends AbstractSpongeValueProcessor<EntityHorse, HorseStyle, Value<HorseStyle>> {
 
     public HorseStyleValueProcessor() {
         super(EntityHorse.class, Keys.HORSE_STYLE);

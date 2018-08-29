@@ -32,7 +32,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeDisarmedDat
 import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class DisarmedDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value.Mutable<Boolean>, DisarmedData, ImmutableDisarmedData> {
+public class DisarmedDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value<Boolean>, DisarmedData, ImmutableDisarmedData> {
 
     public DisarmedDataProcessor() {
         super(Keys.DISARMED);

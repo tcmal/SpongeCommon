@@ -41,7 +41,7 @@ import org.spongepowered.common.text.SpongeTexts;
 
 import java.util.Optional;
 
-public class ItemDisplayNameValueProcessor extends AbstractSpongeValueProcessor<ItemStack, Text, Value.Mutable<Text>> {
+public class ItemDisplayNameValueProcessor extends AbstractSpongeValueProcessor<ItemStack, Text, Value<Text>> {
 
     public ItemDisplayNameValueProcessor() {
         super(ItemStack.class, Keys.DISPLAY_NAME);

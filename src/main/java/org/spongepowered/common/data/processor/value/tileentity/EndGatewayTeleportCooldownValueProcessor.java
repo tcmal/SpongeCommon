@@ -35,7 +35,7 @@ import org.spongepowered.common.interfaces.block.tile.IMixinTileEntityEndGateway
 
 import java.util.Optional;
 
-public class EndGatewayTeleportCooldownValueProcessor extends AbstractSpongeValueProcessor<TileEntityEndGateway, Integer, Value.Mutable<Integer>> {
+public class EndGatewayTeleportCooldownValueProcessor extends AbstractSpongeValueProcessor<TileEntityEndGateway, Integer, Value<Integer>> {
 
     public EndGatewayTeleportCooldownValueProcessor() {
         super(TileEntityEndGateway.class, Keys.END_GATEWAY_TELEPORT_COOLDOWN);

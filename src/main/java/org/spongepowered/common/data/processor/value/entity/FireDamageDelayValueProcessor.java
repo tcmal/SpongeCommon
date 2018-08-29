@@ -37,7 +37,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class FireDamageDelayValueProcessor extends AbstractSpongeValueProcessor<Entity, Integer, BoundedValue.Mutable<Integer>> {
+public class FireDamageDelayValueProcessor extends AbstractSpongeValueProcessor<Entity, Integer, BoundedValue<Integer>> {
 
     public FireDamageDelayValueProcessor() {
         super(Entity.class, Keys.FIRE_DAMAGE_DELAY);

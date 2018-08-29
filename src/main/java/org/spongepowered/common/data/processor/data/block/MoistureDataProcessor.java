@@ -33,7 +33,7 @@ import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProce
 import org.spongepowered.common.data.value.SpongeValueFactory;
 
 public class MoistureDataProcessor
-        extends AbstractBlockOnlyDataProcessor<Integer, BoundedValue.Mutable<Integer>, MoistureData, ImmutableMoistureData> {
+        extends AbstractBlockOnlyDataProcessor<Integer, BoundedValue<Integer>, MoistureData, ImmutableMoistureData> {
 
     public MoistureDataProcessor() {
         super(Keys.MOISTURE);

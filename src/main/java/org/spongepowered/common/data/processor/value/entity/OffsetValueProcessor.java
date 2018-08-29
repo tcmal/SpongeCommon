@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class OffsetValueProcessor extends AbstractSpongeValueProcessor<EntityMinecart, Integer, Value.Mutable<Integer>> {
+public class OffsetValueProcessor extends AbstractSpongeValueProcessor<EntityMinecart, Integer, Value<Integer>> {
 
     public OffsetValueProcessor() {
         super(EntityMinecart.class, Keys.OFFSET);

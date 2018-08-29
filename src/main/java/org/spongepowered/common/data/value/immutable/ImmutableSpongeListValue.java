@@ -97,11 +97,6 @@ public class ImmutableSpongeListValue<E> extends ImmutableSpongeCollectionValue<
     }
 
     @Override
-    public ImmutableSpongeListValue<E> filter(Predicate<? super E> predicate) {
-        return null;
-    }
-
-    @Override
     public List<E> getAll() {
         final List<E> list = Lists.newArrayList();
         list.addAll(this.actualValue);

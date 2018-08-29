@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 public class SpongeBreakableData extends AbstractSingleSetData<BlockType, BreakableData, ImmutableBreakableData> implements BreakableData {
     
     public SpongeBreakableData() {
-        this(Sets.<BlockType>newHashSet());
+        this(Sets.newHashSet());
     }
 
     public SpongeBreakableData(Set<BlockType> breakable) {
@@ -58,6 +58,6 @@ public class SpongeBreakableData extends AbstractSingleSetData<BlockType, Breaka
     @SuppressWarnings("unchecked")
     @Override
     public SetValue.Mutable<BlockType> breakable() {
-        return (SetValue.Mutable<BlockType>) getValueGetter();
+        return getValueGetter();
     }
 }

@@ -38,7 +38,7 @@ import org.spongepowered.common.interfaces.entity.explosive.IMixinFusedExplosive
 
 import java.util.Optional;
 
-public class FuseDurationValueProcessor extends AbstractSpongeValueProcessor<FusedExplosive, Integer, Value.Mutable<Integer>> {
+public class FuseDurationValueProcessor extends AbstractSpongeValueProcessor<FusedExplosive, Integer, Value<Integer>> {
 
     public FuseDurationValueProcessor() {
         super(FusedExplosive.class, Keys.FUSE_DURATION);

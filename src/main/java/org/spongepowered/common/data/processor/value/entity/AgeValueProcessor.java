@@ -36,7 +36,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class AgeValueProcessor extends AbstractSpongeValueProcessor<EntityAgeable, Integer, BoundedValue.Mutable<Integer>> {
+public class AgeValueProcessor extends AbstractSpongeValueProcessor<EntityAgeable, Integer, BoundedValue<Integer>> {
 
     public AgeValueProcessor() {
         super(EntityAgeable.class, Keys.AGE);
@@ -70,7 +70,7 @@ public class AgeValueProcessor extends AbstractSpongeValueProcessor<EntityAgeabl
     }
 
     @Override
-    public Optional<BoundedValue.Mutable<Integer>> getApiValueFromContainer(ValueContainer<?> container) {
+    public Optional<BoundedValue<Integer>> getApiValueFromContainer(ValueContainer<?> container) {
         if (this.supports(container)) {
             Optional<Integer> value = this.getVal((EntityAgeable) container);
             if (value.isPresent()) {

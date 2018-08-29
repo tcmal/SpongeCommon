@@ -42,7 +42,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class GlowingDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Boolean, Value.Mutable<Boolean>, GlowingData, ImmutableGlowingData> {
+public class GlowingDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Boolean, Value<Boolean>, GlowingData, ImmutableGlowingData> {
 
     public GlowingDataProcessor() {
         super(Entity.class, Keys.GLOWING);

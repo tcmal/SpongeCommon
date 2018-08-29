@@ -47,7 +47,7 @@ import org.spongepowered.common.text.SpongeTexts;
 import java.util.List;
 import java.util.Optional;
 
-public class ItemLoreDataProcessor extends AbstractItemSingleDataProcessor<List<Text>, ListValue.Mutable<Text>, LoreData, ImmutableLoreData> {
+public class ItemLoreDataProcessor extends AbstractItemSingleDataProcessor<List<Text>, ListValue<Text>, LoreData, ImmutableLoreData> {
 
     public ItemLoreDataProcessor() {
         super(input -> true, Keys.ITEM_LORE);

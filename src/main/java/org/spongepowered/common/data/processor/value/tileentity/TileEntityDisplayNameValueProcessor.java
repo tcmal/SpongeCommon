@@ -39,7 +39,7 @@ import org.spongepowered.common.text.SpongeTexts;
 
 import java.util.Optional;
 
-public class TileEntityDisplayNameValueProcessor extends AbstractSpongeValueProcessor<IWorldNameable, Text, Value.Mutable<Text>> {
+public class TileEntityDisplayNameValueProcessor extends AbstractSpongeValueProcessor<IWorldNameable, Text, Value<Text>> {
 
     public TileEntityDisplayNameValueProcessor() {
         super(IWorldNameable.class, Keys.DISPLAY_NAME);

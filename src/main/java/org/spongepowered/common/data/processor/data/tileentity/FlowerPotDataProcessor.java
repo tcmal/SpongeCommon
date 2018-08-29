@@ -43,7 +43,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 import java.util.Optional;
 
 public class FlowerPotDataProcessor extends
-        AbstractTileEntitySingleDataProcessor<TileEntityFlowerPot, ItemStackSnapshot, Value.Mutable<ItemStackSnapshot>, RepresentedItemData, ImmutableRepresentedItemData> {
+        AbstractTileEntitySingleDataProcessor<TileEntityFlowerPot, ItemStackSnapshot, Value<ItemStackSnapshot>, RepresentedItemData, ImmutableRepresentedItemData> {
 
     public FlowerPotDataProcessor() {
         super(TileEntityFlowerPot.class, Keys.REPRESENTED_ITEM);

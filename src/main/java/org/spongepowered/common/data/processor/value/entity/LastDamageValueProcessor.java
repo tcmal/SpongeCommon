@@ -36,7 +36,7 @@ import org.spongepowered.common.interfaces.entity.IMixinEntityLivingBase;
 
 import java.util.Optional;
 
-public class LastDamageValueProcessor extends AbstractSpongeValueProcessor<EntityLivingBase, Optional<Double>, OptionalValue.Mutable<Double>> {
+public class LastDamageValueProcessor extends AbstractSpongeValueProcessor<EntityLivingBase, Optional<Double>, OptionalValue<Double>> {
 
     public LastDamageValueProcessor() {
         super(EntityLivingBase.class, Keys.LAST_DAMAGE);

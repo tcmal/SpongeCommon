@@ -39,7 +39,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 import java.util.Optional;
 
 public class BrewingStandDataProcessor extends
-        AbstractTileEntitySingleDataProcessor<TileEntityBrewingStand, Integer, BoundedValue.Mutable<Integer>, BrewingStandData, ImmutableBrewingStandData> {
+        AbstractTileEntitySingleDataProcessor<TileEntityBrewingStand, Integer, BoundedValue<Integer>, BrewingStandData, ImmutableBrewingStandData> {
 
     public BrewingStandDataProcessor() {
         super(TileEntityBrewingStand.class, Keys.REMAINING_BREW_TIME);

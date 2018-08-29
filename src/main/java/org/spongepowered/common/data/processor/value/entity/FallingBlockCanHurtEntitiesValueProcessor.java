@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class FallingBlockCanHurtEntitiesValueProcessor extends AbstractSpongeValueProcessor<EntityFallingBlock, Boolean, Value.Mutable<Boolean>> {
+public class FallingBlockCanHurtEntitiesValueProcessor extends AbstractSpongeValueProcessor<EntityFallingBlock, Boolean, Value<Boolean>> {
 
     public FallingBlockCanHurtEntitiesValueProcessor() {
         super(EntityFallingBlock.class, Keys.FALLING_BLOCK_CAN_HURT_ENTITIES);

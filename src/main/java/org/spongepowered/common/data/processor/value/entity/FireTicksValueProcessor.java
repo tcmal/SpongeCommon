@@ -36,7 +36,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class FireTicksValueProcessor extends AbstractSpongeValueProcessor<Entity, Integer, BoundedValue.Mutable<Integer>> {
+public class FireTicksValueProcessor extends AbstractSpongeValueProcessor<Entity, Integer, BoundedValue<Integer>> {
 
     public FireTicksValueProcessor() {
         super(Entity.class, Keys.FIRE_TICKS);

@@ -87,7 +87,7 @@ public class SpongeSkinData extends AbstractData<SkinData, ImmutableSkinData> im
 
     @Override
     public Value.Mutable<Boolean> updateGameProfile() {
-        return new SpongeValue<>(Keys.UPDATE_GAME_PROFILE, false, this.updateGameProfile);
+        return new SpongeMutableValue<>(Keys.UPDATE_GAME_PROFILE, false, this.updateGameProfile);
     }
 
 }

@@ -40,7 +40,7 @@ import org.spongepowered.common.data.value.immutable.ImmutableSpongeValue;
 import java.util.Optional;
 
 public class KnockbackDataProcessor
-        extends AbstractEntitySingleDataProcessor<EntityArrow, Integer, BoundedValue.Mutable<Integer>, KnockbackData, ImmutableKnockbackData> {
+        extends AbstractEntitySingleDataProcessor<EntityArrow, Integer, BoundedValue<Integer>, KnockbackData, ImmutableKnockbackData> {
 
     public KnockbackDataProcessor() {
         super(EntityArrow.class, Keys.KNOCKBACK_STRENGTH);

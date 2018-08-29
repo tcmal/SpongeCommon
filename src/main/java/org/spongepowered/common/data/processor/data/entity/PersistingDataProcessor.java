@@ -39,7 +39,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 import java.util.Optional;
 
 public class PersistingDataProcessor
-        extends AbstractEntitySingleDataProcessor<EntityLiving, Boolean, Value.Mutable<Boolean>, PersistingData, ImmutablePersistingData> {
+        extends AbstractEntitySingleDataProcessor<EntityLiving, Boolean, Value<Boolean>, PersistingData, ImmutablePersistingData> {
 
     public PersistingDataProcessor() {
         super(EntityLiving.class, Keys.PERSISTS);

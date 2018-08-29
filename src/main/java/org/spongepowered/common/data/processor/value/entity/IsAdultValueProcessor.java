@@ -36,7 +36,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class IsAdultValueProcessor extends AbstractSpongeValueProcessor<EntityAgeable, Boolean, Value.Mutable<Boolean>> {
+public class IsAdultValueProcessor extends AbstractSpongeValueProcessor<EntityAgeable, Boolean, Value<Boolean>> {
 
     public IsAdultValueProcessor() {
         super(EntityAgeable.class, Keys.IS_ADULT);

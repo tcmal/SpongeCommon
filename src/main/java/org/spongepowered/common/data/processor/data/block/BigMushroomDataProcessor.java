@@ -35,7 +35,7 @@ import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProce
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 public class BigMushroomDataProcessor extends
-        AbstractBlockOnlyDataProcessor<BigMushroomType, Value.Mutable<BigMushroomType>, BigMushroomData, ImmutableBigMushroomData> {
+        AbstractBlockOnlyDataProcessor<BigMushroomType, Value<BigMushroomType>, BigMushroomData, ImmutableBigMushroomData> {
 
     public BigMushroomDataProcessor() {
         super(Keys.BIG_MUSHROOM_TYPE);

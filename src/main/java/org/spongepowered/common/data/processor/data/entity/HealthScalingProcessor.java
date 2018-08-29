@@ -39,7 +39,7 @@ import org.spongepowered.common.interfaces.entity.player.IMixinEntityPlayerMP;
 
 import java.util.Optional;
 
-public class HealthScalingProcessor extends AbstractEntitySingleDataProcessor<EntityPlayerMP, Double, BoundedValue.Mutable<Double>, HealthScalingData, ImmutableHealthScalingData> {
+public class HealthScalingProcessor extends AbstractEntitySingleDataProcessor<EntityPlayerMP, Double, BoundedValue<Double>, HealthScalingData, ImmutableHealthScalingData> {
 
     public HealthScalingProcessor() {
         super(EntityPlayerMP.class, Keys.HEALTH_SCALE);

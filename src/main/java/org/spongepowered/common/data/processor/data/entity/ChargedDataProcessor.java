@@ -39,7 +39,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 import java.util.Optional;
 
 public class ChargedDataProcessor
-        extends AbstractEntitySingleDataProcessor<EntityCreeper, Boolean, Value.Mutable<Boolean>, ChargedData, ImmutableChargedData> {
+        extends AbstractEntitySingleDataProcessor<EntityCreeper, Boolean, Value<Boolean>, ChargedData, ImmutableChargedData> {
 
     public ChargedDataProcessor() {
         super(EntityCreeper.class, Keys.CREEPER_CHARGED);

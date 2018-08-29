@@ -43,7 +43,7 @@ import org.spongepowered.common.text.SpongeTexts;
 
 import java.util.Optional;
 
-public class ItemAuthorDataProcessor extends AbstractItemSingleDataProcessor<Text, Value.Mutable<Text>, AuthorData, ImmutableAuthorData> {
+public class ItemAuthorDataProcessor extends AbstractItemSingleDataProcessor<Text, Value<Text>, AuthorData, ImmutableAuthorData> {
 
     public ItemAuthorDataProcessor() {
         super(input -> input.getItem() == Items.WRITABLE_BOOK || input.getItem() == Items.WRITTEN_BOOK, Keys.BOOK_AUTHOR);

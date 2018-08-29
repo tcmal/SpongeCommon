@@ -38,7 +38,7 @@ import org.spongepowered.common.effect.particle.SpongeParticleType;
 
 import java.util.Optional;
 
-public class AreaEffectCloudParticleTypeProcessor extends AbstractSpongeValueProcessor<EntityAreaEffectCloud, ParticleType, Value.Mutable<ParticleType>> {
+public class AreaEffectCloudParticleTypeProcessor extends AbstractSpongeValueProcessor<EntityAreaEffectCloud, ParticleType, Value<ParticleType>> {
 
     public AreaEffectCloudParticleTypeProcessor() {
         super(EntityAreaEffectCloud.class, Keys.AREA_EFFECT_CLOUD_PARTICLE_TYPE);
@@ -46,7 +46,7 @@ public class AreaEffectCloudParticleTypeProcessor extends AbstractSpongeValuePro
 
     @Override
     protected Value.Mutable<ParticleType> constructValue(ParticleType actualValue) {
-        return new SpongeMutableValue<ParticleType>(Keys.AREA_EFFECT_CLOUD_PARTICLE_TYPE, ParticleTypes.MOB_SPELL, actualValue);
+        return new SpongeMutableValue<>(Keys.AREA_EFFECT_CLOUD_PARTICLE_TYPE, ParticleTypes.MOB_SPELL, actualValue);
     }
 
     @Override

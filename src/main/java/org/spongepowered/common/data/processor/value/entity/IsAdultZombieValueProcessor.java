@@ -36,7 +36,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class IsAdultZombieValueProcessor extends AbstractSpongeValueProcessor<EntityZombie, Boolean, Value.Mutable<Boolean>> {
+public class IsAdultZombieValueProcessor extends AbstractSpongeValueProcessor<EntityZombie, Boolean, Value<Boolean>> {
 
     public IsAdultZombieValueProcessor() {
         super(EntityZombie.class, Keys.IS_ADULT);

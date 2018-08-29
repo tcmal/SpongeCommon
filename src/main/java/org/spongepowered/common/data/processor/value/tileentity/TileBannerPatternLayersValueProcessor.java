@@ -39,7 +39,7 @@ import org.spongepowered.common.interfaces.block.tile.IMixinBanner;
 import java.util.List;
 import java.util.Optional;
 
-public class TileBannerPatternLayersValueProcessor extends AbstractSpongeValueProcessor<TileEntityBanner, List<PatternLayer>, PatternListValue.Mutable> {
+public class TileBannerPatternLayersValueProcessor extends AbstractSpongeValueProcessor<TileEntityBanner, List<PatternLayer>, PatternListValue> {
 
     public TileBannerPatternLayersValueProcessor() {
         super(TileEntityBanner.class, Keys.BANNER_PATTERNS);

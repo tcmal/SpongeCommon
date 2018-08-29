@@ -68,6 +68,11 @@ public class ImmutableSpongeMapValue<K, V> extends ImmutableSpongeValue<Map<K, V
     }
 
     @Override
+    public MapValue.Immutable<K, V> asImmutable() {
+        return this;
+    }
+
+    @Override
     public int size() {
         return this.actualValue.size();
     }

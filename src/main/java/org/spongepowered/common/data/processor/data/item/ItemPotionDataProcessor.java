@@ -48,7 +48,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableListValue;
 import java.util.List;
 import java.util.Optional;
 
-public class ItemPotionDataProcessor extends AbstractItemSingleDataProcessor<List<PotionEffect>, ListValue.Mutable<PotionEffect>, PotionEffectData, ImmutablePotionEffectData> {
+public class ItemPotionDataProcessor extends AbstractItemSingleDataProcessor<List<PotionEffect>, ListValue<PotionEffect>, PotionEffectData, ImmutablePotionEffectData> {
 
     public ItemPotionDataProcessor() {
         super(itemStack -> itemStack.getItem() == Items.POTIONITEM || itemStack.getItem() == Items.SPLASH_POTION ||

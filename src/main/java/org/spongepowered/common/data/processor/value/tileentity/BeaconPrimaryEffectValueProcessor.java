@@ -39,7 +39,7 @@ import org.spongepowered.common.interfaces.IMixinTileEntityBeacon;
 import java.util.Optional;
 
 public class BeaconPrimaryEffectValueProcessor
-        extends AbstractSpongeValueProcessor<TileEntityBeacon, Optional<PotionEffectType>, OptionalValue.Mutable<PotionEffectType>> {
+        extends AbstractSpongeValueProcessor<TileEntityBeacon, Optional<PotionEffectType>, OptionalValue<PotionEffectType>> {
 
     public BeaconPrimaryEffectValueProcessor() {
         super(TileEntityBeacon.class, Keys.BEACON_PRIMARY_EFFECT);

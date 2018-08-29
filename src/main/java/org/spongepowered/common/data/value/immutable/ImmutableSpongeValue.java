@@ -26,6 +26,7 @@ package org.spongepowered.common.data.value.immutable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.google.common.base.Objects;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.value.Value;
 import org.spongepowered.common.data.ImmutableDataCachingUtil;
@@ -60,19 +61,19 @@ public class ImmutableSpongeValue<E> extends AbstractValue<E> implements Value.I
 
     @Override
     public Immutable<E> with(E value) {
-        return new ImmutableSpongeValue(this.getKey(), getDefault(), value);
+        return new ImmutableSpongeValue<>(this.getKey(), getDefault(), value);
     }
 
     @Override
     public Immutable<E> transform(Function<E, E> function) {
         final E value = checkNotNull(function).apply(get());
-        return new ImmutableSpongeValue(this.getKey(), getDefault(), value);
+        return new ImmutableSpongeValue<>(this.getKey(), getDefault(), value);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public Mutable<E> asMutable() {
-        return new SpongeMutableValue(getKey(), getDefault(), get());
+        return new SpongeMutableValue<>(getKey(), getDefault(), get());
     }
 
     @Override
@@ -80,4 +81,23 @@ public class ImmutableSpongeValue<E> extends AbstractValue<E> implements Value.I
         return this;
     }
 
+    @SuppressWarnings("rawtypes")
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        ImmutableSpongeValue that = (ImmutableSpongeValue) o;
+
+        return Objects.equal(this.getKey(), that.getKey()) &&
+               Objects.equal(this.getDefault(), that.getDefault()) &&
+               Objects.equal(this.actualValue, that.actualValue);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getKey(), getDefault(), actualValue);
+    }
 }

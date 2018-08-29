@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class ArmorStandBasePlateValueProcessor extends AbstractSpongeValueProcessor<EntityArmorStand, Boolean, Value.Mutable<Boolean>> {
+public class ArmorStandBasePlateValueProcessor extends AbstractSpongeValueProcessor<EntityArmorStand, Boolean, Value<Boolean>> {
 
     public ArmorStandBasePlateValueProcessor() {
         super(EntityArmorStand.class, Keys.ARMOR_STAND_HAS_BASE_PLATE);

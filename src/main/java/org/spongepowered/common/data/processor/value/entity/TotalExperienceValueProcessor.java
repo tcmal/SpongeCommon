@@ -37,7 +37,7 @@ import org.spongepowered.common.interfaces.entity.player.IMixinEntityPlayerMP;
 
 import java.util.Optional;
 
-public class TotalExperienceValueProcessor extends AbstractSpongeValueProcessor<EntityPlayer, Integer, BoundedValue.Mutable<Integer>> {
+public class TotalExperienceValueProcessor extends AbstractSpongeValueProcessor<EntityPlayer, Integer, BoundedValue<Integer>> {
 
     public TotalExperienceValueProcessor() {
         super(EntityPlayer.class, Keys.TOTAL_EXPERIENCE);

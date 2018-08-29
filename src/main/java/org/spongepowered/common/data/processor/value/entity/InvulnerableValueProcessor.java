@@ -35,7 +35,7 @@ import org.spongepowered.common.interfaces.entity.IMixinEntity;
 
 import java.util.Optional;
 
-public class InvulnerableValueProcessor extends AbstractSpongeValueProcessor<Entity, Boolean, Value.Mutable<Boolean>> {
+public class InvulnerableValueProcessor extends AbstractSpongeValueProcessor<Entity, Boolean, Value<Boolean>> {
 
     public InvulnerableValueProcessor() {
         super(Entity.class, Keys.INVULNERABLE);

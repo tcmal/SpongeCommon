@@ -40,7 +40,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class GravityDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Boolean, Value.Mutable<Boolean>, GravityData, ImmutableGravityData> {
+public class GravityDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Boolean, Value<Boolean>, GravityData, ImmutableGravityData> {
 
     public GravityDataProcessor() {
         super(Entity.class, Keys.HAS_GRAVITY);

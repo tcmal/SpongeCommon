@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class AreaEffectCloudReapplicationTimeProcessor extends AbstractSpongeValueProcessor<EntityAreaEffectCloud, Integer, BoundedValue.Mutable<Integer>> {
+public class AreaEffectCloudReapplicationTimeProcessor extends AbstractSpongeValueProcessor<EntityAreaEffectCloud, Integer, BoundedValue<Integer>> {
 
     public AreaEffectCloudReapplicationTimeProcessor() {
         super(EntityAreaEffectCloud.class, Keys.AREA_EFFECT_CLOUD_REAPPLICATION_DELAY);

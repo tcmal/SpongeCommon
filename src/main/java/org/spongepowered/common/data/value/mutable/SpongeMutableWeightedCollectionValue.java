@@ -57,7 +57,7 @@ public class SpongeMutableWeightedCollectionValue<E> extends SpongeMutableCollec
     }
 
     @Override
-    public I asImmutable() {
+    public WeightedCollectionValue.Immutable<E> asImmutable() {
         return new ImmutableSpongeWeightedCollectionValue<>(getKey(), getAll());
     }
 

@@ -39,7 +39,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 import java.util.Optional;
 
 public class PlayingDataProcessor
-        extends AbstractEntitySingleDataProcessor<EntityVillager, Boolean, Value.Mutable<Boolean>, PlayingData, ImmutablePlayingData> {
+        extends AbstractEntitySingleDataProcessor<EntityVillager, Boolean, Value<Boolean>, PlayingData, ImmutablePlayingData> {
 
     public PlayingDataProcessor() {
         super(EntityVillager.class, Keys.IS_PLAYING);

@@ -42,7 +42,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 import java.util.Map;
 import java.util.Optional;
 
-public class TreeDataProcessor extends AbstractCatalogDataProcessor<TreeType, Value.Mutable<TreeType>, TreeData, ImmutableTreeData> {
+public class TreeDataProcessor extends AbstractCatalogDataProcessor<TreeType, Value<TreeType>, TreeData, ImmutableTreeData> {
 
     private static final Map<ItemType, TreeType> boatMapping = ImmutableMap.<ItemType, TreeType>builder()
             .put(ItemTypes.BOAT, TreeTypes.OAK)

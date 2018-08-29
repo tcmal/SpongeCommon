@@ -35,7 +35,7 @@ import org.spongepowered.common.interfaces.block.tile.IMixinTileEntityEndGateway
 
 import java.util.Optional;
 
-public class EndGatewayAgeValueProcessor extends AbstractSpongeValueProcessor<TileEntityEndGateway, Long, Value.Mutable<Long>> {
+public class EndGatewayAgeValueProcessor extends AbstractSpongeValueProcessor<TileEntityEndGateway, Long, Value<Long>> {
 
     public EndGatewayAgeValueProcessor() {
         super(TileEntityEndGateway.class, Keys.END_GATEWAY_AGE);

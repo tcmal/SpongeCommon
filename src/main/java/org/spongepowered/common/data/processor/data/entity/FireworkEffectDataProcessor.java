@@ -48,7 +48,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class FireworkEffectDataProcessor extends
-        AbstractEntitySingleDataProcessor<EntityFireworkRocket, List<FireworkEffect>, ListValue.Mutable<FireworkEffect>, FireworkEffectData, ImmutableFireworkEffectData> {
+        AbstractEntitySingleDataProcessor<EntityFireworkRocket, List<FireworkEffect>, ListValue<FireworkEffect>, FireworkEffectData, ImmutableFireworkEffectData> {
 
     public FireworkEffectDataProcessor() {
         super(EntityFireworkRocket.class, Keys.FIREWORK_EFFECTS);

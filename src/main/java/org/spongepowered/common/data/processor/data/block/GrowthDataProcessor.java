@@ -32,7 +32,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeGrowthData;
 import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProcessor;
 import org.spongepowered.common.data.value.SpongeValueFactory;
 
-public class GrowthDataProcessor extends AbstractBlockOnlyDataProcessor<Integer, BoundedValue.Mutable<Integer>, GrowthData, ImmutableGrowthData> {
+public class GrowthDataProcessor extends AbstractBlockOnlyDataProcessor<Integer, BoundedValue<Integer>, GrowthData, ImmutableGrowthData> {
 
     public GrowthDataProcessor() {
         super(Keys.GROWTH_STAGE);

@@ -36,7 +36,7 @@ import org.spongepowered.common.interfaces.entity.item.IMixinEntityItem;
 
 import java.util.Optional;
 
-public class InfinitePickupDelayValueProcessor extends AbstractSpongeValueProcessor<EntityItem, Boolean, Value.Mutable<Boolean>> {
+public class InfinitePickupDelayValueProcessor extends AbstractSpongeValueProcessor<EntityItem, Boolean, Value<Boolean>> {
 
     public InfinitePickupDelayValueProcessor() {
         super(EntityItem.class, Keys.INFINITE_PICKUP_DELAY);

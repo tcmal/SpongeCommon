@@ -39,7 +39,7 @@ import org.spongepowered.common.interfaces.entity.IMixinEntityHanging;
 
 import java.util.Optional;
 
-public class HangingDataProcessor extends AbstractSingleDataSingleTargetProcessor<IMixinEntityHanging, Direction, Value.Mutable<Direction>, DirectionalData, ImmutableDirectionalData> {
+public class HangingDataProcessor extends AbstractSingleDataSingleTargetProcessor<IMixinEntityHanging, Direction, Value<Direction>, DirectionalData, ImmutableDirectionalData> {
 
     public HangingDataProcessor() {
         super(Keys.DIRECTION, IMixinEntityHanging.class);

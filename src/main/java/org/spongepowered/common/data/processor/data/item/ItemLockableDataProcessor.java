@@ -47,7 +47,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public final class ItemLockableDataProcessor extends AbstractItemSingleDataProcessor<String, Value.Mutable<String>, LockableData, ImmutableLockableData> {
+public final class ItemLockableDataProcessor extends AbstractItemSingleDataProcessor<String, Value<String>, LockableData, ImmutableLockableData> {
 
     public ItemLockableDataProcessor() {
         super(stack -> {
@@ -101,7 +101,7 @@ public final class ItemLockableDataProcessor extends AbstractItemSingleDataProce
 
     @Override
     protected Value.Mutable<String> constructValue(String actualValue) {
-        return new SpongeMutableValue<String>(Keys.LOCK_TOKEN, "", actualValue);
+        return new SpongeMutableValue<>(Keys.LOCK_TOKEN, "", actualValue);
     }
 
     @Override

@@ -35,7 +35,7 @@ import org.spongepowered.common.interfaces.entity.IMixinEntityLivingBase;
 
 import java.util.Optional;
 
-public class MaxAirValueProcessor extends AbstractSpongeValueProcessor<IMixinEntityLivingBase, Integer, BoundedValue.Mutable<Integer>> {
+public class MaxAirValueProcessor extends AbstractSpongeValueProcessor<IMixinEntityLivingBase, Integer, BoundedValue<Integer>> {
 
     public MaxAirValueProcessor() {
         super(IMixinEntityLivingBase.class, Keys.MAX_AIR);

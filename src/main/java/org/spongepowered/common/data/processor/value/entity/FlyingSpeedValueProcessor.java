@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class FlyingSpeedValueProcessor extends AbstractSpongeValueProcessor<EntityPlayer, Double, Value.Mutable<Double>> {
+public class FlyingSpeedValueProcessor extends AbstractSpongeValueProcessor<EntityPlayer, Double, Value<Double>> {
 
     public FlyingSpeedValueProcessor() {
         super(EntityPlayer.class, Keys.FLYING_SPEED);

@@ -38,7 +38,7 @@ import org.spongepowered.common.interfaces.entity.explosive.IMixinFusedExplosive
 
 import java.util.Optional;
 
-public class TicksRemainingValueProcessor extends AbstractSpongeValueProcessor<FusedExplosive, Integer, Value.Mutable<Integer>> {
+public class TicksRemainingValueProcessor extends AbstractSpongeValueProcessor<FusedExplosive, Integer, Value<Integer>> {
 
     public TicksRemainingValueProcessor() {
         super(FusedExplosive.class, Keys.TICKS_REMAINING);

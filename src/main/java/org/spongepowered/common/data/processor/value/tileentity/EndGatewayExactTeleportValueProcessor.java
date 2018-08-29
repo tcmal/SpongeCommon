@@ -35,7 +35,7 @@ import org.spongepowered.common.interfaces.block.tile.IMixinTileEntityEndGateway
 
 import java.util.Optional;
 
-public class EndGatewayExactTeleportValueProcessor extends AbstractSpongeValueProcessor<TileEntityEndGateway, Boolean, Value.Mutable<Boolean>> {
+public class EndGatewayExactTeleportValueProcessor extends AbstractSpongeValueProcessor<TileEntityEndGateway, Boolean, Value<Boolean>> {
 
     public EndGatewayExactTeleportValueProcessor() {
         super(TileEntityEndGateway.class, Keys.EXACT_TELEPORT);

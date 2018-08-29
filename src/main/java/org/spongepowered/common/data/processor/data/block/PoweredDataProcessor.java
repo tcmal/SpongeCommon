@@ -32,7 +32,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongePoweredData
 import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class PoweredDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value.Mutable<Boolean>, PoweredData, ImmutablePoweredData> {
+public class PoweredDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value<Boolean>, PoweredData, ImmutablePoweredData> {
 
     public PoweredDataProcessor() {
         super(Keys.POWERED);

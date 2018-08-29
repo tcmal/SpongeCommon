@@ -44,7 +44,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class RespawnLocationDataProcessor extends
-        AbstractSingleDataSingleTargetProcessor<User, Map<UUID, RespawnLocation>, MapValue.Mutable<UUID, RespawnLocation>, RespawnLocationData, ImmutableRespawnLocation> {
+        AbstractSingleDataSingleTargetProcessor<User, Map<UUID, RespawnLocation>, MapValue<UUID, RespawnLocation>, RespawnLocationData, ImmutableRespawnLocation> {
 
     public RespawnLocationDataProcessor() {
         super(Keys.RESPAWN_LOCATIONS, User.class);

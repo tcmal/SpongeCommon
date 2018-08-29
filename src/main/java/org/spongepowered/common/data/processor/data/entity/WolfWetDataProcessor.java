@@ -39,7 +39,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class WolfWetDataProcessor extends AbstractEntitySingleDataProcessor<EntityWolf, Boolean, Value.Mutable<Boolean>, WetData, ImmutableWetData> {
+public class WolfWetDataProcessor extends AbstractEntitySingleDataProcessor<EntityWolf, Boolean, Value<Boolean>, WetData, ImmutableWetData> {
 
     public WolfWetDataProcessor() {
         super(EntityWolf.class, Keys.IS_WET);

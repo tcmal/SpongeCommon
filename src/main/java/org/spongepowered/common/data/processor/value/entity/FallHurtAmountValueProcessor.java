@@ -36,7 +36,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class FallHurtAmountValueProcessor extends AbstractSpongeValueProcessor<EntityFallingBlock, Double, BoundedValue.Mutable<Double>> {
+public class FallHurtAmountValueProcessor extends AbstractSpongeValueProcessor<EntityFallingBlock, Double, BoundedValue<Double>> {
 
     public FallHurtAmountValueProcessor() {
         super(EntityFallingBlock.class, Keys.FALL_DAMAGE_PER_BLOCK);

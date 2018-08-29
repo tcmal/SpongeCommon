@@ -43,7 +43,7 @@ import org.spongepowered.common.registry.type.entity.ParrotVariantRegistryModule
 import java.util.Optional;
 
 public class ParrotDataProcessor extends
-        AbstractEntitySingleDataProcessor<EntityParrot, ParrotVariant, Value.Mutable<ParrotVariant>, ParrotData, ImmutableParrotData> {
+        AbstractEntitySingleDataProcessor<EntityParrot, ParrotVariant, Value<ParrotVariant>, ParrotData, ImmutableParrotData> {
 
     public ParrotDataProcessor() {
         super(EntityParrot.class, Keys.PARROT_VARIANT);

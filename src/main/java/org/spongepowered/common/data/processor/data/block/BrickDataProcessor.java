@@ -36,7 +36,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeBrickData;
 import org.spongepowered.common.data.processor.common.AbstractCatalogDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class BrickDataProcessor extends AbstractCatalogDataProcessor<BrickType, Value.Mutable<BrickType>, BrickData, ImmutableBrickData> {
+public class BrickDataProcessor extends AbstractCatalogDataProcessor<BrickType, Value<BrickType>, BrickData, ImmutableBrickData> {
 
     public BrickDataProcessor() {
         super(Keys.BRICK_TYPE, input -> input.getItem() == ItemTypes.STONEBRICK || input.getItem() == ItemTypes.STONE_BRICK_STAIRS);

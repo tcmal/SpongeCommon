@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class MaxCookTimeValueProcessor extends AbstractSpongeValueProcessor<TileEntityFurnace, Integer, BoundedValue.Mutable<Integer>> {
+public class MaxCookTimeValueProcessor extends AbstractSpongeValueProcessor<TileEntityFurnace, Integer, BoundedValue<Integer>> {
 
     public MaxCookTimeValueProcessor() {
         super(TileEntityFurnace.class, Keys.MAX_COOK_TIME);

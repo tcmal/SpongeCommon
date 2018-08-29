@@ -30,6 +30,7 @@ import com.google.common.collect.Sets;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.manipulator.DataManipulator;
 import org.spongepowered.api.data.manipulator.ImmutableDataManipulator;
+import org.spongepowered.api.data.value.SetValue;
 import org.spongepowered.api.data.value.Value;
 import org.spongepowered.common.data.value.mutable.SpongeMutableSetValue;
 import org.spongepowered.common.util.ReflectionUtil;
@@ -62,7 +63,7 @@ public abstract class AbstractSingleSetData<E, M extends DataManipulator<M, I>, 
     }
 
     @Override
-    protected Value.Mutable<?> getValueGetter() {
+    protected SetValue.Mutable<E> getValueGetter() {
         return new SpongeMutableSetValue<>(this.usedKey, getValue());
     }
 

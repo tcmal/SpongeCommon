@@ -89,6 +89,11 @@ public class ImmutableSpongeBoundedValue<E> extends ImmutableSpongeValue<E> impl
     }
 
     @Override
+    public BoundedValue.Immutable<E> asImmutable() {
+        return this;
+    }
+
+    @Override
     public E getMinValue() {
         return this.minimum;
     }

@@ -37,7 +37,7 @@ import org.spongepowered.common.util.VecHelper;
 
 import java.util.Optional;
 
-public class ChestRotationValueProcessor extends AbstractSpongeValueProcessor<EntityArmorStand, Vector3d, Value.Mutable<Vector3d>> {
+public class ChestRotationValueProcessor extends AbstractSpongeValueProcessor<EntityArmorStand, Vector3d, Value<Vector3d>> {
 
     public ChestRotationValueProcessor() {
         super(EntityArmorStand.class, Keys.CHEST_ROTATION);

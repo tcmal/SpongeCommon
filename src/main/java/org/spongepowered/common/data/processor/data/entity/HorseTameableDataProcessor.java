@@ -42,7 +42,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class HorseTameableDataProcessor
-        extends AbstractEntitySingleDataProcessor<AbstractHorse, Optional<UUID>, OptionalValue.Mutable<UUID>, TameableData, ImmutableTameableData> {
+        extends AbstractEntitySingleDataProcessor<AbstractHorse, Optional<UUID>, OptionalValue<UUID>, TameableData, ImmutableTameableData> {
 
     public HorseTameableDataProcessor() {
         super(AbstractHorse.class, Keys.TAMED_OWNER);

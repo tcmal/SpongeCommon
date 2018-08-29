@@ -32,7 +32,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeAttachedDat
 import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class AttachedDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value.Mutable<Boolean>, AttachedData, ImmutableAttachedData> {
+public class AttachedDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value<Boolean>, AttachedData, ImmutableAttachedData> {
 
     public AttachedDataProcessor() {
         super(Keys.ATTACHED);

@@ -39,7 +39,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class ItemWetDataProcessor extends AbstractItemSingleDataProcessor<Boolean, Value.Mutable<Boolean>, WetData, ImmutableWetData> {
+public class ItemWetDataProcessor extends AbstractItemSingleDataProcessor<Boolean, Value<Boolean>, WetData, ImmutableWetData> {
 
     public ItemWetDataProcessor() {
         super(item -> item.getItem().equals(ItemTypes.SPONGE), Keys.IS_WET);

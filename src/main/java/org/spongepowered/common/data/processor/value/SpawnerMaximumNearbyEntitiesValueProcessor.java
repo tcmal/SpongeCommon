@@ -36,7 +36,7 @@ import org.spongepowered.common.interfaces.IMixinMobSpawner;
 
 import java.util.Optional;
 
-public class SpawnerMaximumNearbyEntitiesValueProcessor extends AbstractSpongeValueProcessor<IMixinMobSpawner, Short, BoundedValue.Mutable<Short>> {
+public class SpawnerMaximumNearbyEntitiesValueProcessor extends AbstractSpongeValueProcessor<IMixinMobSpawner, Short, BoundedValue<Short>> {
 
     public SpawnerMaximumNearbyEntitiesValueProcessor() {
         super(IMixinMobSpawner.class, Keys.SPAWNER_MAXIMUM_NEARBY_ENTITIES);

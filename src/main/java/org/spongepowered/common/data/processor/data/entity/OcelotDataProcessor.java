@@ -44,7 +44,7 @@ import org.spongepowered.common.registry.type.entity.OcelotTypeRegistryModule;
 import java.util.Optional;
 
 public class OcelotDataProcessor extends
-        AbstractEntitySingleDataProcessor<EntityOcelot, OcelotType, Value.Mutable<OcelotType>, OcelotData, ImmutableOcelotData> {
+        AbstractEntitySingleDataProcessor<EntityOcelot, OcelotType, Value<OcelotType>, OcelotData, ImmutableOcelotData> {
 
     public OcelotDataProcessor() {
         super(EntityOcelot.class, Keys.OCELOT_TYPE);

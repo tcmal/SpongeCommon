@@ -38,7 +38,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class BreedableDataProcessor extends AbstractSingleDataSingleTargetProcessor<EntityAgeable, Boolean, Value.Mutable<Boolean>, BreedableData, ImmutableBreedableData> {
+public class BreedableDataProcessor extends AbstractSingleDataSingleTargetProcessor<EntityAgeable, Boolean, Value<Boolean>, BreedableData, ImmutableBreedableData> {
 
     public BreedableDataProcessor() {
         super(Keys.CAN_BREED, EntityAgeable.class);

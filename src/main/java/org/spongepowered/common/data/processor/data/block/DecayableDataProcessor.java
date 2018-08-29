@@ -32,7 +32,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeDecayableDa
 import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class DecayableDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value.Mutable<Boolean>, DecayableData, ImmutableDecayableData> {
+public class DecayableDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value<Boolean>, DecayableData, ImmutableDecayableData> {
 
     public DecayableDataProcessor() {
         super(Keys.DECAYABLE);

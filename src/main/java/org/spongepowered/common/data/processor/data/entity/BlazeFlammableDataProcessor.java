@@ -39,7 +39,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 import java.util.Optional;
 
 public final class BlazeFlammableDataProcessor
-        extends AbstractEntitySingleDataProcessor<EntityBlaze, Boolean, Value.Mutable<Boolean>, FlammableData, ImmutableFlammableData> {
+        extends AbstractEntitySingleDataProcessor<EntityBlaze, Boolean, Value<Boolean>, FlammableData, ImmutableFlammableData> {
 
     public BlazeFlammableDataProcessor() {
         super(EntityBlaze.class, Keys.IS_AFLAME);

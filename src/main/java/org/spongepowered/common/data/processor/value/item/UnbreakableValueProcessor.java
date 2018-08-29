@@ -36,7 +36,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class UnbreakableValueProcessor extends AbstractSpongeValueProcessor<ItemStack, Boolean, Value.Mutable<Boolean>> {
+public class UnbreakableValueProcessor extends AbstractSpongeValueProcessor<ItemStack, Boolean, Value<Boolean>> {
 
     public UnbreakableValueProcessor() {
         super(ItemStack.class, Keys.UNBREAKABLE);

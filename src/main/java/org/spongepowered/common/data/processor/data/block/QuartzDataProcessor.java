@@ -36,7 +36,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeQuartzData;
 import org.spongepowered.common.data.processor.common.AbstractCatalogDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class QuartzDataProcessor extends AbstractCatalogDataProcessor<QuartzType, Value.Mutable<QuartzType>, QuartzData, ImmutableQuartzData> {
+public class QuartzDataProcessor extends AbstractCatalogDataProcessor<QuartzType, Value<QuartzType>, QuartzData, ImmutableQuartzData> {
 
     public QuartzDataProcessor() {
         super(Keys.QUARTZ_TYPE, input -> input.getItem() == ItemTypes.QUARTZ_BLOCK || input.getItem() == ItemTypes.QUARTZ_STAIRS);

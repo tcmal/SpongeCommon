@@ -1602,7 +1602,7 @@ public abstract class MixinEntityPlayerMP extends MixinEntityPlayer implements P
             return DataTransactionResult.successNoData();
         }
         Collection<ProfileProperty> skin = this.getProfile().getPropertyMap().removeAll("textures");
-        ImmutableValue<?> oldValue = new ImmutableSpongeValue<>(Keys.SKIN, skin.iterator().next());
+        Value.Immutable<?> oldValue = new ImmutableSpongeValue<>(Keys.SKIN, skin.iterator().next());
         this.updateSkin();
 
         return DataTransactionResult.builder().result(DataTransactionResult.Type.SUCCESS).replace(oldValue).build();

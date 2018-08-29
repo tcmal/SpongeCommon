@@ -34,7 +34,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class EntityCommandValueProcessor extends AbstractSpongeValueProcessor<EntityMinecartCommandBlock, String, Value.Mutable<String>> {
+public class EntityCommandValueProcessor extends AbstractSpongeValueProcessor<EntityMinecartCommandBlock, String, Value<String>> {
 
     public EntityCommandValueProcessor() {
         super(EntityMinecartCommandBlock.class, Keys.COMMAND);

@@ -49,7 +49,7 @@ import org.spongepowered.common.registry.type.entity.EntityTypeRegistryModule;
 
 import java.util.Optional;
 
-public class SpawnableDataProcessor extends AbstractItemSingleDataProcessor<EntityType, Value.Mutable<EntityType>, SpawnableData, ImmutableSpawnableData> {
+public class SpawnableDataProcessor extends AbstractItemSingleDataProcessor<EntityType, Value<EntityType>, SpawnableData, ImmutableSpawnableData> {
 
     public SpawnableDataProcessor() {
         super(input -> input.getItem().equals(Items.SPAWN_EGG), Keys.SPAWNABLE_ENTITY_TYPE);

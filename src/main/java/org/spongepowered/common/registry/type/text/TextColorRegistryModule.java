@@ -86,7 +86,7 @@ public final class TextColorRegistryModule extends AbstractCatalogRegistryModule
 
             @Override
             public String toString() {
-                return this.getId();
+                return this.getKey().toString();
             }
         });
     }

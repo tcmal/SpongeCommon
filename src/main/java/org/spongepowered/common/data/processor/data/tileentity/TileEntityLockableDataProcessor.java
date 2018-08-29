@@ -40,7 +40,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 import java.util.Optional;
 
 public final class TileEntityLockableDataProcessor
-        extends AbstractTileEntitySingleDataProcessor<TileEntityLockable, String, Value.Mutable<String>, LockableData, ImmutableLockableData> {
+        extends AbstractTileEntitySingleDataProcessor<TileEntityLockable, String, Value<String>, LockableData, ImmutableLockableData> {
 
     public TileEntityLockableDataProcessor() {
         super(TileEntityLockable.class, Keys.LOCK_TOKEN);
@@ -76,7 +76,7 @@ public final class TileEntityLockableDataProcessor
 
     @Override
     protected Value.Mutable<String> constructValue(String actualValue) {
-        return new SpongeMutableValue<String>(Keys.LOCK_TOKEN, "", actualValue);
+        return new SpongeMutableValue<>(Keys.LOCK_TOKEN, "", actualValue);
     }
 
     @Override

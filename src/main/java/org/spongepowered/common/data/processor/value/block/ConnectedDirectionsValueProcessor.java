@@ -39,7 +39,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public class ConnectedDirectionsValueProcessor extends
-        AbstractSpongeValueProcessor<TileEntityChest, Set<Direction>, SetValue.Mutable<Direction>> {
+        AbstractSpongeValueProcessor<TileEntityChest, Set<Direction>, SetValue<Direction>> {
 
     public ConnectedDirectionsValueProcessor() {
         super(TileEntityChest.class, Keys.CONNECTED_DIRECTIONS);

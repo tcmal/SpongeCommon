@@ -25,6 +25,7 @@
 package org.spongepowered.common.data.value.immutable;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.value.Value;
 import org.spongepowered.api.data.value.WeightedCollectionValue;
@@ -32,6 +33,7 @@ import org.spongepowered.api.util.weighted.WeightedTable;
 import org.spongepowered.api.util.weighted.TableEntry;
 import org.spongepowered.common.data.value.mutable.SpongeMutableWeightedCollectionValue;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
@@ -118,5 +120,10 @@ public class ImmutableSpongeWeightedCollectionValue<E> extends ImmutableSpongeCo
     @Override
     public List<E> get(Random random) {
         return this.actualValue.get(random);
+    }
+
+    @Override
+    public Iterator<TableEntry<E>> iterator() {
+        return Iterators.unmodifiableIterator(this.actualValue.iterator());
     }
 }

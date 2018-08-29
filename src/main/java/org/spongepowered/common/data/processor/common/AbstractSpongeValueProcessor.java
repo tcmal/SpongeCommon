@@ -38,9 +38,9 @@ import java.util.Optional;
 public abstract class AbstractSpongeValueProcessor<C, E, V extends Value<E>> implements ValueProcessor<E, V> {
 
     private final Class<C> containerClass;
-    protected final Key<V> key;
+    protected final Key<? extends V> key;
 
-    protected AbstractSpongeValueProcessor(Class<C> containerClass, Key<V> key) {
+    protected AbstractSpongeValueProcessor(Class<C> containerClass, Key<? extends V> key) {
         this.key = checkNotNull(key, "The key is null!");
         this.containerClass = containerClass;
     }
@@ -72,7 +72,7 @@ public abstract class AbstractSpongeValueProcessor<C, E, V extends Value<E>> imp
 
 
     @Override
-    public final Key<? extends Value<E>> getKey() {
+    public final Key<? extends V> getKey() {
         return this.key;
     }
 

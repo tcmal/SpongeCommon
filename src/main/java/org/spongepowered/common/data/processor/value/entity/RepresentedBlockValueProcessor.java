@@ -38,7 +38,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class RepresentedBlockValueProcessor extends AbstractSpongeValueProcessor<EntityMinecart, BlockState, Value.Mutable<BlockState>> {
+public class RepresentedBlockValueProcessor extends AbstractSpongeValueProcessor<EntityMinecart, BlockState, Value<BlockState>> {
 
     public RepresentedBlockValueProcessor() {
         super(EntityMinecart.class, Keys.REPRESENTED_BLOCK);

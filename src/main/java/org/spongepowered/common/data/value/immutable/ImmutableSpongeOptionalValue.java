@@ -56,9 +56,20 @@ public class ImmutableSpongeOptionalValue<E> extends ImmutableSpongeValue<Option
         return new ImmutableSpongeOptionalValue<>(getKey(), checkNotNull(function.apply(get())));
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Value<E> orElse(E defaultValue) {
+        return new ImmutableSpongeValue<>((Key<? extends Value<E>>) getKey(), actualValue.orElse(defaultValue), defaultValue);
+    }
+
     @Override
     public OptionalValue.Mutable<E> asMutable() {
         return new SpongeMutableOptionalValue<>(getKey(), this.actualValue);
+    }
+
+    @Override
+    public ImmutableSpongeOptionalValue<E> asImmutable() {
+        return this;
     }
 
     @Override
@@ -66,8 +77,4 @@ public class ImmutableSpongeOptionalValue<E> extends ImmutableSpongeValue<Option
         return new ImmutableSpongeOptionalValue<>(getKey(), Optional.ofNullable(value));
     }
 
-    @Override
-    public Value.Immutable or(E value) { // TODO actually construct a new key for this kind...
-        return new ImmutableSpongeValue<>(null, get().isPresent() ? get().get() : checkNotNull(value));
-    }
 }

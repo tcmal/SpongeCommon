@@ -58,7 +58,7 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 // TODO Improve this processor
-public class DisplayNameDataProcessor extends AbstractSingleDataProcessor<Text, Value.Mutable<Text>, DisplayNameData, ImmutableDisplayNameData> {
+public class DisplayNameDataProcessor extends AbstractSingleDataProcessor<Text, Value<Text>, DisplayNameData, ImmutableDisplayNameData> {
 
     public DisplayNameDataProcessor() {
         super(Keys.DISPLAY_NAME);

@@ -36,7 +36,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class VehicleValueProcessor extends AbstractSpongeValueProcessor<net.minecraft.entity.Entity, EntitySnapshot, Value.Mutable<EntitySnapshot>> {
+public class VehicleValueProcessor extends AbstractSpongeValueProcessor<net.minecraft.entity.Entity, EntitySnapshot, Value<EntitySnapshot>> {
 
     public VehicleValueProcessor() {
         super(net.minecraft.entity.Entity.class, Keys.VEHICLE);

@@ -53,7 +53,7 @@ public interface ValueProcessor<E, V extends Value<E>> {
      *
      * @return The associated key for this processor
      */
-    Key<? extends Value<E>> getKey();
+    Key<? extends V> getKey();
 
     /**
      * Gets the priority of this processor. A single {@link Key} can have

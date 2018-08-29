@@ -36,7 +36,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeSandData;
 import org.spongepowered.common.data.processor.common.AbstractCatalogDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class SandDataProcessor extends AbstractCatalogDataProcessor<SandType, Value.Mutable<SandType>, SandData, ImmutableSandData> {
+public class SandDataProcessor extends AbstractCatalogDataProcessor<SandType, Value<SandType>, SandData, ImmutableSandData> {
 
     public SandDataProcessor() {
         super(Keys.SAND_TYPE, input -> input.getItem() == ItemTypes.SAND);

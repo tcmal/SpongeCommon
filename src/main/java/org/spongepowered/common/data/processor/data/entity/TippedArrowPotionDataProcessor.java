@@ -46,7 +46,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public class TippedArrowPotionDataProcessor extends AbstractSingleDataSingleTargetProcessor<EntityTippedArrow, List<PotionEffect>,
-    ListValue.Mutable<PotionEffect>, PotionEffectData, ImmutablePotionEffectData> {
+    ListValue<PotionEffect>, PotionEffectData, ImmutablePotionEffectData> {
 
     public TippedArrowPotionDataProcessor() {
         super(Keys.POTION_EFFECTS, EntityTippedArrow.class);

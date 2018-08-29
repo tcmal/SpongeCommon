@@ -47,7 +47,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 import java.util.Optional;
 
 public class TileEntitySkullDataProcessor
-        extends AbstractTileEntitySingleDataProcessor<TileEntitySkull, SkullType, Value.Mutable<SkullType>, SkullData, ImmutableSkullData> {
+        extends AbstractTileEntitySingleDataProcessor<TileEntitySkull, SkullType, Value<SkullType>, SkullData, ImmutableSkullData> {
 
     public TileEntitySkullDataProcessor() {
         super(TileEntitySkull.class, Keys.SKULL_TYPE);

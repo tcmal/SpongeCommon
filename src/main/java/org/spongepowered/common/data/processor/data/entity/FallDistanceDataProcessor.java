@@ -41,7 +41,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 import java.util.Optional;
 
 public class FallDistanceDataProcessor
-        extends AbstractEntitySingleDataProcessor<EntityLivingBase, Float, BoundedValue.Mutable<Float>, FallDistanceData, ImmutableFallDistanceData> {
+        extends AbstractEntitySingleDataProcessor<EntityLivingBase, Float, BoundedValue<Float>, FallDistanceData, ImmutableFallDistanceData> {
 
     public FallDistanceDataProcessor() {
         super(EntityLivingBase.class, Keys.FALL_DISTANCE);

@@ -38,7 +38,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class SprintDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Boolean, Value.Mutable<Boolean>, SprintData, ImmutableSprintData> {
+public class SprintDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Boolean, Value<Boolean>, SprintData, ImmutableSprintData> {
 
     public SprintDataProcessor() {
         super(Entity.class, Keys.IS_SPRINTING);

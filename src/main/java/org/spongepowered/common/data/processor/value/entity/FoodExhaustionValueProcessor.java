@@ -36,7 +36,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class FoodExhaustionValueProcessor extends AbstractSpongeValueProcessor<EntityPlayer, Double, BoundedValue.Mutable<Double>> {
+public class FoodExhaustionValueProcessor extends AbstractSpongeValueProcessor<EntityPlayer, Double, BoundedValue<Double>> {
 
     public FoodExhaustionValueProcessor() {
         super(EntityPlayer.class, Keys.EXHAUSTION);

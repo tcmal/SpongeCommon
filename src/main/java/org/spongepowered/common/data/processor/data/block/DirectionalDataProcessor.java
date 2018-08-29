@@ -33,7 +33,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeDirectional
 import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class DirectionalDataProcessor extends AbstractBlockOnlyDataProcessor<Direction, Value.Mutable<Direction>, DirectionalData, ImmutableDirectionalData> {
+public class DirectionalDataProcessor extends AbstractBlockOnlyDataProcessor<Direction, Value<Direction>, DirectionalData, ImmutableDirectionalData> {
 
     public DirectionalDataProcessor() {
         super(Keys.DIRECTION);

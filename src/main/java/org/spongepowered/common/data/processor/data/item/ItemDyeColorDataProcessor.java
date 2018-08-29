@@ -44,7 +44,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class ItemDyeColorDataProcessor extends AbstractItemSingleDataProcessor<DyeColor, Value.Mutable<DyeColor>, DyeableData, ImmutableDyeableData> {
+public class ItemDyeColorDataProcessor extends AbstractItemSingleDataProcessor<DyeColor, Value<DyeColor>, DyeableData, ImmutableDyeableData> {
 
     public ItemDyeColorDataProcessor() {
         super(x -> isDyeable(x.getItem()), Keys.DYE_COLOR);

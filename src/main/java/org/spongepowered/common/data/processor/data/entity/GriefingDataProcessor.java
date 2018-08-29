@@ -39,7 +39,7 @@ import org.spongepowered.common.interfaces.entity.IMixinGriefer;
 
 import java.util.Optional;
 
-public class GriefingDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Boolean, Value.Mutable<Boolean>, GriefingData,
+public class GriefingDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Boolean, Value<Boolean>, GriefingData,
         ImmutableGriefingData> {
 
     public GriefingDataProcessor() {

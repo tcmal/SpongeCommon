@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class TileEntityTracksOutputValueProcessor extends AbstractSpongeValueProcessor<TileEntityCommandBlock, Boolean, Value.Mutable<Boolean>> {
+public class TileEntityTracksOutputValueProcessor extends AbstractSpongeValueProcessor<TileEntityCommandBlock, Boolean, Value<Boolean>> {
 
     public TileEntityTracksOutputValueProcessor() {
         super(TileEntityCommandBlock.class, Keys.TRACKS_OUTPUT);

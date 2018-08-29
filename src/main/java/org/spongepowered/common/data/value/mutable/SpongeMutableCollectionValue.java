@@ -124,11 +124,6 @@ public abstract class SpongeMutableCollectionValue<E,
     }
 
     @Override
-    public boolean exists() {
-        return this.actualValue != null;
-    }
-
-    @Override
     public abstract I asImmutable();
 
     @Override

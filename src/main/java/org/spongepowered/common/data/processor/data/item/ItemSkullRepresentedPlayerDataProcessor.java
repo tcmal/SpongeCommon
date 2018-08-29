@@ -42,7 +42,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 import java.util.Optional;
 
 public class ItemSkullRepresentedPlayerDataProcessor
-        extends AbstractItemSingleDataProcessor<GameProfile, Value.Mutable<GameProfile>, RepresentedPlayerData, ImmutableRepresentedPlayerData> {
+        extends AbstractItemSingleDataProcessor<GameProfile, Value<GameProfile>, RepresentedPlayerData, ImmutableRepresentedPlayerData> {
 
     public ItemSkullRepresentedPlayerDataProcessor() {
         super(ItemSkullRepresentedPlayerDataProcessor::isSupportedItem, Keys.REPRESENTED_PLAYER);

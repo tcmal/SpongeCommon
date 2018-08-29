@@ -38,7 +38,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class ShearedDataProcessor extends AbstractEntitySingleDataProcessor<EntitySheep, Boolean, Value.Mutable<Boolean>, ShearedData, ImmutableShearedData> {
+public class ShearedDataProcessor extends AbstractEntitySingleDataProcessor<EntitySheep, Boolean, Value<Boolean>, ShearedData, ImmutableShearedData> {
 
     public ShearedDataProcessor() {
         super(EntitySheep.class, Keys.IS_SHEARED);

@@ -42,7 +42,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class BedDyeColorDataProcessor extends AbstractTileEntitySingleDataProcessor<TileEntityBed, DyeColor, Value.Mutable<DyeColor>, DyeableData,
+public class BedDyeColorDataProcessor extends AbstractTileEntitySingleDataProcessor<TileEntityBed, DyeColor, Value<DyeColor>, DyeableData,
         ImmutableDyeableData> {
 
     public BedDyeColorDataProcessor() {

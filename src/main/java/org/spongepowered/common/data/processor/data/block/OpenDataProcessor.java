@@ -32,7 +32,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeOpenData;
 import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class OpenDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value.Mutable<Boolean>, OpenData, ImmutableOpenData> {
+public class OpenDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value<Boolean>, OpenData, ImmutableOpenData> {
 
     public OpenDataProcessor() {
         super(Keys.OPEN);

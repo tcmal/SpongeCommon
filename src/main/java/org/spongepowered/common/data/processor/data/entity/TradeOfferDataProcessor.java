@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class TradeOfferDataProcessor
-        extends AbstractEntitySingleDataProcessor<EntityVillager, List<TradeOffer>, ListValue.Mutable<TradeOffer>, TradeOfferData, ImmutableTradeOfferData> {
+        extends AbstractEntitySingleDataProcessor<EntityVillager, List<TradeOffer>, ListValue<TradeOffer>, TradeOfferData, ImmutableTradeOfferData> {
 
     public TradeOfferDataProcessor() {
         super(EntityVillager.class, Keys.TRADE_OFFERS);

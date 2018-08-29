@@ -38,7 +38,7 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
-public class FirstJoinValueProcessor extends AbstractSpongeValueProcessor<EntityPlayer, Instant, Value.Mutable<Instant>> {
+public class FirstJoinValueProcessor extends AbstractSpongeValueProcessor<EntityPlayer, Instant, Value<Instant>> {
 
     public FirstJoinValueProcessor() {
         super(EntityPlayer.class, Keys.FIRST_DATE_PLAYED);

@@ -61,6 +61,12 @@ public abstract class ImmutableSpongeCollectionValue<E, V extends Collection<E>,
     @Override
     public abstract L asMutable();
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public I asImmutable() {
+        return (I) this;
+    }
+
     @Override
     public int size() {
         return this.actualValue.size();

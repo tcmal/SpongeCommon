@@ -40,7 +40,7 @@ import org.spongepowered.common.interfaces.entity.IMixinAggressive;
 import java.util.Optional;
 
 public class AggressiveDataProcessor
-        extends AbstractSingleDataSingleTargetProcessor<IMixinAggressive, Boolean, Value.Mutable<Boolean>, AggressiveData, ImmutableAggressiveData> {
+        extends AbstractSingleDataSingleTargetProcessor<IMixinAggressive, Boolean, Value<Boolean>, AggressiveData, ImmutableAggressiveData> {
 
     public AggressiveDataProcessor() {
         super(Keys.ANGRY, IMixinAggressive.class);

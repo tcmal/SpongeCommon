@@ -40,7 +40,7 @@ import org.spongepowered.common.interfaces.ITargetedLocation;
 
 import java.util.Optional;
 
-public final class EntityTargetedLocationDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Vector3d, Value.Mutable<Vector3d>,
+public final class EntityTargetedLocationDataProcessor extends AbstractEntitySingleDataProcessor<Entity, Vector3d, Value<Vector3d>,
         TargetedLocationData, ImmutableTargetedLocationData> {
 
     public EntityTargetedLocationDataProcessor() {

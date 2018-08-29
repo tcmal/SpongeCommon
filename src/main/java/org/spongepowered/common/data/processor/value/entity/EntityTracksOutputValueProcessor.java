@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class EntityTracksOutputValueProcessor extends AbstractSpongeValueProcessor<EntityMinecartCommandBlock, Boolean, Value.Mutable<Boolean>> {
+public class EntityTracksOutputValueProcessor extends AbstractSpongeValueProcessor<EntityMinecartCommandBlock, Boolean, Value<Boolean>> {
 
     public EntityTracksOutputValueProcessor() {
         super(EntityMinecartCommandBlock.class, Keys.TRACKS_OUTPUT);

@@ -39,7 +39,7 @@ import org.spongepowered.common.interfaces.entity.IMixinEntityLivingBase;
 
 import java.util.Optional;
 
-public class ElytraFlyingDataProcessor extends AbstractEntitySingleDataProcessor<EntityLivingBase, Boolean, Value.Mutable<Boolean>, ElytraFlyingData, ImmutableElytraFlyingData> {
+public class ElytraFlyingDataProcessor extends AbstractEntitySingleDataProcessor<EntityLivingBase, Boolean, Value<Boolean>, ElytraFlyingData, ImmutableElytraFlyingData> {
 
     public ElytraFlyingDataProcessor() {
         super(EntityLivingBase.class, Keys.IS_ELYTRA_FLYING);

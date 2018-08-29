@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class FallTimeValueProcessor extends AbstractSpongeValueProcessor<EntityFallingBlock, Integer, Value.Mutable<Integer>> {
+public class FallTimeValueProcessor extends AbstractSpongeValueProcessor<EntityFallingBlock, Integer, Value<Integer>> {
 
     public FallTimeValueProcessor() {
         super(EntityFallingBlock.class, Keys.FALL_TIME);

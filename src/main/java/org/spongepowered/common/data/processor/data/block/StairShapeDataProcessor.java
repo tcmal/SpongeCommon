@@ -35,7 +35,7 @@ import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProce
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 public class StairShapeDataProcessor extends
-        AbstractBlockOnlyDataProcessor<StairShape, Value.Mutable<StairShape>, StairShapeData, ImmutableStairShapeData> {
+        AbstractBlockOnlyDataProcessor<StairShape, Value<StairShape>, StairShapeData, ImmutableStairShapeData> {
 
     public StairShapeDataProcessor() {
         super(Keys.STAIR_SHAPE);

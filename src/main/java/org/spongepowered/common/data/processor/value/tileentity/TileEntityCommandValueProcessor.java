@@ -34,7 +34,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class TileEntityCommandValueProcessor extends AbstractSpongeValueProcessor<TileEntityCommandBlock, String, Value.Mutable<String>> {
+public class TileEntityCommandValueProcessor extends AbstractSpongeValueProcessor<TileEntityCommandBlock, String, Value<String>> {
 
     public TileEntityCommandValueProcessor() {
         super(TileEntityCommandBlock.class, Keys.COMMAND);

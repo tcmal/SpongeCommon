@@ -52,7 +52,7 @@ import org.spongepowered.common.text.SpongeTexts;
 import java.util.List;
 import java.util.Optional;
 
-public class ItemSignDataProcessor extends AbstractItemSingleDataProcessor<List<Text>, ListValue.Mutable<Text>, SignData, ImmutableSignData> {
+public class ItemSignDataProcessor extends AbstractItemSingleDataProcessor<List<Text>, ListValue<Text>, SignData, ImmutableSignData> {
 
     public ItemSignDataProcessor() {
         super(stack -> stack.getItem().equals(Items.SIGN), Keys.SIGN_LINES);

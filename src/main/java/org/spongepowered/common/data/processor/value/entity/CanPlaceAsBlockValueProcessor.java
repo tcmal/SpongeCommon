@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class CanPlaceAsBlockValueProcessor extends AbstractSpongeValueProcessor<EntityFallingBlock, Boolean, Value.Mutable<Boolean>> {
+public class CanPlaceAsBlockValueProcessor extends AbstractSpongeValueProcessor<EntityFallingBlock, Boolean, Value<Boolean>> {
 
     public CanPlaceAsBlockValueProcessor() {
         super(EntityFallingBlock.class, Keys.CAN_PLACE_AS_BLOCK);

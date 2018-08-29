@@ -32,7 +32,7 @@ import org.spongepowered.common.data.manipulator.mutable.block.SpongeDropData;
 import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProcessor;
 import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
-public class DropDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value.Mutable<Boolean>, DropData, ImmutableDropData> {
+public class DropDataProcessor extends AbstractBlockOnlyDataProcessor<Boolean, Value<Boolean>, DropData, ImmutableDropData> {
 
     public DropDataProcessor() {
         super(Keys.SHOULD_DROP);

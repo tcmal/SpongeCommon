@@ -36,7 +36,7 @@ import org.spongepowered.common.interfaces.IMixinMobSpawner;
 
 import java.util.Optional;
 
-public class SpawnerRequiredPlayerRangeValueProcessor extends AbstractSpongeValueProcessor<IMixinMobSpawner, Short, BoundedValue.Mutable<Short>> {
+public class SpawnerRequiredPlayerRangeValueProcessor extends AbstractSpongeValueProcessor<IMixinMobSpawner, Short, BoundedValue<Short>> {
 
     public SpawnerRequiredPlayerRangeValueProcessor() {
         super(IMixinMobSpawner.class, Keys.SPAWNER_REQUIRED_PLAYER_RANGE);

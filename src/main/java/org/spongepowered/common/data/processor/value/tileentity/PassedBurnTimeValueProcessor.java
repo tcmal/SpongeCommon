@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.SpongeValueFactory;
 
 import java.util.Optional;
 
-public class PassedBurnTimeValueProcessor extends AbstractSpongeValueProcessor<TileEntityFurnace, Integer, BoundedValue.Mutable<Integer>> {
+public class PassedBurnTimeValueProcessor extends AbstractSpongeValueProcessor<TileEntityFurnace, Integer, BoundedValue<Integer>> {
 
     public PassedBurnTimeValueProcessor() {
         super(TileEntityFurnace.class, Keys.PASSED_BURN_TIME);

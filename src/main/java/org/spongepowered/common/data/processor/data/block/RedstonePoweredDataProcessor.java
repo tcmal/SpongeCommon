@@ -33,7 +33,7 @@ import org.spongepowered.common.data.processor.common.AbstractBlockOnlyDataProce
 import org.spongepowered.common.data.value.SpongeValueFactory;
 
 public class RedstonePoweredDataProcessor extends
-        AbstractBlockOnlyDataProcessor<Integer, BoundedValue.Mutable<Integer>, RedstonePoweredData, ImmutableRedstonePoweredData> {
+        AbstractBlockOnlyDataProcessor<Integer, BoundedValue<Integer>, RedstonePoweredData, ImmutableRedstonePoweredData> {
 
     public RedstonePoweredDataProcessor() {
         super(Keys.POWER);

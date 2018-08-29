@@ -43,7 +43,7 @@ import org.spongepowered.common.data.value.mutable.SpongeMutableValue;
 
 import java.util.Optional;
 
-public class BlockItemDataProcessor extends AbstractItemSingleDataProcessor<BlockState, Value.Mutable<BlockState>, BlockItemData, ImmutableBlockItemData> {
+public class BlockItemDataProcessor extends AbstractItemSingleDataProcessor<BlockState, Value<BlockState>, BlockItemData, ImmutableBlockItemData> {
 
     public BlockItemDataProcessor() {
         super(stack -> stack.getItem() instanceof ItemBlock, Keys.ITEM_BLOCKSTATE);

@@ -40,7 +40,7 @@ import org.spongepowered.common.data.value.immutable.ImmutableSpongeValue;
 import java.util.Optional;
 
 public class AngerableDataProcessor extends
-        AbstractEntitySingleDataProcessor<EntityPigZombie, Integer, BoundedValue.Mutable<Integer>, AngerableData, ImmutableAngerableData> {
+        AbstractEntitySingleDataProcessor<EntityPigZombie, Integer, BoundedValue<Integer>, AngerableData, ImmutableAngerableData> {
 
     public AngerableDataProcessor() {
         super(EntityPigZombie.class, Keys.ANGER);

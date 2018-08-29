@@ -35,7 +35,7 @@ import org.spongepowered.common.data.value.immutable.ImmutableSpongeBoundedValue
 import java.util.Comparator;
 import java.util.function.Function;
 
-public class SpongeBoundedValue<E> extends SpongeMutableValue<E> implements BoundedValue.Mutable<E> {
+public class SpongeBoundedValue<E> extends SpongeMutableValue<E, BoundedValue.Mutable<E>, BoundedValue.Immutable<E>> implements BoundedValue.Mutable<E> {
 
     private final Comparator<E> comparator;
     private final E minimum;
