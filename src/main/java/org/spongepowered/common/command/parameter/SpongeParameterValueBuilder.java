@@ -25,6 +25,9 @@
 package org.spongepowered.common.command.parameter;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import org.spongepowered.api.command.parameter.CommandContext;
+import org.spongepowered.api.command.parameter.Completions;
 import org.spongepowered.api.command.parameter.Parameter;
 import org.spongepowered.api.command.parameter.managed.ValueCompleter;
 import org.spongepowered.api.command.parameter.managed.ValueParser;
@@ -43,6 +46,8 @@ import javax.annotation.Nullable;
 
 public class SpongeParameterValueBuilder<T> implements Parameter.Value.Builder<T> {
 
+    private static final ValueCompleter EMPTY_COMPLETER = (completionBuilder, context) -> {};
+
     @Nullable private Class<T> valueClass;
     @Nullable private String key;
     private final List<ValueParser<? extends T>> parsers = new ArrayList<>();
@@ -52,7 +57,6 @@ public class SpongeParameterValueBuilder<T> implements Parameter.Value.Builder<T
     @Nullable private Function<Cause, T> defaultValueFunction;
     private boolean consumesAll;
     private boolean isOptional;
-
 
     @Override
     public Parameter.Value.Builder<T> setKey(String key) {
@@ -126,6 +130,29 @@ public class SpongeParameterValueBuilder<T> implements Parameter.Value.Builder<T
     public SpongeParameterValue<T> build() throws IllegalStateException {
         Preconditions.checkState(this.key != null, "The command key may not be null");
         Preconditions.checkState(!this.parsers.isEmpty(), "There must be parsers");
+
+        ValueCompleter completer;
+        if (this.completer != null) {
+            completer = this.completer;
+        } else {
+            ImmutableList.Builder<ValueCompleter> completersBuilder = ImmutableList.builder();
+            for (ValueParser<? extends T> parser : this.parsers) {
+                if (parser instanceof ValueCompleter) {
+                    completersBuilder.add((ValueCompleter) parser);
+                }
+            }
+
+            final ImmutableList<ValueCompleter> completers = completersBuilder.build();
+            if (completers.isEmpty()) {
+                completer = EMPTY_COMPLETER;
+            } else {
+                completer = (completionBuilder, context) -> {
+                    for (ValueCompleter valueCompleter : completers) {
+                        valueCompleter.complete(completionBuilder, context);
+                    }
+                };
+            }
+        }
         return null;
     }
 

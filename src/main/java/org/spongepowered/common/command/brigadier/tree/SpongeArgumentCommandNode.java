@@ -1,5 +1,6 @@
-package org.spongepowered.common.command.parameter;
+package org.spongepowered.common.command.brigadier.tree;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ImmutableStringReader;
@@ -14,12 +15,17 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.exception.ArgumentParseException;
+import org.spongepowered.api.command.managed.CommandExecutor;
 import org.spongepowered.api.command.parameter.ArgumentReader;
+import org.spongepowered.api.command.parameter.Completions;
 import org.spongepowered.api.command.parameter.Parameter;
+import org.spongepowered.api.command.parameter.managed.ValueCompleter;
 import org.spongepowered.api.command.parameter.managed.ValueParser;
 import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.common.command.SpongeCommandExecutorWrapper;
 import org.spongepowered.common.command.brigadier.SpongeStringReader;
 import org.spongepowered.common.command.brigadier.context.SpongeCommandContextBuilder;
+import org.spongepowered.common.command.parameter.SpongeValueCompleter;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -27,7 +33,7 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nullable;
 
-public class SpongeCommandNode<T> extends ArgumentCommandNode<Cause, T> {
+public class SpongeArgumentCommandNode<T> extends ArgumentCommandNode<Cause, T> {
     private static final String REQUIRED_ARGUMENT_OPEN = "<";
     private static final String REQUIRED_ARGUMENT_CLOSE = ">";
 
@@ -36,18 +42,20 @@ public class SpongeCommandNode<T> extends ArgumentCommandNode<Cause, T> {
 
     private final Parameter.Value<T> parameter;
     private final String name;
+    @Nullable private final CommandExecutor executor;
 
-    public SpongeCommandNode(Parameter.Value<T> parameter, @Nullable Command<Cause> executor) {
+    public SpongeArgumentCommandNode(Parameter.Value<T> parameter, @Nullable CommandExecutor executor) {
         super(parameter.getKey().key(),
-                new DummyArgumentType<T>(), // TODO: make this representative
-                executor,
+                new DummyArgumentType<>(), // TODO: make this representative
+                executor == null ? null : new SpongeCommandExecutorWrapper(executor),
                 parameter.getRequirement(),
                 null,
                 null,
                 false,
-                parameter.getCompleter().map(SpongeValueCompleter::new).orElse(null));
+                new SpongeValueCompleter(parameter.getCompleter()));
         this.parameter = parameter;
         this.name = this.parameter.getKey().key();
+        this.executor = executor;
     }
 
     protected boolean isValidInput(CommandDispatcher<Cause> dispatcher, Cause cause, String input) {
@@ -76,9 +84,14 @@ public class SpongeCommandNode<T> extends ArgumentCommandNode<Cause, T> {
         return this.name;
     }
 
+    // TODO: Cause aware?
     @Override
     public String getUsageText() {
-        return null; // TODO
+        if (this.parameter.isOptional()) {
+            return OPTIONAL_ARGUMENT_OPEN + this.parameter.getKey() + OPTIONAL_ARGUMENT_CLOSE;
+        } else {
+            return REQUIRED_ARGUMENT_OPEN + this.parameter.getKey() + REQUIRED_ARGUMENT_CLOSE;
+        }
     }
 
     @Override
@@ -102,7 +115,10 @@ public class SpongeCommandNode<T> extends ArgumentCommandNode<Cause, T> {
 
     @Override
     public CompletableFuture<Suggestions> listSuggestions(CommandContext<Cause> context, SuggestionsBuilder builder) throws CommandSyntaxException {
-        return null;
+        this.parameter.getCompleter().complete(
+                (Completions.Builder) builder,
+                (org.spongepowered.api.command.parameter.CommandContext) context);
+        return builder.buildFuture();
     }
 
     @Override
@@ -112,7 +128,7 @@ public class SpongeCommandNode<T> extends ArgumentCommandNode<Cause, T> {
 
     @Override
     public Collection<String> getExamples() {
-        return null;
+        return ImmutableList.of(); // TODO: Expose to plugins
     }
 
     public void parseArg(ArgumentReader.Mutable argReader, SpongeCommandContextBuilder contextBuilder) throws CommandSyntaxException {

@@ -9,7 +9,7 @@ import com.mojang.brigadier.tree.CommandNode;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.common.command.brigadier.SpongeStringReader;
 import org.spongepowered.common.command.brigadier.context.SpongeCommandContextBuilder;
-import org.spongepowered.common.command.parameter.SpongeCommandNode;
+import org.spongepowered.common.command.brigadier.tree.SpongeArgumentCommandNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,8 +60,8 @@ public class SpongeCommandDispatcher extends CommandDispatcher<Cause> {
             final SpongeStringReader reader = new SpongeStringReader(originalReader);
             try {
                 try {
-                    if (child instanceof SpongeCommandNode) {
-                        ((SpongeCommandNode) child).parseArg(reader, context);
+                    if (child instanceof SpongeArgumentCommandNode) {
+                        ((SpongeArgumentCommandNode) child).parseArg(reader, context);
                     } else {
                         child.parse(reader, context);
                     }

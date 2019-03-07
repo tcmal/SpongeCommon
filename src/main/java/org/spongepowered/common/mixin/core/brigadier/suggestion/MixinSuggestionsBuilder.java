@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mixin(value = SuggestionsBuilder.class, remap = false)
 public abstract class MixinSuggestionsBuilder implements Completions.Builder {
@@ -43,6 +44,11 @@ public abstract class MixinSuggestionsBuilder implements Completions.Builder {
     public Completions.Builder suggestion(int completion, String tooltip) {
         suggest(completion, new LiteralMessage(tooltip)); // TODO: can this be translatable text? If so, add the overloads
         return this;
+    }
+
+    @Override
+    public List<String> buildList() {
+        return this.result.stream().map(Suggestion::getText).collect(Collectors.toList());
     }
 
     @Override
