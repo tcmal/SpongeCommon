@@ -3,7 +3,7 @@ package org.spongepowered.common.command.brigadier.tree;
 import com.mojang.brigadier.RedirectModifier;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import org.spongepowered.api.command.managed.CommandExecutor;
+import org.spongepowered.api.command.CommandExecutor;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.common.command.SpongeCommandExecutorWrapper;
 

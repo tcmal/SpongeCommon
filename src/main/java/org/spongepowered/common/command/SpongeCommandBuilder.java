@@ -25,8 +25,7 @@
 package org.spongepowered.common.command;
 
 import org.spongepowered.api.command.Command;
-import org.spongepowered.api.command.managed.ChildExceptionBehavior;
-import org.spongepowered.api.command.managed.CommandExecutor;
+import org.spongepowered.api.command.CommandExecutor;
 import org.spongepowered.api.command.parameter.Parameter;
 import org.spongepowered.api.command.parameter.flag.Flags;
 import org.spongepowered.api.event.cause.Cause;
@@ -47,11 +46,6 @@ public class SpongeCommandBuilder implements Command.Builder {
 
     @Override
     public Command.Builder parameter(Parameter parameter) {
-        return null;
-    }
-
-    @Override
-    public Command.Builder setChildExceptionBehavior(ChildExceptionBehavior exceptionBehavior) {
         return null;
     }
 
@@ -82,11 +76,6 @@ public class SpongeCommandBuilder implements Command.Builder {
 
     @Override
     public Command.Builder setExecutionRequirements(@Nullable Predicate<Cause> executionRequirements) {
-        return null;
-    }
-
-    @Override
-    public Command.Builder setCheckRequirementForChildren(boolean required) {
         return null;
     }
 

@@ -5,7 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.exception.CommandException;
-import org.spongepowered.api.command.managed.CommandExecutor;
+import org.spongepowered.api.command.CommandExecutor;
 import org.spongepowered.api.event.cause.Cause;
 
 public class SpongeCommandExecutorWrapper implements Command<Cause>, CommandExecutor {
