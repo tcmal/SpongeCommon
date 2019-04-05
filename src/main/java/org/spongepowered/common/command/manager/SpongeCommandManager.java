@@ -1,3 +1,27 @@
+/*
+ * This file is part of Sponge, licensed under the MIT License (MIT).
+ *
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
+ * Copyright (c) contributors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package org.spongepowered.common.command.manager;
 
 import com.google.common.collect.HashMultimap;
@@ -5,7 +29,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.ICommandSource;
@@ -24,6 +52,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.common.command.CommandHelper;
+import org.spongepowered.common.command.brigadier.SpongeStringReader;
 import org.spongepowered.common.mixin.core.brigadier.builder.MixinArgumentBuilder;
 
 import java.util.Collection;
@@ -35,14 +64,14 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Singleton;
 
 @Singleton
 public class SpongeCommandManager extends CommandDispatcher<ICommandSource> implements CommandManager {
 
     // Our Sponge commands will end up on a different node so that we can take advantage of the Cause instead.
-    private final CommandDispatcher<Cause> spongeCommandDispatcher = new CommandDispatcher<>();
-
     private final Map<String, SpongeCommandMapping> commandMappings = new HashMap<>();
     private final Multimap<PluginContainer, SpongeCommandMapping> pluginToCommandMap = HashMultimap.create();
 
@@ -75,10 +104,20 @@ public class SpongeCommandManager extends CommandDispatcher<ICommandSource> impl
 
         // TODO: can we use IPhaseContexts to our advantage and store the subject?
         //  May just do what mods expect too.
-        Predicate<ICommandSource> requirement = toBuild.getRequirement().and(source ->
-                CommandHelper.getSubject(
-                        Sponge.getCauseStackManager().getCurrentCause()).orElseGet(() -> Sponge.getServer().getConsole()).hasPermission(permission));
+        Predicate<ICommandSource> requirement = toBuild.getRequirement().and(source -> {
+            if (source instanceof Subject) {
+                return ((Subject) source).hasPermission(permission);
+            } else {
+                return CommandHelper.getSubject(
+                        Sponge.getCauseStackManager().getCurrentCause())
+                            .orElseGet(() -> Sponge.getServer().getConsole()).hasPermission(permission);
+            }
+        });
         toBuild.requires(requirement);
+        // TODO: Check
+        Predicate<Cause> causeRequirement = cause -> CommandHelper.getSubject(cause)
+                .orElseGet(() -> Sponge.getServer().getConsole())
+                .hasPermission(permission);
 
         boolean registerRootCommand = this.commandMappings.containsKey(requestedAlias);
         Set<String> aliases = new HashSet<>();
@@ -88,7 +127,8 @@ public class SpongeCommandManager extends CommandDispatcher<ICommandSource> impl
         }
 
         // Create the mapping
-        SpongeCommandMapping newMapping = new SpongeCommandMapping(aliasToRegister, aliases, container, null, false);
+        SpongeCommandMapping newMapping = new SpongeCommandMapping(
+                aliasToRegister, aliases, container, null, false, causeRequirement);
         aliases.forEach(x -> this.commandMappings.put(x, newMapping));
         this.pluginToCommandMap.put(container, newMapping);
 
@@ -104,7 +144,10 @@ public class SpongeCommandManager extends CommandDispatcher<ICommandSource> impl
 
     // Sponge command
     @Override
-    public Optional<CommandMapping> register(PluginContainer container, Command command, String primaryAlias, String... secondaryAliases) {
+    public Optional<CommandMapping> register(PluginContainer container,
+                                             Command command,
+                                             String primaryAlias,
+                                             String... secondaryAliases) {
         return Optional.empty(); // TODO
     }
 
@@ -187,35 +230,61 @@ public class SpongeCommandManager extends CommandDispatcher<ICommandSource> impl
         return command;
     }
 
-    // TODO: Temporary logic,?
-    private ICommandSource getSource(Cause cause) {
-        return CommandHelper.getSubject(cause)
-                .filter(x -> x instanceof ICommandSource)
-                .map(x -> (ICommandSource) x)
-                .orElseGet(() -> (ICommandSource) Sponge.getServer().getConsole());
-    }
-
     private CommandResult process(Cause cause, String arguments) throws CommandException {
         try (CauseStackManager.StackFrame frame = Sponge.getCauseStackManager().pushCauseFrame()) {
-            // Get the first part
-            String command = arguments.split(" ", 2)[0].toLowerCase();
-
-            // Is the command registered?
-            CommandMapping mapping = this.commandMappings.get(command);
-            if (mapping == null) {
-                // nope.
-                throw new CommandException(Text.of("The command " + command + " does not exist."));
+            int result;
+            try {
+                SpongeStringReader reader = new SpongeStringReader(arguments);
+                ICommandSource source = getCommandSourceFor(reader.readString(), null, cause);
+                result = this.execute(arguments, source);
+            } catch (CommandSyntaxException e) {
+                throw new CommandException(Text.of(e.getMessage()), e);
             }
 
-            // TODO
-            return null;
+            return CommandResult.builder().setResult(result).build();
         }
+    }
+
+    @Override
+    public int execute(StringReader input, ICommandSource source) throws CommandSyntaxException {
+        try (CauseStackManager.StackFrame frame = Sponge.getCauseStackManager().pushCauseFrame()) {
+            StringReader copy = new SpongeStringReader(input.getString());
+            ICommandSource sourceToUse = getCommandSourceFor(input.getRead(), source, frame.getCurrentCause());
+            return super.execute(copy, sourceToUse);
+        }
+    }
+
+    @Override
+    public ParseResults<ICommandSource> parse(StringReader input, ICommandSource source) {
+        try (CauseStackManager.StackFrame frame = Sponge.getCauseStackManager().pushCauseFrame()) {
+            StringReader copy = new SpongeStringReader(input);
+            ICommandSource sourceToUse = getCommandSourceFor(input.getRead(), source, frame.getCurrentCause());
+            return super.parse(copy, sourceToUse);
+        }
+    }
+
+    @Override
+    public String[] getAllUsage(CommandNode<ICommandSource> node, ICommandSource source, boolean restricted) {
+        return super.getAllUsage(node, source, restricted);
     }
 
     private List<String> suggest(Cause cause, String arguments) {
         try (CauseStackManager.StackFrame frame = Sponge.getCauseStackManager().pushCauseFrame()) {
             return ImmutableList.of(); // TODO: obviously not this
         }
+    }
+
+    private ICommandSource getCommandSourceFor(String command, @Nullable ICommandSource requestedSource, Cause cause) {
+        if (requestedSource instanceof CauseCommandSource) {
+            return requestedSource;
+        }
+        // Is the command registered?
+        SpongeCommandMapping mapping = this.commandMappings.get(command);
+        if (mapping != null && mapping.isRegisteredAsSpongeCommand()) {
+            return new CauseCommandSource(cause);
+        }
+
+        return CommandHelper.getCommandSource(cause);
     }
 
 }

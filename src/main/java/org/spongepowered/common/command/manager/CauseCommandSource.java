@@ -22,19 +22,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.common.mixin.core.brigadier.context;
+package org.spongepowered.common.command.manager;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.context.ParsedArgument;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
+import net.minecraft.command.ICommandSource;
+import net.minecraft.util.text.ITextComponent;
+import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.common.command.CommandHelper;
+import org.spongepowered.common.text.SpongeTexts;
 
-import java.util.Map;
+public class CauseCommandSource implements ICommandSource {
 
-@Mixin(value = CommandContext.class, remap = false)
-public interface MixinCommandContext<S> {
+    private final Cause cause;
+    private final ICommandSource wrappedSource;
 
-    @Accessor
-    Map<String, ParsedArgument<S, ?>> getArguments();
+    CauseCommandSource(Cause cause) {
+        this.cause = cause;
+        this.wrappedSource = CommandHelper.getCommandSource(cause);
+    }
 
+    public Cause getCause() {
+        return this.cause;
+    }
+
+    @Override
+    public void sendMessage(ITextComponent component) {
+        CommandHelper.getTargetMessageChannel(this.cause).send(SpongeTexts.toText(component));
+    }
+
+    @Override
+    public boolean shouldReceiveFeedback() {
+        return this.wrappedSource.shouldReceiveFeedback();
+    }
+
+    @Override
+    public boolean shouldReceiveErrors() {
+        return this.wrappedSource.shouldReceiveFeedback();
+    }
+
+    @Override
+    public boolean allowLogging() {
+        return this.wrappedSource.allowLogging();
+    }
 }

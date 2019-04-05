@@ -24,6 +24,8 @@
  */
 package org.spongepowered.common.command;
 
+import net.minecraft.command.ICommandSource;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.command.parameter.CommandContext;
 import org.spongepowered.api.event.cause.Cause;
@@ -40,6 +42,16 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 public class CommandHelper {
+
+    // TODO: try to fix this too...
+    public static ICommandSource getCommandSource(Cause cause) {
+        return CommandHelper.getSubject(cause)
+                .filter(x -> x instanceof ICommandSource)
+                .map(x -> (ICommandSource) x)
+                .orElseGet(() -> cause
+                        .first(ICommandSource.class)
+                        .orElseGet(() -> (ICommandSource) Sponge.getServer().getConsole()));
+    }
 
     public static MessageChannel getTargetMessageChannel(Cause cause) {
         MessageChannel channel = cause.getContext().get(EventContextKeys.MESSAGE_CHANNEL)

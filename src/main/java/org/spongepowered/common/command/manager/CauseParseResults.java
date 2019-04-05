@@ -22,19 +22,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.common.mixin.core.brigadier.context;
+package org.spongepowered.common.command.manager;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.context.ParsedArgument;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
+import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.context.CommandContextBuilder;
+import net.minecraft.command.ICommandSource;
+import org.spongepowered.api.event.cause.Cause;
 
-import java.util.Map;
+public class CauseParseResults extends ParseResults<ICommandSource> {
 
-@Mixin(value = CommandContext.class, remap = false)
-public interface MixinCommandContext<S> {
+    private final ParseResults<Cause> wrapped;
 
-    @Accessor
-    Map<String, ParsedArgument<S, ?>> getArguments();
+    public CauseParseResults(
+            CommandContextBuilder<ICommandSource> context,
+            ParseResults<Cause> wrappedCause) {
+        super(context);
+        this.wrapped = wrappedCause;
+    }
 
+    public ParseResults<Cause> getWrapped() {
+        return wrapped;
+    }
 }
