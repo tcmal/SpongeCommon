@@ -81,7 +81,7 @@ public class SpongeStringReader extends StringReader implements ArgumentReader.M
     }
 
     @Override
-    public String parseUnquotedString() throws ArgumentParseException {
+    public String parseUnquotedString() {
         final int start = getCursor();
         while (canRead() && !Character.isWhitespace(peek())) {
             skip();
@@ -123,10 +123,6 @@ public class SpongeStringReader extends StringReader implements ArgumentReader.M
         } else {
             throw new IllegalArgumentException("The provided ArgumentReader does not match this ArgumentReader");
         }
-    }
-
-    public void resetCursor() {
-        setCursor(0);
     }
 
 }

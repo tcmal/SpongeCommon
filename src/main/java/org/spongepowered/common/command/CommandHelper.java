@@ -99,7 +99,7 @@ public class CommandHelper {
 
     }
 
-    public static SpongeCommandContext fromBrig(com.mojang.brigadier.context.CommandContext<Cause> context) {
+    public static SpongeCommandContext fromBrig(com.mojang.brigadier.context.CommandContext<ICommandSource> context) {
         if (context instanceof SpongeCommandContext) {
             return (SpongeCommandContext) context;
         }

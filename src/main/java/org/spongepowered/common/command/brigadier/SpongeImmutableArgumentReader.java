@@ -35,7 +35,7 @@ public class SpongeImmutableArgumentReader implements ArgumentReader.Immutable, 
     private final int length;
     private final int remaining;
 
-    public SpongeImmutableArgumentReader(String input, int cursor) {
+    SpongeImmutableArgumentReader(String input, int cursor) {
         this.input = input;
         this.cursor = cursor;
         this.length = this.input.length();

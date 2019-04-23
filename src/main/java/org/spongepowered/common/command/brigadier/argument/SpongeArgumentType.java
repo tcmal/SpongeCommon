@@ -38,7 +38,7 @@ import org.spongepowered.api.text.Text;
 
 import java.util.Optional;
 
-public class SpongeArgumentType<T> implements ValueParameter<T> {
+public class SpongeArgumentType<T> implements ValueParameter<T>, ArgumentType<T> {
 
     private final ArgumentType<T> wrappedType;
 
@@ -62,4 +62,8 @@ public class SpongeArgumentType<T> implements ValueParameter<T> {
         }
     }
 
+    @Override
+    public final T parse(StringReader reader) throws CommandSyntaxException {
+        throw new IllegalStateException("The argument " + getClass().getSimpleName() + " can only be used with Sponge argument types.");
+    }
 }

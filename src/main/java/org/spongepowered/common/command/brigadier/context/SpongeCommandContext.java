@@ -24,7 +24,9 @@
  */
 package org.spongepowered.common.command.brigadier.context;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.RedirectModifier;
@@ -32,6 +34,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.ParsedArgument;
 import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.tree.CommandNode;
+import net.minecraft.command.ICommandSource;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.command.parameter.Parameter;
 import org.spongepowered.api.event.cause.Cause;
@@ -39,19 +42,24 @@ import org.spongepowered.api.service.permission.Subject;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.common.command.CommandHelper;
+import org.spongepowered.common.command.manager.CauseCommandSource;
 import org.spongepowered.common.command.parameter.SpongeParameterKey;
 import org.spongepowered.common.mixin.core.brigadier.context.MixinCommandContext;
+import org.spongepowered.common.util.SpongeCommonTranslationHelper;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-public class SpongeCommandContext extends CommandContext<Cause> implements org.spongepowered.api.command.parameter.CommandContext {
+public class SpongeCommandContext extends CommandContext<ICommandSource> implements org.spongepowered.api.command.parameter.CommandContext {
 
-    private final Multimap<SpongeParameterKey<?>, Object> argumentMultimap;
+    private final Map<Parameter.Key<?>, Collection<?>> argumentMap;
+    private final CauseCommandSource causeSource;
+    private final Cause cause;
 
     @Nullable private MessageChannel channel;
 
@@ -60,43 +68,53 @@ public class SpongeCommandContext extends CommandContext<Cause> implements org.s
     @Nullable private Optional<Location> location;
     @Nullable private Optional<BlockSnapshot> blockSnapshot;
 
-    public SpongeCommandContext(CommandContext<Cause> causeCommandContext) {
-        super(causeCommandContext.getSource(),
+    public SpongeCommandContext(CommandContext<ICommandSource> causeCommandContext) {
+        this(causeCommandContext.getSource(),
                 causeCommandContext.getInput(),
                 ((MixinCommandContext) causeCommandContext).getArguments(),
+                new HashMap<>(),
                 causeCommandContext.getCommand(),
                 causeCommandContext.getNodes(),
                 causeCommandContext.getRange(),
                 causeCommandContext.getChild(),
                 causeCommandContext.getRedirectModifier(),
                 causeCommandContext.isForked());
-        this.argumentMultimap = HashMultimap.create();
     }
 
     public SpongeCommandContext(
-            Cause source,
+            ICommandSource source,
             String input,
-            Map<String, ParsedArgument<Cause, ?>> brigArguments,
-            Multimap<SpongeParameterKey<?>, Object> arguments,
-            Command<Cause> command,
-            Map<CommandNode<Cause>, StringRange> nodes,
+            Map<String, ParsedArgument<ICommandSource, ?>> brigArguments,
+            Map<Parameter.Key<?>, Collection<?>> arguments,
+            Command<ICommandSource> command,
+            Map<CommandNode<ICommandSource>, StringRange> nodes,
             StringRange range,
-            @Nullable CommandContext<Cause> child,
-            @Nullable RedirectModifier<Cause> modifier,
+            @Nullable CommandContext<ICommandSource> child,
+            @Nullable RedirectModifier<ICommandSource> modifier,
             boolean forks) {
-        super(source, input, brigArguments, command, nodes, range, child, modifier, forks);
-        this.argumentMultimap = arguments;
+        super(checkCauseCommandSource(source).getWrappedSource(),
+                input,
+                brigArguments,
+                command,
+                nodes,
+                range,
+                child,
+                modifier,
+                forks);
+        this.argumentMap = arguments;
+        this.causeSource = (CauseCommandSource) source;
+        this.cause = this.causeSource.getCause();
     }
 
     @Override
     public Cause getCause() {
-        return getSource();
+        return this.causeSource.getCause();
     }
 
     @Override
     public MessageChannel getTargetMessageChannel() {
         if (this.channel == null) {
-            this.channel = CommandHelper.getTargetMessageChannel(getSource());
+            this.channel = CommandHelper.getTargetMessageChannel(getCause());
         }
 
         return this.channel;
@@ -105,7 +123,7 @@ public class SpongeCommandContext extends CommandContext<Cause> implements org.s
     @Override
     public Optional<Subject> getSubject() {
         if (this.subject == null) {
-            this.subject = CommandHelper.getSubject(getSource());
+            this.subject = CommandHelper.getSubject(this.cause);
         }
 
         return this.subject;
@@ -115,9 +133,9 @@ public class SpongeCommandContext extends CommandContext<Cause> implements org.s
     public Optional<Location> getLocation() {
         if (this.location == null) {
             if (this.blockSnapshot != null && this.blockSnapshot.isPresent()) {
-                this.location = CommandHelper.getLocation(getSource(), this.blockSnapshot.get());
+                this.location = CommandHelper.getLocation(this.cause, this.blockSnapshot.get());
             } else {
-                this.location = CommandHelper.getLocation(getSource());
+                this.location = CommandHelper.getLocation(this.cause);
             }
         }
 
@@ -127,27 +145,61 @@ public class SpongeCommandContext extends CommandContext<Cause> implements org.s
     @Override
     public Optional<BlockSnapshot> getTargetBlock() {
         if (this.blockSnapshot == null) {
-            this.blockSnapshot = CommandHelper.getTargetBlock(getSource());
+            this.blockSnapshot = CommandHelper.getTargetBlock(this.cause);
         }
 
         return this.blockSnapshot;
     }
 
-    @Override public boolean hasAny(Parameter.Key<?> key) {
+    @Override
+    public boolean hasAny(Parameter.Key<?> key) {
+        Collection<?> value = this.argumentMap.get(key);
+        if (value != null) {
+            return !value.isEmpty();
+        }
         return false;
     }
 
-    @Override public <T> Optional<? extends T> getOne(Parameter.Key<T> key) {
-        return Optional.empty();
+    @Override
+    public <T> Optional<? extends T> getOne(Parameter.Key<T> key) {
+        return Optional.ofNullable(getValue(key));
     }
 
-    @Override public <T> T requireOne(Parameter.Key<T> key) throws NoSuchElementException {
-        return null;
+    @Override
+    public <T> T requireOne(Parameter.Key<T> key) throws NoSuchElementException {
+        T value = getValue(key);
+        if (value == null) {
+            throw new NoSuchElementException("No value exists for key " + key.key());
+        }
+
+        return value;
     }
 
-    @Override public <T> Collection<? extends T> getAll(Parameter.Key<T> key) {
-        return null;
+    @Nullable
+    private <T> T getValue(Parameter.Key<T> key) {
+        Collection<?> values = this.argumentMap.get(key);
+        if (values == null || values.isEmpty()) {
+            return null;
+        } else if (values.size() != 1) {
+            // Then don't return one
+            throw new IllegalArgumentException(values.size() + " values exist for key " + key.key() + " when requireOne was called.");
+        }
+
+        return (T) values.iterator().next();
     }
 
+    @Override
+    public <T> Collection<? extends T> getAll(Parameter.Key<T> key) {
+        Collection<? extends T> values = (Collection<? extends T>) this.argumentMap.get(key);
+        if (values == null) {
+            return ImmutableList.of();
+        } else {
+            return ImmutableList.copyOf(values);
+        }
+    }
 
+    private static CauseCommandSource checkCauseCommandSource(ICommandSource source) {
+        Preconditions.checkArgument(source instanceof CauseCommandSource, "Context requires warpped context");
+        return (CauseCommandSource) source;
+    }
 }

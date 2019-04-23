@@ -30,6 +30,7 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
+import net.minecraft.command.ICommandSource;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.common.command.brigadier.SpongeStringReader;
 import org.spongepowered.common.command.brigadier.context.SpongeCommandContextBuilder;
@@ -41,19 +42,19 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SpongeCommandDispatcher extends CommandDispatcher<Cause> {
+public class SpongeCommandDispatcher extends CommandDispatcher<ICommandSource> {
 
     @Override
-    public ParseResults<Cause> parse(String command, Cause source) {
+    public ParseResults<ICommandSource> parse(String command, ICommandSource source) {
         return parse(new SpongeStringReader(command), source);
     }
 
     @Override
-    public ParseResults<Cause> parse(StringReader command, Cause source) {
+    public ParseResults<ICommandSource> parse(StringReader command, ICommandSource source) {
         return parse(new SpongeStringReader(command), source);
     }
 
-    public ParseResults<Cause> parse(SpongeStringReader command, Cause source) {
+    public ParseResults<ICommandSource> parse(SpongeStringReader command, ICommandSource source) {
         final SpongeCommandContextBuilder context = new SpongeCommandContextBuilder(this, source, 0);
         return parse(getRoot(), command, context);
     }
@@ -67,16 +68,16 @@ public class SpongeCommandDispatcher extends CommandDispatcher<Cause> {
      *
      * TODO: see if we can get away with not doing this like this.
      */
-    private ParseResults<Cause> parse(
-            final CommandNode<Cause> node,
+    private ParseResults<ICommandSource> parse(
+            final CommandNode<ICommandSource> node,
             final SpongeStringReader originalReader,
             final SpongeCommandContextBuilder contextSoFar) {
-        final Cause source = contextSoFar.getSource();
-        Map<CommandNode<Cause>, CommandSyntaxException> errors = null;
+        final ICommandSource source = contextSoFar.getSource();
+        Map<CommandNode<ICommandSource>, CommandSyntaxException> errors = null;
         List<SpongePartialParse> potentials = null;
         final int cursor = originalReader.getCursor();
 
-        for (final CommandNode<Cause> child : node.getRelevantNodes(originalReader)) {
+        for (final CommandNode<ICommandSource> child : node.getRelevantNodes(originalReader)) {
             if (!child.canUse(source)) {
                 continue;
             }
@@ -112,11 +113,11 @@ public class SpongeCommandDispatcher extends CommandDispatcher<Cause> {
                 if (child.getRedirect() != null) {
                     final SpongeCommandContextBuilder childContext = new SpongeCommandContextBuilder(this, source, reader.getCursor());
                     childContext.withNode(child.getRedirect(), StringRange.between(cursor, reader.getCursor() - 1));
-                    final ParseResults<Cause> parse = parse(child.getRedirect(), reader, childContext);
+                    final ParseResults<ICommandSource> parse = parse(child.getRedirect(), reader, childContext);
                     context.withChild(parse.getContext());
                     return new ParseResults<>(context, originalReader.getCursor(), parse.getReader(), parse.getExceptions());
                 } else {
-                    final ParseResults<Cause> parse = parse(child, reader, context);
+                    final ParseResults<ICommandSource> parse = parse(child, reader, context);
                     if (potentials == null) {
                         potentials = new ArrayList<>(1);
                     }
@@ -156,9 +157,9 @@ public class SpongeCommandDispatcher extends CommandDispatcher<Cause> {
 
     private static class SpongePartialParse {
         public final SpongeCommandContextBuilder context;
-        public final ParseResults<Cause> parse;
+        public final ParseResults<ICommandSource> parse;
 
-        private SpongePartialParse(final SpongeCommandContextBuilder context, final ParseResults<Cause> parse) {
+        private SpongePartialParse(final SpongeCommandContextBuilder context, final ParseResults<ICommandSource> parse) {
             this.context = context;
             this.parse = parse;
         }

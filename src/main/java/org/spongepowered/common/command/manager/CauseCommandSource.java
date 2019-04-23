@@ -35,13 +35,17 @@ public class CauseCommandSource implements ICommandSource {
     private final Cause cause;
     private final ICommandSource wrappedSource;
 
-    CauseCommandSource(Cause cause) {
+    public CauseCommandSource(Cause cause) {
         this.cause = cause;
         this.wrappedSource = CommandHelper.getCommandSource(cause);
     }
 
     public Cause getCause() {
         return this.cause;
+    }
+
+    public ICommandSource getWrappedSource() {
+        return this.wrappedSource;
     }
 
     @Override

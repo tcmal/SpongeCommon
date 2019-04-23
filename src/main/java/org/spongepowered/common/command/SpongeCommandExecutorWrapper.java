@@ -27,12 +27,13 @@ package org.spongepowered.common.command;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.command.ICommandSource;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.exception.CommandException;
 import org.spongepowered.api.command.CommandExecutor;
 import org.spongepowered.api.event.cause.Cause;
 
-public class SpongeCommandExecutorWrapper implements Command<Cause>, CommandExecutor {
+public class SpongeCommandExecutorWrapper implements Command<ICommandSource>, CommandExecutor {
 
     private final CommandExecutor executor;
 
@@ -41,7 +42,7 @@ public class SpongeCommandExecutorWrapper implements Command<Cause>, CommandExec
     }
 
     @Override
-    public int run(CommandContext<Cause> context) throws CommandSyntaxException {
+    public int run(CommandContext<ICommandSource> context) throws CommandSyntaxException {
         try {
             return execute(CommandHelper.fromBrig(context)).getResult();
         } catch (CommandException e) {

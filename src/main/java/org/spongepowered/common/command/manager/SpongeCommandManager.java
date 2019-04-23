@@ -236,7 +236,7 @@ public class SpongeCommandManager extends CommandDispatcher<ICommandSource> impl
             try {
                 SpongeStringReader reader = new SpongeStringReader(arguments);
                 ICommandSource source = getCommandSourceFor(reader.readString(), null, cause);
-                result = this.execute(arguments, source);
+                result = execute(arguments, source);
             } catch (CommandSyntaxException e) {
                 throw new CommandException(Text.of(e.getMessage()), e);
             }
@@ -246,18 +246,11 @@ public class SpongeCommandManager extends CommandDispatcher<ICommandSource> impl
     }
 
     @Override
-    public int execute(StringReader input, ICommandSource source) throws CommandSyntaxException {
-        try (CauseStackManager.StackFrame frame = Sponge.getCauseStackManager().pushCauseFrame()) {
-            StringReader copy = new SpongeStringReader(input.getString());
-            ICommandSource sourceToUse = getCommandSourceFor(input.getRead(), source, frame.getCurrentCause());
-            return super.execute(copy, sourceToUse);
-        }
-    }
-
-    @Override
     public ParseResults<ICommandSource> parse(StringReader input, ICommandSource source) {
         try (CauseStackManager.StackFrame frame = Sponge.getCauseStackManager().pushCauseFrame()) {
             StringReader copy = new SpongeStringReader(input);
+
+            // This will select the correct ICommandSource based on the command that is about to be parsed.
             ICommandSource sourceToUse = getCommandSourceFor(input.getRead(), source, frame.getCurrentCause());
             return super.parse(copy, sourceToUse);
         }
@@ -275,16 +268,14 @@ public class SpongeCommandManager extends CommandDispatcher<ICommandSource> impl
     }
 
     private ICommandSource getCommandSourceFor(String command, @Nullable ICommandSource requestedSource, Cause cause) {
-        if (requestedSource instanceof CauseCommandSource) {
-            return requestedSource;
-        }
         // Is the command registered?
         SpongeCommandMapping mapping = this.commandMappings.get(command);
         if (mapping != null && mapping.isRegisteredAsSpongeCommand()) {
-            return new CauseCommandSource(cause);
+            return requestedSource instanceof CauseCommandSource ? requestedSource : new CauseCommandSource(cause);
         }
 
-        return CommandHelper.getCommandSource(cause);
+        return requestedSource instanceof CauseCommandSource ? ((CauseCommandSource) requestedSource).getWrappedSource() :
+                CommandHelper.getCommandSource(cause);
     }
 
 }

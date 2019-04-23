@@ -36,6 +36,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
+import net.minecraft.command.ICommandSource;
+import org.lwjgl.system.CallbackI;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.exception.ArgumentParseException;
 import org.spongepowered.api.command.CommandExecutor;
@@ -47,15 +49,17 @@ import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.common.command.SpongeCommandExecutorWrapper;
 import org.spongepowered.common.command.brigadier.SpongeStringReader;
 import org.spongepowered.common.command.brigadier.context.SpongeCommandContextBuilder;
+import org.spongepowered.common.command.manager.CauseCommandSource;
 import org.spongepowered.common.command.parameter.SpongeValueCompleter;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
-public class SpongeArgumentCommandNode<T> extends ArgumentCommandNode<Cause, T> {
+public class SpongeArgumentCommandNode<T> extends ArgumentCommandNode<ICommandSource, T> {
     private static final String REQUIRED_ARGUMENT_OPEN = "<";
     private static final String REQUIRED_ARGUMENT_CLOSE = ">";
 
@@ -64,27 +68,26 @@ public class SpongeArgumentCommandNode<T> extends ArgumentCommandNode<Cause, T> 
 
     private final Parameter.Value<T> parameter;
     private final String name;
-    @Nullable private final CommandExecutor executor;
 
     public SpongeArgumentCommandNode(Parameter.Value<T> parameter, @Nullable CommandExecutor executor) {
         super(parameter.getKey().key(),
-                new DummyArgumentType<>(), // TODO: make this representative
+                new DummyArgumentType<>(), // TODO: make this representative so we can register it (check if a type already exists,
+                                           // in the MC registry, if not, create it)
                 executor == null ? null : new SpongeCommandExecutorWrapper(executor),
-                parameter.getRequirement(),
+                wrapCausePredicate(parameter.getRequirement()),
                 null,
                 null,
                 false,
                 new SpongeValueCompleter(parameter.getCompleter()));
         this.parameter = parameter;
         this.name = this.parameter.getKey().key();
-        this.executor = executor;
     }
 
-    protected boolean isValidInput(CommandDispatcher<Cause> dispatcher, Cause cause, String input) {
+    protected boolean isValidInput(CommandDispatcher<ICommandSource> dispatcher, ICommandSource commandSource, String input) {
         for (ValueParser<? extends T> param : this.parameter.getParsers()) {
             try {
                 final SpongeStringReader reader = new SpongeStringReader(input);
-                param.getValue(reader, new SpongeCommandContextBuilder(dispatcher, cause, 0));
+                param.getValue(reader, new SpongeCommandContextBuilder(dispatcher, commandSource, 0));
                 if (!reader.canRead() || reader.peek() == ' ') {
                     return true;
                 }
@@ -98,7 +101,9 @@ public class SpongeArgumentCommandNode<T> extends ArgumentCommandNode<Cause, T> 
 
     @Override
     public boolean isValidInput(String input) {
-        return isValidInput(new CommandDispatcher<>(), Sponge.getCauseStackManager().getCurrentCause(), input);
+        return isValidInput(new CommandDispatcher<>(),
+                new CauseCommandSource(Sponge.getCauseStackManager().getCurrentCause()),
+                input);
     }
 
     @Override
@@ -117,7 +122,7 @@ public class SpongeArgumentCommandNode<T> extends ArgumentCommandNode<Cause, T> 
     }
 
     @Override
-    public void parse(StringReader reader, CommandContextBuilder<Cause> contextBuilder) throws CommandSyntaxException {
+    public void parse(StringReader reader, CommandContextBuilder<ICommandSource> contextBuilder) throws CommandSyntaxException {
         ArgumentReader.Mutable mutableReader;
         SpongeCommandContextBuilder builder;
         if (reader instanceof ArgumentReader.Mutable) {
@@ -136,7 +141,7 @@ public class SpongeArgumentCommandNode<T> extends ArgumentCommandNode<Cause, T> 
     }
 
     @Override
-    public CompletableFuture<Suggestions> listSuggestions(CommandContext<Cause> context, SuggestionsBuilder builder) throws CommandSyntaxException {
+    public CompletableFuture<Suggestions> listSuggestions(CommandContext<ICommandSource> context, SuggestionsBuilder builder) throws CommandSyntaxException {
         this.parameter.getCompleter().complete(
                 (Completions.Builder) builder,
                 (org.spongepowered.api.command.parameter.CommandContext) context);
@@ -159,7 +164,8 @@ public class SpongeArgumentCommandNode<T> extends ArgumentCommandNode<Cause, T> 
         Iterator<ValueParser<? extends T>> parserIterator = this.parameter.getParsers().iterator();
         while (result == null && parserIterator.hasNext()) {
             try {
-                result = parserIterator.next().getValue(argReader, (org.spongepowered.api.command.parameter.CommandContext.Builder) contextBuilder)
+                result = parserIterator.next()
+                        .getValue(argReader, (org.spongepowered.api.command.parameter.CommandContext.Builder) contextBuilder)
                         .orElse(null);
             } catch (ArgumentParseException e) {
                 // TODO: Create exception
@@ -183,9 +189,20 @@ public class SpongeArgumentCommandNode<T> extends ArgumentCommandNode<Cause, T> 
         contextBuilder.withNode(this, new StringRange(start, argReader.getCursor()));
     }
 
+    private static Predicate<ICommandSource> wrapCausePredicate(Predicate<Cause> causePredicate) {
+        return commandSource -> {
+            if (commandSource instanceof CauseCommandSource) {
+                return causePredicate.test(((CauseCommandSource) commandSource).getCause());
+            }
+
+            return false;
+        };
+    }
+
     private static class DummyArgumentType<T> implements ArgumentType<T> {
 
-        @Override public <S> T parse(StringReader reader) throws CommandSyntaxException {
+        @Override
+        public T parse(StringReader reader) throws CommandSyntaxException {
             throw new AssertionError("This should not be called.");
         }
     }

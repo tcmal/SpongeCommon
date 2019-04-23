@@ -24,35 +24,47 @@
  */
 package org.spongepowered.common.command.brigadier.context;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedHashMultimap;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContextBuilder;
 import com.mojang.brigadier.context.ParsedArgument;
+import net.minecraft.command.ICommandSource;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.command.parameter.Parameter;
 import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.EventContext;
+import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.service.permission.Subject;
 import org.spongepowered.api.text.channel.MessageChannel;
+import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.common.command.CommandHelper;
+import org.spongepowered.common.command.manager.CauseCommandSource;
 import org.spongepowered.common.command.parameter.SpongeParameterKey;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-public class SpongeCommandContextBuilder extends CommandContextBuilder<Cause>
+public class SpongeCommandContextBuilder extends CommandContextBuilder<ICommandSource>
         implements org.spongepowered.api.command.parameter.CommandContext.Builder {
 
-    public static SpongeCommandContextBuilder createFrom(CommandContextBuilder<Cause> original) {
+    private Cause cause;
+
+    public static SpongeCommandContextBuilder createFrom(CommandContextBuilder<ICommandSource> original) {
         final SpongeCommandContextBuilder copy =
                 new SpongeCommandContextBuilder(original.getDispatcher(), original.getSource(), original.getRange().getStart());
-        IMixinCommandContextBuilder<Cause> mixinCommandContextBuilder = (IMixinCommandContextBuilder<Cause>) original;
-        IMixinCommandContextBuilder<Cause> copyMixinCommandContextBuilder = (IMixinCommandContextBuilder<Cause>) copy;
+        IMixinCommandContextBuilder<ICommandSource> mixinCommandContextBuilder = (IMixinCommandContextBuilder<ICommandSource>) original;
+        IMixinCommandContextBuilder<ICommandSource> copyMixinCommandContextBuilder = (IMixinCommandContextBuilder<ICommandSource>) copy;
         copy.withChild(original.getChild());
         copy.withCommand(original.getCommand());
         copyMixinCommandContextBuilder.putArguments(original.getArguments());
@@ -63,7 +75,7 @@ public class SpongeCommandContextBuilder extends CommandContextBuilder<Cause>
     }
 
     // The Sponge command system allows for multiple arguments to be stored under the same key.
-    private final LinkedHashMultimap<SpongeParameterKey<?>, Object> arguments = LinkedHashMultimap.create();
+    private final HashMap<Parameter.Key<?>, Collection<?>> arguments = new HashMap<>();
 
     @Nullable private MessageChannel channel;
 
@@ -72,15 +84,38 @@ public class SpongeCommandContextBuilder extends CommandContextBuilder<Cause>
     @Nullable private Optional<Location> location;
     @Nullable private Optional<BlockSnapshot> blockSnapshot;
 
-    public SpongeCommandContextBuilder(CommandDispatcher<Cause> dispatcher, Cause source, int start) {
+    public SpongeCommandContextBuilder(CommandDispatcher<ICommandSource> dispatcher, ICommandSource source, int start) {
         super(dispatcher, source, start);
     }
 
     @Override
-    public SpongeCommandContextBuilder withArgument(String name, ParsedArgument<Cause, ?> argument) {
+    public SpongeCommandContextBuilder withArgument(String name, ParsedArgument<ICommandSource, ?> argument) {
         // With mods, they'll do anything, so we'll store it under the "Object" class.
-        this.arguments.put(new SpongeParameterKey<>(name, Object.class), argument.getResult());
+        Parameter.Key<Object> objectKey = new SpongeParameterKey<>(name, Object.class);
+        addToArgumentMap(objectKey, argument.getResult());
         super.withArgument(name, argument); // for getArguments and any mods that use this.
+        return this;
+    }
+
+    public SpongeCommandContextBuilder withCause(Cause cause) {
+        this.cause = cause;
+        super.withSource(new CauseCommandSource(this.cause));
+        return this;
+    }
+
+    @Override
+    public SpongeCommandContextBuilder withSource(ICommandSource source) {
+        if (this.cause == null) {
+            this.cause = Sponge.getCauseStackManager().getCurrentCause();
+        }
+
+        // Update the cause to include the command source into the context.
+        this.cause = cause.with(
+                EventContext.builder()
+                    .add(EventContextKeys.MESSAGE_CHANNEL, MessageChannel.fixed((MessageReceiver) source))
+                    .add(EventContextKeys.SUBJECT, (Subject) source)
+                    .build());
+        super.withSource(new CauseCommandSource(this.cause));
         return this;
     }
 
@@ -92,7 +127,7 @@ public class SpongeCommandContextBuilder extends CommandContextBuilder<Cause>
 
     @Override
     public Cause getCause() {
-        return getSource();
+        return this.cause;
     }
 
     @Override
@@ -183,7 +218,7 @@ public class SpongeCommandContextBuilder extends CommandContextBuilder<Cause>
 
     @Override
     public <T> void putEntry(Parameter.Key<T> key, T object) {
-        this.arguments.put(SpongeParameterKey.getSpongeKey(key), object);
+        addToArgumentMap(SpongeParameterKey.getSpongeKey(key), object);
     }
 
     @Override
@@ -200,12 +235,12 @@ public class SpongeCommandContextBuilder extends CommandContextBuilder<Cause>
     public SpongeCommandContext build(final String input) {
         final CommandContextBuilder child = getChild();
         // TODO: this might not be needed for the derived class, come back when mixins are working
-        final IMixinCommandContextBuilder<Cause> mixinCommandContextBuilder = (IMixinCommandContextBuilder<Cause>) this;
+        final IMixinCommandContextBuilder<ICommandSource> mixinCommandContextBuilder = (IMixinCommandContextBuilder<ICommandSource>) this;
         return new SpongeCommandContext(
                 getSource(),
                 input,
                 getArguments(),
-                ImmutableMultimap.copyOf(this.arguments),
+                ImmutableMap.copyOf(this.arguments),
                 getCommand(),
                 getNodes(),
                 getRange(),
@@ -217,6 +252,10 @@ public class SpongeCommandContextBuilder extends CommandContextBuilder<Cause>
     @Override
     public Builder reset() {
         return null;
+    }
+
+    private <T> void addToArgumentMap(Parameter.Key<T> key, T value) {
+        ((List<T>) this.arguments.computeIfAbsent(key, k -> new ArrayList<>())).add(value);
     }
 
 }
