@@ -161,7 +161,7 @@ public class SpongeCommandContext extends CommandContext<ICommandSource> impleme
     }
 
     @Override
-    public <T> Optional<? extends T> getOne(Parameter.Key<T> key) {
+    public <T> Optional<T> getOne(Parameter.Key<T> key) {
         return Optional.ofNullable(getValue(key));
     }
 

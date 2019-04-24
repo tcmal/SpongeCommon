@@ -80,7 +80,7 @@ public class SpongeCommandBuilder implements Command.Builder {
     }
 
     @Override
-    public Command build() {
+    public Command.Parameterized build() {
         return null;
     }
 

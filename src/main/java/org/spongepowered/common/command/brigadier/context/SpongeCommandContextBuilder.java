@@ -177,7 +177,7 @@ public class SpongeCommandContextBuilder extends CommandContextBuilder<ICommandS
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> Optional<? extends T> getOne(Parameter.Key<T> key) {
+    public <T> Optional<T> getOne(Parameter.Key<T> key) {
         SpongeParameterKey<T> spongeParameterKey = SpongeParameterKey.getSpongeKey(key);
         Collection<?> collection = getFrom(spongeParameterKey);
         if (collection.size() > 1) {

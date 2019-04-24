@@ -43,6 +43,8 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.exception.CommandException;
 import org.spongepowered.api.command.manager.CommandManager;
 import org.spongepowered.api.command.manager.CommandMapping;
+import org.spongepowered.api.command.parameter.Parameter;
+import org.spongepowered.api.command.parameter.managed.standard.CatalogedValueParameters;
 import org.spongepowered.api.event.CauseStackManager;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.EventContextKeys;
@@ -53,12 +55,17 @@ import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.common.command.CommandHelper;
 import org.spongepowered.common.command.brigadier.SpongeStringReader;
+import org.spongepowered.common.command.brigadier.tree.SpongeArgumentCommandNode;
+import org.spongepowered.common.command.parameter.SpongeParameterKey;
 import org.spongepowered.common.mixin.core.brigadier.builder.MixinArgumentBuilder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -71,7 +78,9 @@ import javax.inject.Singleton;
 @Singleton
 public class SpongeCommandManager extends CommandDispatcher<ICommandSource> implements CommandManager {
 
-    // Our Sponge commands will end up on a different node so that we can take advantage of the Cause instead.
+    private static final Parameter.Value<String> OPTIONAL_REMAINING_STRING =
+            Parameter.remainingRawJoinedStrings().setKey("arguments").optional().build();
+
     private final Map<String, SpongeCommandMapping> commandMappings = new HashMap<>();
     private final Multimap<PluginContainer, SpongeCommandMapping> pluginToCommandMap = HashMultimap.create();
 
@@ -148,7 +157,60 @@ public class SpongeCommandManager extends CommandDispatcher<ICommandSource> impl
                                              Command command,
                                              String primaryAlias,
                                              String... secondaryAliases) {
-        return Optional.empty(); // TODO
+        // We have a Sponge command, so let's start by checking to see what
+        // we're going to register.
+        String primaryAliasLowercase = primaryAlias.toLowerCase(Locale.ENGLISH);
+        String namespacedAlias = container.getId() + ":" + primaryAlias.toLowerCase(Locale.ENGLISH);
+        if (this.commandMappings.containsKey(namespacedAlias)) {
+            // It's registered.
+            throw new IllegalArgumentException(
+                    "The command alias " + primaryAlias + " has already been registered for this plugin");
+        }
+
+        Set<String> aliases = new HashSet<>();
+        aliases.add(primaryAliasLowercase);
+        for (String secondaryAlias : secondaryAliases) {
+            aliases.add(secondaryAlias.toLowerCase(Locale.ENGLISH));
+        }
+
+        // Okay, what can we register?
+        aliases.removeIf(this.commandMappings::containsKey);
+
+        // Now we need to create the command tree.
+        LiteralArgumentBuilder<ICommandSource> baseNode = null;
+        // TODO: Built commands, parameterized but not Sponge commands need doing.
+        if (command instanceof Command.Parameterized) {
+
+        } else {
+            // We have a command that isn't parameterised. Best we can do is
+            // create a single string argument and put it into the tree.
+            baseNode = LiteralArgumentBuilder.<ICommandSource>literal(namespacedAlias)
+                        .then(new SpongeArgumentCommandNode<>(
+                            OPTIONAL_REMAINING_STRING,
+                            commandContext -> command.process(
+                                    commandContext.getCause(),
+                                    commandContext.getOne(OPTIONAL_REMAINING_STRING).orElse(""))
+                        ));
+
+        }
+
+        if (baseNode == null) {
+            return Optional.empty();
+        }
+
+        // Add to mapping.
+        SpongeCommandMapping mapping = new SpongeCommandMapping(
+                namespacedAlias,
+                aliases,
+                container,
+                command,
+                true,
+                c -> true);
+        this.pluginToCommandMap.put(container, mapping);
+        this.commandMappings.put(namespacedAlias, mapping);
+        aliases.forEach(key -> this.commandMappings.put(key, mapping));
+
+        return Optional.of(mapping);
     }
 
     @Override
