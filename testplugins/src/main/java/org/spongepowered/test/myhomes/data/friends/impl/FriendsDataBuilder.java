@@ -29,6 +29,7 @@ import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.data.manipulator.DataManipulatorBuilder;
 import org.spongepowered.api.data.persistence.AbstractDataBuilder;
 import org.spongepowered.api.data.persistence.InvalidDataException;
+import org.spongepowered.test.myhomes.HomeKeys;
 import org.spongepowered.test.myhomes.MyHomes;
 import org.spongepowered.test.myhomes.data.friends.FriendsData;
 import org.spongepowered.test.myhomes.data.friends.ImmutableFriendsData;
@@ -57,8 +58,8 @@ public class FriendsDataBuilder extends AbstractDataBuilder<FriendsData> impleme
 
     @Override
     protected Optional<FriendsData> buildContent(DataView container) throws InvalidDataException {
-        if (container.contains(MyHomes.FRIENDS)) {
-            List<UUID> friends = container.getObjectList(MyHomes.FRIENDS.getQuery(), UUID.class).get();
+        if (container.contains(HomeKeys.FRIENDS)) {
+            List<UUID> friends = container.getObjectList(HomeKeys.FRIENDS.getQuery(), UUID.class).get();
             return Optional.of(new FriendsDataImpl(friends));
         }
 

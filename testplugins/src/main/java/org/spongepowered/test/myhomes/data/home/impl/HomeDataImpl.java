@@ -24,6 +24,7 @@
  */
 package org.spongepowered.test.myhomes.data.home.impl;
 
+import org.spongepowered.test.myhomes.HomeKeys;
 import org.spongepowered.test.myhomes.MyHomes;
 import org.spongepowered.test.myhomes.data.home.Home;
 import org.spongepowered.test.myhomes.data.home.HomeData;
@@ -57,7 +58,7 @@ public class HomeDataImpl extends AbstractData<HomeData, ImmutableHomeData> impl
     }
 
     // It's best to provide an empty constructor with "default" values
-    public HomeDataImpl() {
+    HomeDataImpl() {
         this(null, ImmutableMap.of());
     }
 
@@ -65,14 +66,14 @@ public class HomeDataImpl extends AbstractData<HomeData, ImmutableHomeData> impl
     @Override
     public Value<Home> defaultHome() {
         return Sponge.getRegistry().getValueFactory()
-                .createValue(MyHomes.DEFAULT_HOME, this.defaultHome, null);
+                .createValue(HomeKeys.DEFAULT_HOME, this.defaultHome, null);
     }
 
     // Override if you have a separate interface
     @Override
     public MapValue<String, Home> homes() {
         return Sponge.getRegistry().getValueFactory()
-                .createMapValue(MyHomes.HOMES, this.homes, ImmutableMap.of());
+                .createMapValue(HomeKeys.HOMES, this.homes, ImmutableMap.of());
     }
 
     private Home getDefaultHome() {
@@ -94,14 +95,14 @@ public class HomeDataImpl extends AbstractData<HomeData, ImmutableHomeData> impl
 
     @Override
     protected void registerGettersAndSetters() {
-        registerKeyValue(MyHomes.DEFAULT_HOME, this::defaultHome);
-        registerKeyValue(MyHomes.HOMES, this::homes);
+        registerKeyValue(HomeKeys.DEFAULT_HOME, this::defaultHome);
+        registerKeyValue(HomeKeys.HOMES, this::homes);
 
-        registerFieldGetter(MyHomes.DEFAULT_HOME, this::getDefaultHome);
-        registerFieldGetter(MyHomes.HOMES, this::getHomes);
+        registerFieldGetter(HomeKeys.DEFAULT_HOME, this::getDefaultHome);
+        registerFieldGetter(HomeKeys.HOMES, this::getHomes);
 
-        registerFieldSetter(MyHomes.DEFAULT_HOME, this::setDefaultHome);
-        registerFieldSetter(MyHomes.HOMES, this::setHomes);
+        registerFieldSetter(HomeKeys.DEFAULT_HOME, this::setDefaultHome);
+        registerFieldSetter(HomeKeys.HOMES, this::setHomes);
     }
 
     @Override
@@ -128,15 +129,15 @@ public class HomeDataImpl extends AbstractData<HomeData, ImmutableHomeData> impl
     // Only required on mutable implementations
     @Override
     public Optional<HomeData> from(DataContainer container) {
-        if (!container.contains(MyHomes.DEFAULT_HOME, MyHomes.HOMES)) {
+        if (!container.contains(HomeKeys.DEFAULT_HOME, HomeKeys.HOMES)) {
             return Optional.empty();
         }
         // Loads the structure defined in toContainer
-        this.defaultHome = container.getSerializable(MyHomes.DEFAULT_HOME.getQuery(), Home.class).get();
+        this.defaultHome = container.getSerializable(HomeKeys.DEFAULT_HOME.getQuery(), Home.class).get();
 
         // Loads the map of homes
         this.homes = Maps.newHashMap();
-        DataView homes = container.getView(MyHomes.HOMES.getQuery()).get();
+        DataView homes = container.getView(HomeKeys.HOMES.getQuery()).get();
         for (DataQuery homeQuery : homes.getKeys(false)) {
             homes.getSerializable(homeQuery, Home.class)
                     .ifPresent(home -> this.homes.put(homeQuery.toString(), home));
@@ -155,9 +156,9 @@ public class HomeDataImpl extends AbstractData<HomeData, ImmutableHomeData> impl
         DataContainer container = super.toContainer();
         // This is the simplest, but use whatever structure you want!
         if(this.defaultHome != null) {
-            container.set(MyHomes.DEFAULT_HOME, this.defaultHome);
+            container.set(HomeKeys.DEFAULT_HOME, this.defaultHome);
         }
-        container.set(MyHomes.HOMES, this.homes);
+        container.set(HomeKeys.HOMES, this.homes);
 
         return container;
     }

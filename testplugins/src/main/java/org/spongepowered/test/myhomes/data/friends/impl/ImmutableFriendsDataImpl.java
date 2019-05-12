@@ -26,6 +26,7 @@ package org.spongepowered.test.myhomes.data.friends.impl;
 
 import org.spongepowered.api.data.manipulator.immutable.common.AbstractImmutableListData;
 import org.spongepowered.api.data.value.immutable.ImmutableListValue;
+import org.spongepowered.test.myhomes.HomeKeys;
 import org.spongepowered.test.myhomes.MyHomes;
 import org.spongepowered.test.myhomes.data.friends.FriendsData;
 import org.spongepowered.test.myhomes.data.friends.ImmutableFriendsData;
@@ -36,7 +37,7 @@ import java.util.UUID;
 public class ImmutableFriendsDataImpl extends AbstractImmutableListData<UUID, ImmutableFriendsData, FriendsData> implements ImmutableFriendsData {
 
     public ImmutableFriendsDataImpl(List<UUID> value) {
-        super(MyHomes.FRIENDS, value);
+        super(HomeKeys.FRIENDS, value);
     }
 
     @Override

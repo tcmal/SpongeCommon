@@ -26,6 +26,7 @@ package org.spongepowered.test.myhomes.data.home.impl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import org.spongepowered.test.myhomes.HomeKeys;
 import org.spongepowered.test.myhomes.MyHomes;
 import org.spongepowered.test.myhomes.data.home.Home;
 import org.spongepowered.test.myhomes.data.home.HomeData;
@@ -56,11 +57,11 @@ public class ImmutableHomeDataImpl extends AbstractImmutableData<ImmutableHomeDa
         this.homes = ImmutableMap.copyOf(checkNotNull(homes));
 
         this.defaultHomeValue = Sponge.getRegistry().getValueFactory()
-                .createValue(MyHomes.DEFAULT_HOME, defaultHome)
+                .createValue(HomeKeys.DEFAULT_HOME, defaultHome)
                 .asImmutable();
 
         this.homesValue = Sponge.getRegistry().getValueFactory()
-                .createMapValue(MyHomes.HOMES, homes, ImmutableMap.of())
+                .createMapValue(HomeKeys.HOMES, homes, ImmutableMap.of())
                 .asImmutable();
     }
 
@@ -86,11 +87,11 @@ public class ImmutableHomeDataImpl extends AbstractImmutableData<ImmutableHomeDa
 
     @Override
     protected void registerGetters() {
-        registerKeyValue(MyHomes.DEFAULT_HOME, this::defaultHome);
-        registerKeyValue(MyHomes.HOMES, this::homes);
+        registerKeyValue(HomeKeys.DEFAULT_HOME, this::defaultHome);
+        registerKeyValue(HomeKeys.HOMES, this::homes);
 
-        registerFieldGetter(MyHomes.DEFAULT_HOME, this::getDefaultHome);
-        registerFieldGetter(MyHomes.HOMES, this::getHomes);
+        registerFieldGetter(HomeKeys.DEFAULT_HOME, this::getDefaultHome);
+        registerFieldGetter(HomeKeys.HOMES, this::getHomes);
     }
 
     @Override
@@ -109,9 +110,9 @@ public class ImmutableHomeDataImpl extends AbstractImmutableData<ImmutableHomeDa
         DataContainer container = super.toContainer();
         // This is the simplest, but use whatever structure you want!
         if(this.defaultHome != null) {
-            container.set(MyHomes.DEFAULT_HOME, this.defaultHome);
+            container.set(HomeKeys.DEFAULT_HOME, this.defaultHome);
         }
-        container.set(MyHomes.HOMES, this.homes);
+        container.set(HomeKeys.HOMES, this.homes);
 
         return container;
     }

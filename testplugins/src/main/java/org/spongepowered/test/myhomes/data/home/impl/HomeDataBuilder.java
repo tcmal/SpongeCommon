@@ -24,6 +24,7 @@
  */
 package org.spongepowered.test.myhomes.data.home.impl;
 
+import org.spongepowered.test.myhomes.HomeKeys;
 import org.spongepowered.test.myhomes.MyHomes;
 import org.spongepowered.test.myhomes.data.home.Home;
 import org.spongepowered.test.myhomes.data.home.HomeData;
@@ -58,16 +59,16 @@ public class HomeDataBuilder extends AbstractDataBuilder<HomeData> implements Da
 
     @Override
     protected Optional<HomeData> buildContent(DataView container) throws InvalidDataException {
-        if(!container.contains(MyHomes.HOMES)) return Optional.empty();
+        if(!container.contains(HomeKeys.HOMES)) return Optional.empty();
 
         HomeData data = new HomeDataImpl();
 
-        container.getView(MyHomes.HOMES.getQuery())
+        container.getView(HomeKeys.HOMES.getQuery())
                 .get().getKeys(false).forEach(name -> data.homes().put(name.toString(), container.getSerializable(name, Home.class)
                 .orElseThrow(InvalidDataException::new)));
 
-        container.getSerializable(MyHomes.DEFAULT_HOME.getQuery(), Home.class).ifPresent(home -> {
-            data.set(MyHomes.DEFAULT_HOME, home);
+        container.getSerializable(HomeKeys.DEFAULT_HOME.getQuery(), Home.class).ifPresent(home -> {
+            data.set(HomeKeys.DEFAULT_HOME, home);
         });
 
         return Optional.of(data);
@@ -87,7 +88,7 @@ public class HomeDataBuilder extends AbstractDataBuilder<HomeData> implements Da
 
         @Override
         public DataView update(DataView content) {
-            content.set(MyHomes.HOMES, ImmutableMap.of());
+            content.set(HomeKeys.HOMES, ImmutableMap.of());
 
             return content;
         }

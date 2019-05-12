@@ -24,28 +24,40 @@
  */
 package org.spongepowered.test.myhomes;
 
-import com.google.common.reflect.TypeToken;
+import static org.spongepowered.api.command.args.GenericArguments.onlyOne;
+import static org.spongepowered.api.command.args.GenericArguments.optional;
+import static org.spongepowered.api.command.args.GenericArguments.player;
+import static org.spongepowered.api.command.args.GenericArguments.string;
+
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.command.args.ArgumentParseException;
+import org.spongepowered.api.command.args.ChildCommandElementExecutor;
+import org.spongepowered.api.command.args.CommandArgs;
+import org.spongepowered.api.command.args.CommandContext;
+import org.spongepowered.api.command.args.CommandElement;
+import org.spongepowered.api.command.args.GenericArguments;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.data.DataManager;
-import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.DataRegistration;
 import org.spongepowered.api.data.key.Key;
-import org.spongepowered.api.data.value.mutable.ListValue;
-import org.spongepowered.api.data.value.mutable.MapValue;
-import org.spongepowered.api.data.value.mutable.Value;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameRegistryEvent;
+import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.chat.ChatTypes;
+import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
-import org.spongepowered.api.util.generator.dummy.DummyObjectProvider;
+import org.spongepowered.api.text.translation.ResourceBundleTranslation;
 import org.spongepowered.test.LoadableModule;
 import org.spongepowered.test.myhomes.data.friends.FriendsData;
 import org.spongepowered.test.myhomes.data.friends.ImmutableFriendsData;
@@ -60,52 +72,95 @@ import org.spongepowered.test.myhomes.data.home.impl.HomeDataBuilder;
 import org.spongepowered.test.myhomes.data.home.impl.HomeDataImpl;
 import org.spongepowered.test.myhomes.data.home.impl.ImmutableHomeDataImpl;
 
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.function.Function;
+
+import javax.annotation.Nullable;
 
 @Plugin(id = "myhomes", name = "MyHomes", version = "0.0.0", description = "A simple homes plugin")
 public class MyHomes implements LoadableModule {
 
-    // TODO - make this an actual home plugin that would work...
-    // for now it just registers data and data related stuff.
-
-    public static Key<Value<Home>> DEFAULT_HOME = DummyObjectProvider.createExtendedFor(Key.class, "DEFAULT_HOME");
-    public static Key<MapValue<String, Home>> HOMES = DummyObjectProvider.createExtendedFor(Key.class, "HOMES");
-    public static Key<ListValue<UUID>> FRIENDS = DummyObjectProvider.createExtendedFor(Key.class, "FRIENDS");
-
+    public static final Text HOME_NAME = Text.of(TextColors.DARK_GREEN, "name");
+    public static final Text PLAYER = Text.of(TextColors.BLUE, "player");
     @Inject private PluginContainer container;
     @Inject private Logger logger;
+
+    private static final CommandElement DUMMY_ELEMENT = new CommandElement(Text.EMPTY) {
+        @Nullable
+        @Override protected Object parseValue(CommandSource source, CommandArgs args) throws ArgumentParseException {
+            throw args.createError(t("No subcommand was specified")); // this will never be visible, but just in case
+        }
+
+        @Override public List<String> complete(CommandSource src, CommandArgs args, CommandContext context) {
+            return ImmutableList.of();
+        }
+    };
+
+    private static final Function<Locale, ResourceBundle> LOOKUP_FUNC = new Function<Locale, ResourceBundle>() {
+        @Nullable
+        @Override
+        public ResourceBundle apply(Locale input) {
+            return ResourceBundle.getBundle("org.spongepowered.common.Translations", input);
+        }
+    };
+
+    /**
+     * Get the translated text for a given string.
+     *
+     * @param key The translation key
+     * @param args Translation parameters
+     * @return The translatable text
+     */
+    public static Text t(String key, Object... args) {
+        return Text.of(new ResourceBundleTranslation(key, LOOKUP_FUNC), args);
+    }
 
     private DataRegistration<FriendsData, ImmutableFriendsData> friendsDataRegistration;
     private DataRegistration<HomeData, ImmutableHomeData> homeDataRegistration;
 
     private final MyHomeListener listener = new MyHomeListener();
 
+
+    @Listener
+    public void onGameInit(GameInitializationEvent e) {
+        final ChildCommandElementExecutor nonFlagChildren = new ChildCommandElementExecutor(null, DUMMY_ELEMENT, true);
+        nonFlagChildren.register(CommandSpec.builder()
+            .description(Text.of("Sets a new home"))
+            .permission("myhomes.create")
+            .arguments(optional(onlyOne(player(PLAYER))), string(HOME_NAME))
+            .executor((src, args) -> {
+                final Optional<String> one = args.getOne(HOME_NAME);
+                if (!one.isPresent()) {
+                    return CommandResult.empty();
+                }
+                // todo - create a home
+                if (src instanceof Player) {
+                    final Home playerHome = new Home(((Player) src).getTransform(), one.get());
+                    final HomeData data = ((Player) src).get(HomeKeys.HOME_DATA.getManipulatorClass())
+                        .orElseGet(() -> new HomeDataImpl(playerHome, new HashMap<>()));
+
+
+                }
+                return CommandResult.success();
+            })
+                .build());
+        Sponge.getCommandManager().register(this, CommandSpec.builder()
+                .description(Text.of(TextColors.DARK_AQUA, "Go Home"))
+                .arguments(GenericArguments.firstParsing(nonFlagChildren))
+                .executor(nonFlagChildren).build(),
+            "home", "myhome"
+        );
+    }
     @Listener
     public void onKeyRegistration(GameRegistryEvent.Register<Key<?>> event) {
         this.logger.info("onKeyRegistration");
-        DEFAULT_HOME = Key.builder()
-            .type(new TypeToken<Value<Home>>() { public static final long serialVersionUID = 1L; })
-            .id("default_home")
-            .name("Default Home")
-            .query(DataQuery.of("DefaultHome"))
-            .build();
-        event.register(DEFAULT_HOME);
-
-        HOMES = Key.builder()
-            .type(new TypeToken<MapValue<String, Home>>() { public static final long serialVersionUID = 1L; })
-            .id("homes")
-            .name("Homes")
-            .query(DataQuery.of("Homes"))
-            .build();
-        event.register(HOMES);
-
-        FRIENDS = Key.builder()
-            .type(new TypeToken<ListValue<UUID>>() { public static final long serialVersionUID = 1L; })
-            .id("friends")
-            .name("Friends")
-            .query(DataQuery.of("Friends"))
-            .build();
-        event.register(FRIENDS);
+        event.register(HomeKeys.DEFAULT_HOME);
+        event.register(HomeKeys.HOMES);
+        event.register(HomeKeys.FRIENDS);
     }
 
     @Listener
@@ -117,26 +172,7 @@ public class MyHomes implements LoadableModule {
         dataManager.registerContentUpdater(Home.class, new HomeBuilder.NameUpdater());
         dataManager.registerContentUpdater(HomeData.class, new HomeDataBuilder.HomesUpdater());
 
-        this.homeDataRegistration = DataRegistration.builder()
-            .dataClass(HomeData.class)
-            .immutableClass(ImmutableHomeData.class)
-            .dataImplementation(HomeDataImpl.class)
-            .immutableImplementation(ImmutableHomeDataImpl.class)
-            .builder(new HomeDataBuilder())
-            .name("Home Data")
-            .id("home")
-            .build();
-
-        // Friends stuff
-        this.friendsDataRegistration = DataRegistration.builder()
-            .dataClass(FriendsData.class)
-            .immutableClass(ImmutableFriendsData.class)
-            .dataImplementation(FriendsDataImpl.class)
-            .immutableImplementation(ImmutableFriendsDataImpl.class)
-            .builder(new FriendsDataBuilder())
-            .name("Friends Data")
-            .id("friends")
-            .build();
+        event.register(HomeKeys.HOME_DATA);
     }
 
 
@@ -151,7 +187,7 @@ public class MyHomes implements LoadableModule {
         @Listener
         public void onClientConnectionJoin(ClientConnectionEvent.Join event) {
             Player player = event.getTargetEntity();
-            player.get(DEFAULT_HOME).ifPresent(home -> {
+            player.get(HomeKeys.DEFAULT_HOME).ifPresent(home -> {
                 player.setTransform(home.getTransform());
                 player.sendMessage(ChatTypes.ACTION_BAR, Text.of("Teleported to home - ", TextStyles.BOLD, home.getName()));
             });
